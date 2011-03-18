@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using Odey.ReconciliationServices;
+using Odey.ReconcilationServices.FMKeeleyReconcilationService;
 
 namespace Testing
 {
@@ -22,29 +23,50 @@ namespace Testing
             dr1["UnderlyingSecurityId"] = uSecId;
             dt.Rows.Add(dr1);
         }
-        static void Main(string[] args)
-        {
-            DataTable dt1 = new DataTable("Test 1");
-            DataColumn secId = dt1.Columns.Add("securityId",typeof(int));
-            DataColumn fundId = dt1.Columns.Add("FundId",typeof(int));
-            DataColumn refDate = dt1.Columns.Add("ReferenceDate",typeof(DateTime));
-            DataColumn ccy = dt1.Columns.Add("Ccy",typeof(string));
+        //static void Main(string[] args)
+        //{
+        //    DataTable dt1 = new DataTable("Test 1");
+        //    DataColumn secId = dt1.Columns.Add("securityId",typeof(int));
+        //    DataColumn fundId = dt1.Columns.Add("FundId",typeof(int));
+        //    DataColumn refDate = dt1.Columns.Add("ReferenceDate",typeof(DateTime));
+        //    DataColumn ccy = dt1.Columns.Add("Ccy",typeof(string));
 
-            dt1.PrimaryKey = new DataColumn[] { secId, fundId, refDate, ccy };
+        //    dt1.PrimaryKey = new DataColumn[] { secId, fundId, refDate, ccy };
 
-            DataColumn pos = dt1.Columns.Add("NetPosition", typeof(decimal));
-            DataColumn maturityDate = dt1.Columns.Add("MaturityDate", typeof(DateTime));
-            DataColumn plCcy = dt1.Columns.Add("PlCcy", typeof(String));
-            DataColumn uSecId = dt1.Columns.Add("UnderlyingSecurityId", typeof(int));
+        //    DataColumn pos = dt1.Columns.Add("NetPosition", typeof(decimal));
+        //    DataColumn maturityDate = dt1.Columns.Add("MaturityDate", typeof(DateTime));
+        //    DataColumn plCcy = dt1.Columns.Add("PlCcy", typeof(String));
+        //    DataColumn uSecId = dt1.Columns.Add("UnderlyingSecurityId", typeof(int));
 
-            AddDataRow(dt1,1, 2, DateTime.Today, "USD", new decimal(5.6), DateTime.Now.AddDays(5), "NZD", 3);
-            DataTable dt2 = dt1.Clone();
-            AddDataRow(dt2, 1, 2, DateTime.Today, "USD", new decimal(5.6), DateTime.Now.AddDays(5), "NZD", 3);
-            MatchingEngine engine = new MatchingEngine();
-            List<MatchingEngineOutput> outputs = engine.Match(dt1, dt2,MatchType.Full);
+        //    AddDataRow(dt1,1, 2, DateTime.Today, "USD", new decimal(5.6), DateTime.Now.AddDays(5), "NZD", 3);
+        //    DataTable dt2 = dt1.Clone();
+        //    AddDataRow(dt2, 1, 2, DateTime.Today, "USD", new decimal(5.6), DateTime.Now.AddDays(5), "NZD", 3);
+        //    MatchingEngine engine = new MatchingEngine();
+        //    List<MatchingEngineOutput> outputs = engine.Match(dt1, dt2,MatchType.Full);
 
             
 
+        //}
+
+        static void Main(string[] args)
+        {
+            //DataTable dt1 = FMKeeleyReconciliationService.GetKeeleyPositions(27, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
+            //DataTable dt2 = FMKeeleyReconciliationService.GetFMPositions(2100, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
+
+            FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
+            service.ReconcileCVLPositions(741, new DateTime(2011, 3, 1), new DateTime(2011, 3, 16));
+            //command.Parameters = parameters;
+            //SqlParameter fundParam = new SqlParameter("@fundId", SqlDbType.Int);
+            //fundParam.Value = fundId;
+            //command.Parameters.Add(fundParam);
+
+            //SqlParameter fromParam = new SqlParameter("@fromDt", SqlDbType.DateTime);
+            //fromParam.Value = fromDate;
+            //command.Parameters.Add(fromParam);
+
+            //SqlParameter toParam = new SqlParameter("@toDt", SqlDbType.DateTime);
+            //toParam.Value = toDate;
+            //command.Parameters.Add(toParam);
         }
     }
 }

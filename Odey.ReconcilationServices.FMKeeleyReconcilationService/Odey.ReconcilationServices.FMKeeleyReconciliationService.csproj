@@ -10,8 +10,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Odey.ReconcilationServices.FMKeeleyReconcilationService</RootNamespace>
-    <AssemblyName>Odey.ReconcilationServices.FMKeeleyReconcilationService</AssemblyName>
+    <RootNamespace>Odey.ReconcilationServices.FMKeeleyReconciliationService</RootNamespace>
+    <AssemblyName>Odey.ReconcilationServices.FMKeeleyReconciliationService</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -33,6 +33,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Odey.Framework.Infrastructure.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Framework.Infrastructure.Services">
+      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Framework.Keeley.Entities">
+      <HintPath>..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.StaticServices.Clients">
+      <HintPath>..\Binaries\Odey.StaticServices\Odey.StaticServices.Clients.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.StaticServices.Contracts">
+      <HintPath>..\Binaries\Odey.StaticServices\Odey.StaticServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceModelEx.IdentityCallStack">
+      <HintPath>..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -52,7 +71,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FMKeeleyReconcilationService.svc" />
+    <Content Include="FMKeeleyReconciliationService.svc" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -62,9 +81,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FMKeeleyReconcilationService.svc.cs">
-      <DependentUpon>FMKeeleyReconcilationService.svc</DependentUpon>
+    <Compile Include="FMKeeleyReconciliationService.svc.cs">
+      <DependentUpon>FMKeeleyReconciliationService.svc</DependentUpon>
     </Compile>
+    <Compile Include="MatchingEngines\CVLMatchingEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +94,10 @@
     <ProjectReference Include="..\Odey.ReconcilationService.Contracts\Odey.ReconcilationService.Contracts.csproj">
       <Project>{D87B7FD6-CCFF-4DFA-9F00-04F686016E90}</Project>
       <Name>Odey.ReconcilationService.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Odey.ReconciliationServices\Odey.ReconciliationServices.csproj">
+      <Project>{B4CCD4CF-9F24-4265-B24C-D790F5DB9758}</Project>
+      <Name>Odey.ReconciliationServices</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

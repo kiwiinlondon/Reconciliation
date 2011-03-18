@@ -101,7 +101,14 @@ namespace Odey.ReconciliationServices
 
         protected virtual bool StringsMatch(string fieldName, string field1, string field2) { return (field1.Equals(field2) ? true : false); }
         protected virtual bool IntegersMatch(string fieldName, int field1, int field2) { return (field1.Equals(field2) ? true : false); }
-        protected virtual bool DecimalsMatch(string fieldName, decimal field1, decimal field2) { return (field1.Equals(field2) ? true : false); }
+        protected virtual bool DecimalsMatch(string fieldName, decimal field1, decimal field2) 
+        {
+            if (Math.Abs(field1 - field2) < new decimal(0.00000001))
+            {
+                return true;
+            }
+            return false;
+        }
         protected virtual bool DatesMatch(string fieldName, DateTime field1, DateTime field2) { return (field1.Equals(field2) ? true : false); }
 
         private bool FieldsMatch(string fieldName, Type fieldType, object field1, object field2)
@@ -167,13 +174,13 @@ namespace Odey.ReconciliationServices
             {
                 //DataRow dr1 = dt1.Rows[i];
                 DataRow dr2 = GetCorrespondingRow(dr1, dt2, selectFormat);
-                if (dr2 == null)
+                if (dr2 == null && !MissingRowCanBeIgnored(dr1))
                 {
                     outputs.Add(new MatchingEngineOutput(dr1, null, MatchOutputType.MissingFrom2, null));
                 }
                 else
                 {
-                    List<string> misMatchedFieldNames = new List<string>();
+                    List<string> misMatchedFieldNames;
                     MatchOutputType matchOutputType = RowsMatch(dr1, dr2, out misMatchedFieldNames);
                     outputs.Add(new MatchingEngineOutput(dr1, dr2, matchOutputType, misMatchedFieldNames));
                     matchedDataRows.Add(dr2); 
@@ -184,7 +191,7 @@ namespace Odey.ReconciliationServices
             {
                 foreach (DataRow dr2 in dt2.Rows)
                 {
-                    if (!matchedDataRows.Contains(dr2))
+                    if (!matchedDataRows.Contains(dr2) && !MissingRowCanBeIgnored(dr2))
                     {
                         outputs.Add(new MatchingEngineOutput(null, dr2, MatchOutputType.MissingFrom1, null));
                     }
@@ -192,6 +199,14 @@ namespace Odey.ReconciliationServices
             }
             return outputs;
         }
+        #endregion
+
+        #region Missing Row Can Be Ignored
+        protected virtual bool MissingRowCanBeIgnored(DataRow dr)
+        {
+            return false;
+        }
+
         #endregion
     }
 }

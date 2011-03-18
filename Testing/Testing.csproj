@@ -11,7 +11,8 @@
     <RootNamespace>Testing</RootNamespace>
     <AssemblyName>Testing</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -34,6 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\Binaries\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Framework.Infrastructure.Services">
+      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,10 +54,24 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Odey.ReconcilationService.Contracts\Odey.ReconcilationService.Contracts.csproj">
+      <Project>{D87B7FD6-CCFF-4DFA-9F00-04F686016E90}</Project>
+      <Name>Odey.ReconcilationService.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Odey.ReconcilationServices.FMKeeleyReconcilationService\Odey.ReconcilationServices.FMKeeleyReconciliationService.csproj">
+      <Project>{A8DB4F98-D955-4B77-A8CF-92F3D4424097}</Project>
+      <Name>Odey.ReconcilationServices.FMKeeleyReconciliationService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Odey.ReconciliationServices\Odey.ReconciliationServices.csproj">
       <Project>{B4CCD4CF-9F24-4265-B24C-D790F5DB9758}</Project>
       <Name>Odey.ReconciliationServices</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
