@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using Odey.ReconciliationServices;
-using Odey.ReconcilationServices.FMKeeleyReconcilationService;
+using Odey.ReconciliationServices.FMKeeleyReconciliationService;
 
 namespace Testing
 {
@@ -54,7 +54,7 @@ namespace Testing
             //DataTable dt2 = FMKeeleyReconciliationService.GetFMPositions(2100, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
 
             FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
-            service.ReconcileCVLPositions(741, new DateTime(2011, 3, 1), new DateTime(2011, 3, 16));
+            service.GetUnmatchedCVLPositions(741, new DateTime(2011, 5, 12), new DateTime(2011, 5, 12),true);
             //command.Parameters = parameters;
             //SqlParameter fundParam = new SqlParameter("@fundId", SqlDbType.Int);
             //fundParam.Value = fundId;

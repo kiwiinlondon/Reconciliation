@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using Odey.ReconciliationServices.Contracts;
 
 namespace Odey.ReconciliationServices
 {
     public class MatchingEngine
     {
         #region Compare DataTable Structures
-        private static void CheckDataTableStructures(DataTable dt1, DataTable dt2, MatchType matchType)
+        private static void CheckDataTableStructures(DataTable dt1, DataTable dt2, MatchTypeIds matchType)
         {
             HashSet<DataColumn> matchedDataColumns = new HashSet<DataColumn>();
             foreach (DataColumn dc1 in dt1.Columns)
@@ -25,13 +26,13 @@ namespace Odey.ReconciliationServices
                 }
                 matchedDataColumns.Add(dc2);
             }
-            if (matchType == MatchType.Full)
+            if (matchType == MatchTypeIds.Full)
             {
                 foreach (DataColumn dc in dt2.Columns)
                 {
                     if (!matchedDataColumns.Contains(dc))
                     {
-                        throw new ApplicationException(String.Format("Data Table 2 does not contain column {0}", dc.ColumnName));
+                        throw new ApplicationException(String.Format("Data Table 1 does not contain column {0}", dc.ColumnName));
                     }
                 }
             }
@@ -75,9 +76,7 @@ namespace Odey.ReconciliationServices
             }
             return values;
         }
-        #endregion 
-
-        
+        #endregion       
 
         #region Get Corresponding Row
         private static DataRow GetCorrespondingRow(DataRow dr, DataTable dt,string selectFormat)
@@ -144,65 +143,158 @@ namespace Odey.ReconciliationServices
         }
         #endregion 
 
+        #region Get Matched State Missing Row
+        private MatchOutputTypeIds GetMatchedStateMissingRow(DataRow dr, bool row1IsMissing)
+        {
+            if (RowCanBeIgnored(dr))
+            {
+                    return MatchOutputTypeIds.Matched; 
+            }
+            else
+            {
+                if (row1IsMissing)
+                {
+                    return MatchOutputTypeIds.MissingFrom1; 
+                }
+                else
+                {
+                    return MatchOutputTypeIds.MissingFrom2; 
+                }
+            }
+        }
+        #endregion
+
+        #region Get Value From Data Row
+        private object GetValueFromDataRow(DataRow dr, string columnName)
+        {
+            if (dr == null)
+            {
+                return null;
+            }
+            else
+            {
+                if (dr[columnName] == DBNull.Value)
+                {
+                    return null;
+                }
+                else
+                {
+                    return dr[columnName];
+                }
+            }
+        }
+        #endregion
 
         #region Match Rows
-        private MatchOutputType RowsMatch(DataRow dr1, DataRow dr2, out List<string> misMatchedFieldNames)
+        private MatchingEngineOutputItem MatchRows(DataRow dr1, DataRow dr2, List<MatchingEngineOutputProperty> keyProperties, List<MatchingEngineOutputProperty> nonKeyProperties)
         {
-            misMatchedFieldNames = new List<string>();
-            MatchOutputType matchOutputType = MatchOutputType.Matched;
-            foreach (DataColumn dc in dr1.Table.Columns)
+            MatchingEngineOutputItem matchingEngineOutputItem= new MatchingEngineOutputItem ();
+            matchingEngineOutputItem.KeyValues = new Dictionary<string, object>();
+            matchingEngineOutputItem.NonKeyValues = new Dictionary<string, MatchingEngineOutputPropertyValue>();
+            matchingEngineOutputItem.MismatchedProperties = new List<MatchingEngineOutputPropertyValue>();
+            matchingEngineOutputItem.MatchOutputType = MatchOutputTypeIds.None;
+            
+            DataRow dr = null;
+            if (dr1 == null)
             {
-                if (!FieldsMatch(dc.ColumnName, dc.DataType, dr1[dc], dr2[dc.ColumnName]))
-                {
-                    matchOutputType = MatchOutputType.MisMatched;
-                    misMatchedFieldNames.Add(dc.ColumnName);
-                }               
+                dr = dr2;
+                matchingEngineOutputItem.MatchOutputType = GetMatchedStateMissingRow(dr2,true);
             }
-            return matchOutputType;
+            else
+            {
+                dr = dr1;
+                if (dr1 == null)
+                {
+                    matchingEngineOutputItem.MatchOutputType = GetMatchedStateMissingRow(dr1, false);
+                }
+            }
+            foreach (MatchingEngineOutputProperty property in keyProperties)
+            {
+                object value = GetValueFromDataRow(dr, property.PropertyName);
+                matchingEngineOutputItem.KeyValues.Add(property.PropertyName, value);
+            }
+         
+            foreach(MatchingEngineOutputProperty property in nonKeyProperties)
+            {             
+                MatchingEngineOutputPropertyValue value = new MatchingEngineOutputPropertyValue(property);
+                value.Value1 = GetValueFromDataRow(dr1, property.PropertyName);
+                value.Value2 = GetValueFromDataRow(dr2, property.PropertyName);
+
+                if (matchingEngineOutputItem.MatchOutputType == MatchOutputTypeIds.None)
+                {
+                    bool fieldsMatch = FieldsMatch(property.PropertyName, property.PropertyType, value.Value1, value.Value2);
+                    if (!fieldsMatch)
+                    {
+                        matchingEngineOutputItem.MatchOutputType = MatchOutputTypeIds.Mismatched;
+                        
+                        value.MatchOutputTypeId = MatchOutputTypeIds.Mismatched;
+                    }
+                    else
+                    {
+                        value.MatchOutputTypeId = MatchOutputTypeIds.Matched;
+                    }
+                }                
+                else
+                {
+                     value.MatchOutputTypeId = matchingEngineOutputItem.MatchOutputType;
+                }
+                if (value.MatchOutputTypeId != MatchOutputTypeIds.Matched)
+                {
+                    matchingEngineOutputItem.MismatchedProperties.Add(value);
+                }
+                matchingEngineOutputItem.NonKeyValues.Add(property.PropertyName, value);   
+            }
+            if (matchingEngineOutputItem.MatchOutputType == MatchOutputTypeIds.None)
+            {
+                matchingEngineOutputItem.MatchOutputType = MatchOutputTypeIds.Matched;
+            }
+            return matchingEngineOutputItem; 
+        }
+        #endregion
+
+        #region Add To Values
+        private void AddToOutput(MatchingEngineOutput matchingEngineOutput, MatchingEngineOutputItem item, bool returnOnlyMismatches)
+        {
+            if (!(item.MatchOutputType == MatchOutputTypeIds.Matched && returnOnlyMismatches))
+            {
+                matchingEngineOutput.Outputs.Add(item);
+            }
         }
         #endregion
 
         #region Match
-        public List<MatchingEngineOutput> Match(DataTable dt1, DataTable dt2, MatchType matchType)
+        public MatchingEngineOutput Match(DataTable dt1, DataTable dt2, MatchTypeIds matchType, bool returnOnlyMismatches, DataSourceIds dataSource1, DataSourceIds dataSource2)
         {
+            
             CheckDataTableStructures(dt1, dt2, matchType);
-            List<MatchingEngineOutput> outputs = new List<MatchingEngineOutput>();
+            MatchingEngineOutput matchingEngineOutput = new MatchingEngineOutput(dt1,dataSource1,dataSource2);            
             string selectFormat = CreatePrimaryKeySelectFormat(dt1);
-            HashSet<DataRow> matchedDataRows = new HashSet<DataRow>(); 
-            //for (int i=0; i<dt1.Rows.Count; i++)
+            HashSet<DataRow> d2FoundRows = new HashSet<DataRow>(); 
             foreach (DataRow dr1 in dt1.Rows)
             {
-                //DataRow dr1 = dt1.Rows[i];
                 DataRow dr2 = GetCorrespondingRow(dr1, dt2, selectFormat);
-                if (dr2 == null && !MissingRowCanBeIgnored(dr1))
-                {
-                    outputs.Add(new MatchingEngineOutput(dr1, null, MatchOutputType.MissingFrom2, null));
-                }
-                else
-                {
-                    List<string> misMatchedFieldNames;
-                    MatchOutputType matchOutputType = RowsMatch(dr1, dr2, out misMatchedFieldNames);
-                    outputs.Add(new MatchingEngineOutput(dr1, dr2, matchOutputType, misMatchedFieldNames));
-                    matchedDataRows.Add(dr2); 
-                }       
+                MatchingEngineOutputItem item = MatchRows(dr1, dr2, matchingEngineOutput.Key, matchingEngineOutput.NonKeyProperties);
+                AddToOutput(matchingEngineOutput,item,returnOnlyMismatches);
+                d2FoundRows.Add(dr2); 
             }
 
-            if (matchType == MatchType.Full)
+            if (matchType == MatchTypeIds.Full)
             {
                 foreach (DataRow dr2 in dt2.Rows)
                 {
-                    if (!matchedDataRows.Contains(dr2) && !MissingRowCanBeIgnored(dr2))
+                    if (!d2FoundRows.Contains(dr2))
                     {
-                        outputs.Add(new MatchingEngineOutput(null, dr2, MatchOutputType.MissingFrom1, null));
+                        MatchingEngineOutputItem item = MatchRows(null, dr2, matchingEngineOutput.Key, matchingEngineOutput.NonKeyProperties);
+                        AddToOutput(matchingEngineOutput, item, returnOnlyMismatches);
                     }
                 }
-            }
-            return outputs;
+            }                
+            return matchingEngineOutput;
         }
         #endregion
 
         #region Missing Row Can Be Ignored
-        protected virtual bool MissingRowCanBeIgnored(DataRow dr)
+        protected virtual bool RowCanBeIgnored(DataRow item)
         {
             return false;
         }

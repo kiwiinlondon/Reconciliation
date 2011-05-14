@@ -12,13 +12,23 @@ namespace Odey.ReconciliationServices
 {
     public class DataSetUtilities
     {
+        private static string GetConnectionString(string name)
+        {
+            ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[name];
+            //string connectionString = ConfigurationManager.ConnectionStrings[name].ConnectionString;
+            if (connectionStringSettings == null)
+            {
+                throw new ApplicationException(String.Format("Connection string {0} was not provided", name));
+            }
+            return connectionStringSettings.ConnectionString;
+        }
 
         #region FM Connection String
         private static string FMConnectionString
         {
             get
             {
-                return ConfigurationManager.ConnectionStrings["FM"].ConnectionString;
+                return GetConnectionString("FM");
             }
         }
         #endregion
@@ -28,7 +38,7 @@ namespace Odey.ReconciliationServices
         {
             get
             {
-                return ConfigurationManager.ConnectionStrings["Keeley"].ConnectionString;
+                return GetConnectionString("Keeley");
             }
         }
         #endregion

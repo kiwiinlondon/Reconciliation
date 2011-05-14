@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\Binaries\log4net\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Odey.Framework.Infrastructure.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -91,9 +94,9 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Odey.ReconcilationService.Contracts\Odey.ReconcilationService.Contracts.csproj">
+    <ProjectReference Include="..\Odey.ReconcilationService.Contracts\Odey.ReconciliationServices.Contracts.csproj">
       <Project>{D87B7FD6-CCFF-4DFA-9F00-04F686016E90}</Project>
-      <Name>Odey.ReconcilationService.Contracts</Name>
+      <Name>Odey.ReconciliationServices.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Odey.ReconciliationServices\Odey.ReconciliationServices.csproj">
       <Project>{B4CCD4CF-9F24-4265-B24C-D790F5DB9758}</Project>

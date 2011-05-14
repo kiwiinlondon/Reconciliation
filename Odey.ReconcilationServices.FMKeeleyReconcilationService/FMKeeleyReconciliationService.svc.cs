@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
-using Odey.ReconciliationService.Contracts;
+using Odey.ReconciliationServices.Contracts;
 using Odey.Framework.Infrastructure.Services;
 using System.Data;
 using System.Data.SqlClient;
@@ -15,22 +15,22 @@ using Odey.Framework.Keeley.Entities;
 using Odey.StaticServices.Clients;
 using Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngines;
 
-namespace Odey.ReconcilationServices.FMKeeleyReconcilationService
+namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
-    public class FMKeeleyReconciliationService : OdeyServiceBase, IFMReconciliation
+    public class FMKeeleyReconciliationService : OdeyServiceBase, IFMKeeleyReconciliation
     {
-        #region IReconcilation Members
+        #region Reconcile CVL Positions 
 
-        public void ReconcileCVLPositions(int fundId, DateTime fromDate, DateTime toDate)
+        public MatchingEngineOutput GetUnmatchedCVLPositions(int fundId, DateTime fromDate, DateTime toDate, bool returnOnlyMismatches)
         {            
             DataTable dt1 = GetKeeleyPositions(fundId, fromDate, toDate);
             FundClient client = new FundClient();
             Fund fund = client.Get(fundId);
             DataTable dt2 = GetFMPositions(fund.FMOrgId, fromDate, toDate);
             CVLMatchingEngine engine = new CVLMatchingEngine();
-            List<MatchingEngineOutput> outputs = engine.Match(dt1, dt2, MatchType.Full);
-            List <MatchingEngineOutput> nonMatched = outputs.Where(a => a.MatchOutputType != MatchOutputType.Matched).ToList();
+            MatchingEngineOutput output = engine.Match(dt1, dt2, MatchTypeIds.Full, returnOnlyMismatches,DataSourceIds.KeeleyPortfolio,DataSourceIds.FMContViewLadder);
+            return output;
         }
 
         #endregion
@@ -50,17 +50,17 @@ namespace Odey.ReconcilationServices.FMKeeleyReconcilationService
                     DataColumn fmSecId = _dt.Columns.Add("FMSecId", typeof(int));
                     DataColumn ccyIso = _dt.Columns.Add("CcyIso", typeof(string));
                     _dt.Columns.Add("NetPosition", typeof(decimal));
-                    _dt.Columns.Add("UnitCost", typeof(decimal));
-                    _dt.Columns.Add("MarkPrice", typeof(decimal));
-                    _dt.Columns.Add("FXRate", typeof(decimal));
-                    _dt.Columns.Add("MarketValue", typeof(decimal));
-                    _dt.Columns.Add("DeltaEquityPosition", typeof(decimal));
-                    _dt.Columns.Add("Accrual", typeof(decimal));
-                    _dt.Columns.Add("CashIncome", typeof(decimal));
-                    _dt.Columns.Add("RealisedFXPNL", typeof(decimal));
-                    _dt.Columns.Add("UnRealisedFXPNL", typeof(decimal));
-                    _dt.Columns.Add("RealisedPricePNL", typeof(decimal));
-                    _dt.Columns.Add("UnRealisedPricePNL", typeof(decimal));
+                    //_dt.Columns.Add("UnitCost", typeof(decimal));
+                    //_dt.Columns.Add("MarkPrice", typeof(decimal));
+                    //_dt.Columns.Add("FXRate", typeof(decimal));
+                    //_dt.Columns.Add("MarketValue", typeof(decimal));
+                    //_dt.Columns.Add("DeltaEquityPosition", typeof(decimal));
+                    //_dt.Columns.Add("Accrual", typeof(decimal));
+                    //_dt.Columns.Add("CashIncome", typeof(decimal));
+                    //_dt.Columns.Add("RealisedFXPNL", typeof(decimal));
+                    //_dt.Columns.Add("UnRealisedFXPNL", typeof(decimal));
+                    //_dt.Columns.Add("RealisedPricePNL", typeof(decimal));
+                    //_dt.Columns.Add("UnRealisedPricePNL", typeof(decimal));
                     _dt.PrimaryKey = new DataColumn[] { refDate, bookId, fmSecId, ccyIso };
                 }
                 return _dt.Clone();
@@ -106,17 +106,17 @@ namespace Odey.ReconcilationServices.FMKeeleyReconcilationService
             columnMappings.Add("RFK_ISEC_ID", "FMSecId");
             columnMappings.Add("PL_CCY", "CcyIso");        
             columnMappings.Add("NET_POSITION","NetPosition");
-		    columnMappings.Add("UNIT_COST","UnitCost");
-		    columnMappings.Add("MARK_PRICE","MarkPrice");
-		    columnMappings.Add("XRATE","FXRate");
-		    columnMappings.Add("MARK_VALUE","MarketValue");
-		    columnMappings.Add("DELTA_MARK_VALUE","DeltaEquityPosition");
-		    columnMappings.Add("ACCRUAL","Accrual");
-		    columnMappings.Add("CASH_INCOME","CashIncome");
-		    columnMappings.Add("FX_RLPL","RealisedFXPNL");
-		    columnMappings.Add("FX_UNPL","UnRealisedFXPNL");
-		    columnMappings.Add("PRICE_RLPL","RealisedPricePNL");
-            columnMappings.Add("PRICE_UNPL", "UnRealisedPricePNL");
+		    //columnMappings.Add("UNIT_COST","UnitCost");
+		    //columnMappings.Add("MARK_PRICE","MarkPrice");
+		    //columnMappings.Add("XRATE","FXRate");
+		    //columnMappings.Add("MARK_VALUE","MarketValue");
+		    //columnMappings.Add("DELTA_MARK_VALUE","DeltaEquityPosition");
+		    //columnMappings.Add("ACCRUAL","Accrual");
+		    //columnMappings.Add("CASH_INCOME","CashIncome");
+		    //columnMappings.Add("FX_RLPL","RealisedFXPNL");
+		    //columnMappings.Add("FX_UNPL","UnRealisedFXPNL");
+		    //columnMappings.Add("PRICE_RLPL","RealisedPricePNL");
+            //columnMappings.Add("PRICE_UNPL", "UnRealisedPricePNL");
 
             return columnMappings;
         }
