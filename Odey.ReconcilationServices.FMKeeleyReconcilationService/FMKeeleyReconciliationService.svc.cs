@@ -51,10 +51,10 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
                     DataColumn ccyIso = _dt.Columns.Add("CcyIso", typeof(string));
                     _dt.Columns.Add("NetPosition", typeof(decimal));
                     //_dt.Columns.Add("UnitCost", typeof(decimal));
-                    //_dt.Columns.Add("MarkPrice", typeof(decimal));
-                    //_dt.Columns.Add("FXRate", typeof(decimal));
+                    _dt.Columns.Add("CurrentPrice", typeof(decimal));
+                    _dt.Columns.Add("CurrentFXRate", typeof(decimal));
                     //_dt.Columns.Add("MarketValue", typeof(decimal));
-                    //_dt.Columns.Add("DeltaEquityPosition", typeof(decimal));
+                    _dt.Columns.Add("NotionalMarketValue", typeof(decimal));
                     //_dt.Columns.Add("Accrual", typeof(decimal));
                     //_dt.Columns.Add("CashIncome", typeof(decimal));
                     //_dt.Columns.Add("RealisedFXPNL", typeof(decimal));
@@ -107,10 +107,10 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             columnMappings.Add("PL_CCY", "CcyIso");        
             columnMappings.Add("NET_POSITION","NetPosition");
 		    //columnMappings.Add("UNIT_COST","UnitCost");
-		    //columnMappings.Add("MARK_PRICE","MarkPrice");
-		    //columnMappings.Add("XRATE","FXRate");
+		    columnMappings.Add("MARK_PRICE","CurrentPrice");
+		    columnMappings.Add("XRATE","CurrentFXRate");
 		    //columnMappings.Add("MARK_VALUE","MarketValue");
-		    //columnMappings.Add("DELTA_MARK_VALUE","DeltaEquityPosition");
+            columnMappings.Add("DELTA_MARK_VALUE", "NotionalMarketValue");
 		    //columnMappings.Add("ACCRUAL","Accrual");
 		    //columnMappings.Add("CASH_INCOME","CashIncome");
 		    //columnMappings.Add("FX_RLPL","RealisedFXPNL");
@@ -134,8 +134,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             DataSetUtilities.FillFMDataTable(dt, "reconcilation.get_cvl_positions", CreateDataSet2Parameters(bftFundId, fromDate, toDate), CreateDataSet2ColumnMappings());
             return dt;
         }
-
-
+        
     }
 }
 

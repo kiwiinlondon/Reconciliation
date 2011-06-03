@@ -102,7 +102,7 @@ namespace Odey.ReconciliationServices
         protected virtual bool IntegersMatch(string fieldName, int field1, int field2) { return (field1.Equals(field2) ? true : false); }
         protected virtual bool DecimalsMatch(string fieldName, decimal field1, decimal field2) 
         {
-            if (Math.Abs(field1 - field2) < new decimal(0.00000001))
+            if (Math.Abs(field1 - field2) < new decimal(0.00001))
             {
                 return true;
             }
@@ -193,7 +193,8 @@ namespace Odey.ReconciliationServices
             matchingEngineOutputItem.NonKeyValues = new Dictionary<string, MatchingEngineOutputPropertyValue>();
             matchingEngineOutputItem.MismatchedProperties = new List<MatchingEngineOutputPropertyValue>();
             matchingEngineOutputItem.MatchOutputType = MatchOutputTypeIds.None;
-            
+           
+
             DataRow dr = null;
             if (dr1 == null)
             {
@@ -203,7 +204,7 @@ namespace Odey.ReconciliationServices
             else
             {
                 dr = dr1;
-                if (dr1 == null)
+                if (dr2 == null)
                 {
                     matchingEngineOutputItem.MatchOutputType = GetMatchedStateMissingRow(dr1, false);
                 }

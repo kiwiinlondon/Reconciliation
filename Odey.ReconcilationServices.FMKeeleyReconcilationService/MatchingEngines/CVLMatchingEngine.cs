@@ -9,9 +9,25 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
 {
     public class CVLMatchingEngine : MatchingEngine
     {
-        private static bool GreaterThanZero(decimal value)
+        protected override bool DecimalsMatch(string fieldName, decimal field1, decimal field2)
         {
-            return (!(-1 < value && value < 1));
+            switch (fieldName)
+            {
+                case "NetPosition":
+                    return !GreaterThanZero(field1 - field2,(decimal)1.5);
+                case "NotionalMarketValue":
+                    return !GreaterThanZero(field1 - field2, (decimal)10);
+                default:
+                    return base.DecimalsMatch(fieldName, field1, field2);
+            }
+            
+        }
+
+       
+
+        private static bool GreaterThanZero(decimal value,decimal tolerance)
+        {
+            return (!(-tolerance < value && value < tolerance));
         }
         public static bool IsZero(
             decimal netPosition//,
@@ -25,7 +41,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
             //decimal cashIncome
                 )
         {
-            if (GreaterThanZero(netPosition))
+            if (GreaterThanZero(netPosition,1))
             {
                 return false;
             }
