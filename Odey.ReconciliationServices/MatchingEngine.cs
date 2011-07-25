@@ -98,9 +98,9 @@ namespace Odey.ReconciliationServices
 
         #region Match Field
 
-        protected virtual bool StringsMatch(string fieldName, string field1, string field2) { return (field1.Equals(field2) ? true : false); }
-        protected virtual bool IntegersMatch(string fieldName, int field1, int field2) { return (field1.Equals(field2) ? true : false); }
-        protected virtual bool DecimalsMatch(string fieldName, decimal field1, decimal field2) 
+        protected virtual bool StringsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, string field1, string field2) { return (field1.Equals(field2) ? true : false); }
+        protected virtual bool IntegersMatch(MatchingEngineOutputItem matchingEngineOutputItem,string fieldName, int field1, int field2) { return (field1.Equals(field2) ? true : false); }
+        protected virtual bool DecimalsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2) 
         {
             if (Math.Abs(field1 - field2) < new decimal(0.00001))
             {
@@ -108,9 +108,9 @@ namespace Odey.ReconciliationServices
             }
             return false;
         }
-        protected virtual bool DatesMatch(string fieldName, DateTime field1, DateTime field2) { return (field1.Equals(field2) ? true : false); }
+        protected virtual bool DatesMatch(MatchingEngineOutputItem matchingEngineOutputItem,string fieldName, DateTime field1, DateTime field2) { return (field1.Equals(field2) ? true : false); }
 
-        private bool FieldsMatch(string fieldName, Type fieldType, object field1, object field2)
+        private bool FieldsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, Type fieldType, object field1, object field2)
         {
             if (field1 == null && field2 == null)
             {
@@ -122,19 +122,19 @@ namespace Odey.ReconciliationServices
             }
             else if (fieldType == typeof(string))
             {
-                return StringsMatch(fieldName,field1.ToString(), field2.ToString());
+                return StringsMatch(matchingEngineOutputItem,fieldName, field1.ToString(), field2.ToString());
             }
             else if (fieldType == typeof(int))
             {
-                return IntegersMatch(fieldName,int.Parse(field1.ToString()), int.Parse(field2.ToString()));
+                return IntegersMatch(matchingEngineOutputItem,fieldName, int.Parse(field1.ToString()), int.Parse(field2.ToString()));
             }
             else if (fieldType == typeof(decimal))
             {
-                return DecimalsMatch(fieldName,decimal.Parse(field1.ToString()), decimal.Parse(field2.ToString()));
+                return DecimalsMatch(matchingEngineOutputItem, fieldName, decimal.Parse(field1.ToString()), decimal.Parse(field2.ToString()));
             }
             else if (fieldType == typeof(DateTime))
             {
-                return DatesMatch(fieldName,DateTime.Parse(field1.ToString()), DateTime.Parse(field2.ToString()));
+                return DatesMatch(matchingEngineOutputItem, fieldName, DateTime.Parse(field1.ToString()), DateTime.Parse(field2.ToString()));
             }
             else
             {
@@ -223,7 +223,7 @@ namespace Odey.ReconciliationServices
 
                 if (matchingEngineOutputItem.MatchOutputType == MatchOutputTypeIds.None)
                 {
-                    bool fieldsMatch = FieldsMatch(property.PropertyName, property.PropertyType, value.Value1, value.Value2);
+                    bool fieldsMatch = FieldsMatch(matchingEngineOutputItem,property.PropertyName, property.PropertyType, value.Value1, value.Value2);
                     if (!fieldsMatch)
                     {
                         matchingEngineOutputItem.MatchOutputType = MatchOutputTypeIds.Mismatched;

@@ -49,19 +49,20 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
                     DataColumn bookId = _dt.Columns.Add("FMBookId", typeof(int));
                     DataColumn fmSecId = _dt.Columns.Add("FMSecId", typeof(int));
                     DataColumn ccyIso = _dt.Columns.Add("CcyIso", typeof(string));
+                    DataColumn instClass = _dt.Columns.Add("FMInstClass", typeof(string));
                     _dt.Columns.Add("NetPosition", typeof(decimal));
-                    //_dt.Columns.Add("UnitCost", typeof(decimal));
-                    _dt.Columns.Add("CurrentPrice", typeof(decimal));
-                    _dt.Columns.Add("CurrentFXRate", typeof(decimal));
-                    //_dt.Columns.Add("MarketValue", typeof(decimal));
-                    _dt.Columns.Add("NotionalMarketValue", typeof(decimal));
-                    //_dt.Columns.Add("Accrual", typeof(decimal));
-                    //_dt.Columns.Add("CashIncome", typeof(decimal));
+                    _dt.Columns.Add("UnitCost", typeof(decimal));
+                    _dt.Columns.Add("Price", typeof(decimal));
+                    _dt.Columns.Add("FXRate", typeof(decimal));
+                    _dt.Columns.Add("MarketValue", typeof(decimal));
+                    _dt.Columns.Add("DeltaMarketValue", typeof(decimal));
+                    _dt.Columns.Add("TotalAccrual", typeof(decimal));
+                    _dt.Columns.Add("CashIncome", typeof(decimal));
                     //_dt.Columns.Add("RealisedFXPNL", typeof(decimal));
-                    //_dt.Columns.Add("UnRealisedFXPNL", typeof(decimal));
                     //_dt.Columns.Add("RealisedPricePNL", typeof(decimal));
-                    //_dt.Columns.Add("UnRealisedPricePNL", typeof(decimal));
-                    _dt.PrimaryKey = new DataColumn[] { refDate, bookId, fmSecId, ccyIso };
+                    //_dt.Columns.Add("UnRealisedPNL", typeof(decimal));
+                    _dt.Columns.Add("TotalPNL", typeof(decimal));
+                    _dt.PrimaryKey = new DataColumn[] { refDate, bookId, instClass, fmSecId,ccyIso };
                 }
                 return _dt.Clone();
             }
@@ -104,20 +105,20 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             columnMappings.Add("LADDER_DATE", "ReferenceDate");
             columnMappings.Add("BOOK_ID", "FMBookId");
             columnMappings.Add("RFK_ISEC_ID", "FMSecId");
-            columnMappings.Add("PL_CCY", "CcyIso");        
+            columnMappings.Add("PL_CCY", "CcyIso");
+            columnMappings.Add("INST_CLASS", "FMInstClass");      
             columnMappings.Add("NET_POSITION","NetPosition");
-		    //columnMappings.Add("UNIT_COST","UnitCost");
-		    columnMappings.Add("MARK_PRICE","CurrentPrice");
-		    columnMappings.Add("XRATE","CurrentFXRate");
-		    //columnMappings.Add("MARK_VALUE","MarketValue");
-            columnMappings.Add("DELTA_MARK_VALUE", "NotionalMarketValue");
-		    //columnMappings.Add("ACCRUAL","Accrual");
-		    //columnMappings.Add("CASH_INCOME","CashIncome");
+		    columnMappings.Add("UNIT_COST","UnitCost");
+		    columnMappings.Add("MARK_PRICE","Price");
+		    columnMappings.Add("XRATE","FXRate");
+		    columnMappings.Add("MARK_VALUE","MarketValue");
+            columnMappings.Add("DELTA_MARK_VALUE", "DeltaMarketValue");
+            columnMappings.Add("TOTAL_ACCRUAL", "TotalAccrual");
+		    columnMappings.Add("CASH_INCOME","CashIncome");
 		    //columnMappings.Add("FX_RLPL","RealisedFXPNL");
-		    //columnMappings.Add("FX_UNPL","UnRealisedFXPNL");
 		    //columnMappings.Add("PRICE_RLPL","RealisedPricePNL");
-            //columnMappings.Add("PRICE_UNPL", "UnRealisedPricePNL");
-
+            //columnMappings.Add("TOTAL_UNPL", "UnRealisedPNL");
+            columnMappings.Add("TOTAL_PNL", "TotalPNL");
             return columnMappings;
         }
 
