@@ -35,37 +35,45 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
 
         #endregion
 
-        private static DataTable _dt = null;
-        private static object _dataTableLock = new object();
+        #region Get Matche dNavs
 
-        private static DataTable GetNewDataTable()
+        public MatchingEngineOutput GetMatchedNavs(DateTime referenceDate)
         {
-            lock (_dataTableLock)
-            {
-                if (_dt == null)
-                {
-                    _dt = new DataTable("Positions");
-                    DataColumn refDate = _dt.Columns.Add("ReferenceDate", typeof(DateTime));
-                    DataColumn bookId = _dt.Columns.Add("FMBookId", typeof(int));
-                    DataColumn fmSecId = _dt.Columns.Add("FMSecId", typeof(int));
-                    DataColumn ccyIso = _dt.Columns.Add("CcyIso", typeof(string));
-                    DataColumn instClass = _dt.Columns.Add("FMInstClass", typeof(string));
-                    _dt.Columns.Add("NetPosition", typeof(decimal));
-                    _dt.Columns.Add("UnitCost", typeof(decimal));
-                    _dt.Columns.Add("Price", typeof(decimal));
-                    _dt.Columns.Add("FXRate", typeof(decimal));
-                    _dt.Columns.Add("MarketValue", typeof(decimal));
-                    _dt.Columns.Add("DeltaMarketValue", typeof(decimal));
-                    _dt.Columns.Add("TotalAccrual", typeof(decimal));
-                    _dt.Columns.Add("CashIncome", typeof(decimal));
-                    //_dt.Columns.Add("RealisedFXPNL", typeof(decimal));
-                    //_dt.Columns.Add("RealisedPricePNL", typeof(decimal));
-                    //_dt.Columns.Add("UnRealisedPNL", typeof(decimal));
-                    _dt.Columns.Add("TotalPNL", typeof(decimal));
-                    _dt.PrimaryKey = new DataColumn[] { refDate, bookId, instClass, fmSecId,ccyIso };
-                }
-                return _dt.Clone();
-            }
+            DataTable dt1 = GetKeeleyNavs(referenceDate);
+            DataTable dt2 = GetFMNavs(referenceDate);
+            NavMatchingEngine engine = new NavMatchingEngine();
+            MatchingEngineOutput output = engine.Match(dt1, dt2, MatchTypeIds.Full, false, DataSourceIds.KeeleyPortfolio, DataSourceIds.FMContViewLadder);
+            return output;
+        }
+
+        #endregion
+
+        #region CVL Matching
+
+        private static DataTable GetNewCVLDataTable()
+        {
+
+            DataTable dt = new DataTable("Positions");
+            DataColumn refDate = dt.Columns.Add("ReferenceDate", typeof(DateTime));
+            DataColumn bookId = dt.Columns.Add("FMBookId", typeof(int));
+            DataColumn fmSecId = dt.Columns.Add("FMSecId", typeof(int));
+            DataColumn ccyIso = dt.Columns.Add("CcyIso", typeof(string));
+            DataColumn instClass = dt.Columns.Add("FMInstClass", typeof(string));
+            dt.Columns.Add("NetPosition", typeof(decimal));
+            dt.Columns.Add("UnitCost", typeof(decimal));
+            dt.Columns.Add("Price", typeof(decimal));
+            dt.Columns.Add("FXRate", typeof(decimal));
+            dt.Columns.Add("MarketValue", typeof(decimal));
+            dt.Columns.Add("DeltaMarketValue", typeof(decimal));
+            dt.Columns.Add("TotalAccrual", typeof(decimal));
+            dt.Columns.Add("CashIncome", typeof(decimal));
+            //_dt.Columns.Add("RealisedFXPNL", typeof(decimal));
+            //_dt.Columns.Add("RealisedPricePNL", typeof(decimal));
+            //_dt.Columns.Add("UnRealisedPNL", typeof(decimal));
+            dt.Columns.Add("TotalPNL", typeof(decimal));
+            dt.PrimaryKey = new DataColumn[] { refDate, bookId, instClass, fmSecId, ccyIso };
+            return dt;
+
         }
 
         private static Dictionary<string, object> CreateDataSet1Parameters(int fundId, DateTime fromDate, DateTime toDate)
@@ -124,18 +132,72 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
 
         public static DataTable GetKeeleyPositions(int fundId, DateTime fromDate, DateTime toDate)
         {
-            DataTable dt = GetNewDataTable();
+            DataTable dt = GetNewCVLDataTable();
             DataSetUtilities.FillKeeleyDataTable(dt, "Portfolio_GetForFMRec", CreateDataSet1Parameters(fundId, fromDate, toDate), CreateDataSet1ColumnMappings());
             return dt;
         }
 
         public static DataTable GetFMPositions(int bftFundId, DateTime fromDate, DateTime toDate)
         {
-            DataTable dt = GetNewDataTable();
+            DataTable dt = GetNewCVLDataTable();
             DataSetUtilities.FillFMDataTable(dt, "reconcilation.get_cvl_positions", CreateDataSet2Parameters(bftFundId, fromDate, toDate), CreateDataSet2ColumnMappings());
             return dt;
         }
-        
+        #endregion
+
+        #region NAV Matching
+
+        private static DataTable GetNewNavDataTable()
+        {
+
+            DataTable dt = new DataTable("Navs");      
+            DataColumn fundId = dt.Columns.Add("FMFundId", typeof(int));            
+            dt.Columns.Add("MarketValue", typeof(decimal));
+            dt.PrimaryKey = new DataColumn[] { fundId };
+            return dt;
+
+        }
+
+        private static Dictionary<string, object> CreateNavDataSet1Parameters(DateTime referenceDate)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+
+            parameters.Add("@referenceDate", referenceDate);
+
+            return parameters;
+        }
+
+        private static Dictionary<string, object> CreateNavDataSet2Parameters(DateTime referenceDate)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+
+            parameters.Add("in_ladder_date", referenceDate);
+
+            return parameters;
+        }
+
+        private static Dictionary<string, string> CreateNavDataSet2ColumnMappings()
+        {
+            Dictionary<string, string> columnMappings = new Dictionary<string, string>();
+            columnMappings.Add("FUND_ID", "FMFundId");
+            columnMappings.Add("MARKET_VALUE", "MarketValue");        
+            return columnMappings;
+        }
+
+        public static DataTable GetKeeleyNavs(DateTime referenceDate)
+        {
+            DataTable dt = GetNewNavDataTable();
+            DataSetUtilities.FillKeeleyDataTable(dt, "Portfolio_GetForFMNavRec", CreateNavDataSet1Parameters(referenceDate),null);
+            return dt;
+        }
+
+        public static DataTable GetFMNavs(DateTime referenceDate)
+        {
+            DataTable dt = GetNewNavDataTable();
+            DataSetUtilities.FillFMDataTable(dt, "reconcilation.get_navs", CreateNavDataSet2Parameters(referenceDate), CreateNavDataSet2ColumnMappings());
+            return dt;
+        }
+        #endregion
     }
 }
 

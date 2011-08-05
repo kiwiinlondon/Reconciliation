@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using Odey.ReconciliationServices;
 using Odey.ReconciliationServices.FMKeeleyReconciliationService;
+using Odey.ReconciliationServices.Clients;
 
 namespace Testing
 {
@@ -49,12 +50,13 @@ namespace Testing
         //}
 
         static void Main(string[] args)
-        {
+        {            
             //DataTable dt1 = FMKeeleyReconciliationService.GetKeeleyPositions(27, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
             //DataTable dt2 = FMKeeleyReconciliationService.GetFMPositions(2100, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
 
             FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
-            service.GetUnmatchedCVLPositions(5331, new DateTime(2011, 7, 12), new DateTime(2011, 7, 25), true);
+            //service.GetUnmatchedCVLPositions(741,new DateTime(2011, 7, 28), new DateTime(2011, 7, 28), true);
+            service.GetMatchedNavs(new DateTime(2011, 7, 28));
             //command.Parameters = parameters;
             //SqlParameter fundParam = new SqlParameter("@fundId", SqlDbType.Int);
             //fundParam.Value = fundId;

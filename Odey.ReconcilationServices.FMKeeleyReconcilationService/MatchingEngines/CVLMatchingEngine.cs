@@ -60,10 +60,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
             return false;
         }
 
-        private static bool GreaterThanZero(decimal value,decimal tolerance)
-        {
-            return (!(-tolerance < value && value < tolerance));
-        }
+        
 
         private bool GreaterThanZeroIgnoreSipp(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2, decimal? tolerance)
         {

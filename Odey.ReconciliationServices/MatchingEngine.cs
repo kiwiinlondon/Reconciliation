@@ -221,7 +221,7 @@ namespace Odey.ReconciliationServices
                 value.Value1 = GetValueFromDataRow(dr1, property.PropertyName);
                 value.Value2 = GetValueFromDataRow(dr2, property.PropertyName);
 
-                if (matchingEngineOutputItem.MatchOutputType == MatchOutputTypeIds.None)
+                if (matchingEngineOutputItem.MatchOutputType == MatchOutputTypeIds.None || matchingEngineOutputItem.MatchOutputType == MatchOutputTypeIds.Mismatched)
                 {
                     bool fieldsMatch = FieldsMatch(matchingEngineOutputItem,property.PropertyName, property.PropertyType, value.Value1, value.Value2);
                     if (!fieldsMatch)
@@ -260,6 +260,13 @@ namespace Odey.ReconciliationServices
             {
                 matchingEngineOutput.Outputs.Add(item);
             }
+        }
+        #endregion
+
+        #region Greater Than Zero
+        protected static bool GreaterThanZero(decimal value, decimal tolerance)
+        {
+            return (!(-tolerance < value && value < tolerance));
         }
         #endregion
 

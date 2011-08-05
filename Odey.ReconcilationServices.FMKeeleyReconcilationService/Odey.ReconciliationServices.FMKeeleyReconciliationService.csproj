@@ -101,6 +101,7 @@
       <DependentUpon>FMKeeleyReconciliationService.svc</DependentUpon>
     </Compile>
     <Compile Include="MatchingEngines\CVLMatchingEngine.cs" />
+    <Compile Include="MatchingEngines\NavMatchingEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -124,7 +125,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>52860</DevelopmentServerPort>
+          <DevelopmentServerPort>55860</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

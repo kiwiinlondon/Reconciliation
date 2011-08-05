@@ -11,5 +11,8 @@ namespace Odey.ReconciliationServices.Contracts
     {
         [OperationContract]
         MatchingEngineOutput GetUnmatchedCVLPositions(int fundId, DateTime fromDate, DateTime toDate, bool returnOnlyMismatches);
+
+        [OperationContract]
+        MatchingEngineOutput GetMatchedNavs(DateTime referenceDate);
     }
 }

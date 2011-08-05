@@ -29,5 +29,26 @@ namespace Odey.ReconciliationServices.Clients
         }
 
         #endregion
+
+        #region IFMKeeleyReconciliation Members
+
+
+        public MatchingEngineOutput GetMatchedNavs(DateTime referenceDate)
+        {
+            IFMKeeleyReconciliation proxy = factory.CreateChannel();
+            try
+            {
+                MatchingEngineOutput e = proxy.GetMatchedNavs(referenceDate);
+                ((ICommunicationObject)proxy).Close();
+                return e;
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
+        #endregion
     }
 }

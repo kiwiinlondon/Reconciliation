@@ -72,7 +72,7 @@ namespace Odey.ReconciliationServices
         #region Add Column Mappings
         private static void AddColumnMappings(DataTableMapping mapping, Dictionary<string, string> columnMappings)
         {
-            if (mapping != null)
+            if (mapping != null && columnMappings != null)
             {
                 foreach (KeyValuePair<string, string> columnMapping in columnMappings)
                 {
