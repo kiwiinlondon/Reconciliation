@@ -24,7 +24,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
                 case "RealisedPricePNL":
                 case "MarketValue":
                 case "TotalPNL":                
-                    return !GreaterThanZero(field1 - field2, (decimal)20);
+                    return !GreaterThanZero(field1 - field2, (decimal)30);
                 case "DeltaMarketValue":
                     return GreaterThanZeroIgnoreSipp(matchingEngineOutputItem, fieldName, field1, field2, 20);
                 case "FXRate":
@@ -53,7 +53,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
             int instrumentMarketId = instrumentMarketFMCache.Get(IdentifierTypeIds.FMSecId, matchingEngineOutputItem.KeyValues["FMSecId"].ToString()).Value;
             InstrumentMarketByIdCache instrumentMarketCache = new InstrumentMarketByIdCache();
             InstrumentMarket instrumentMarket = instrumentMarketCache.Get(instrumentMarketId);
-            if (instrumentMarket.InstrumentClassID == (int)InstrumentClassIds.ForwardFx)
+            if (instrumentMarket.InstrumentClassID == (int)InstrumentClassIds.ForwardFX)
             {
                 return !GreaterThanZero(field1 - field2, (decimal)tolerance);
             }
