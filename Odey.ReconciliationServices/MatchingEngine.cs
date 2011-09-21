@@ -4,11 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using Odey.ReconciliationServices.Contracts;
+using log4net;
 
 namespace Odey.ReconciliationServices
 {
     public class MatchingEngine
     {
+        public MatchingEngine(ILog logger)
+        {
+            Logger = logger;
+        }
+        protected ILog Logger { get; set; }
+
         #region Compare DataTable Structures
         private static void CheckDataTableStructures(DataTable dt1, DataTable dt2, MatchTypeIds matchType)
         {
@@ -151,7 +158,7 @@ namespace Odey.ReconciliationServices
                     return MatchOutputTypeIds.Matched; 
             }
             else
-            {
+            {               
                 if (row1IsMissing)
                 {
                     return MatchOutputTypeIds.MissingFrom1; 
@@ -160,6 +167,7 @@ namespace Odey.ReconciliationServices
                 {
                     return MatchOutputTypeIds.MissingFrom2; 
                 }
+                
             }
         }
         #endregion

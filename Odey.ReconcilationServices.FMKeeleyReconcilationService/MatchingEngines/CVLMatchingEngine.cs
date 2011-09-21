@@ -8,11 +8,13 @@ using Odey.ReconciliationServices.Contracts;
 using Odey.StaticServices.Caches;
 using Odey.Framework.Keeley.Entities.Enums;
 using Odey.Framework.Keeley.Entities;
+using log4net;
 
 namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngines
 {
     public class CVLMatchingEngine : MatchingEngine
     {
+        public CVLMatchingEngine(ILog logger) : base(logger) { }
         protected override bool DecimalsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2)
         {
             switch (fieldName)

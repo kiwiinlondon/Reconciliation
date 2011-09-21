@@ -23,13 +23,22 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
         #region Reconcile CVL Positions 
 
         public MatchingEngineOutput GetUnmatchedCVLPositions(int fundId, DateTime fromDate, DateTime toDate, bool returnOnlyMismatches)
-        {            
+        {
+            Logger.Info(String.Format("Fund {0}", fundId));
+            Logger.Info(String.Format("From Date {0} -> {1}", fromDate, toDate));
             DataTable dt1 = GetKeeleyPositions(fundId, fromDate, toDate);
+            Logger.Info(String.Format("Keeeley {0}", dt1.Rows.Count));
             FundClient client = new FundClient();
             Fund fund = client.Get(fundId);
             DataTable dt2 = GetFMPositions(fund.FMOrgId, fromDate, toDate);
-            CVLMatchingEngine engine = new CVLMatchingEngine();
+            Logger.Info(String.Format("CVL {0}", dt2.Rows.Count));
+            CVLMatchingEngine engine = new CVLMatchingEngine(Logger);
             MatchingEngineOutput output = engine.Match(dt1, dt2, MatchTypeIds.Full, returnOnlyMismatches,DataSourceIds.KeeleyPortfolio,DataSourceIds.FMContViewLadder);
+            Logger.Info(String.Format("Outputs {0}", output.Outputs.Count));
+            Logger.Info(String.Format("Outputs Mismatched {0}", output.Outputs.Where(a=>a.MatchOutputType== MatchOutputTypeIds.Mismatched).Count()));
+            Logger.Info(String.Format("Outputs Missing from 1 {0}", output.Outputs.Where(a=>a.MatchOutputType== MatchOutputTypeIds.MissingFrom1).Count()));
+            Logger.Info(String.Format("Outputs Missing from 2 {0}", output.Outputs.Where(a => a.MatchOutputType == MatchOutputTypeIds.MissingFrom2).Count()));
+            
             return output;
         }
 
@@ -41,7 +50,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
         {
             DataTable dt1 = GetKeeleyNavs(referenceDate);
             DataTable dt2 = GetFMNavs(referenceDate);
-            NavMatchingEngine engine = new NavMatchingEngine();
+            NavMatchingEngine engine = new NavMatchingEngine(Logger);
             MatchingEngineOutput output = engine.Match(dt1, dt2, MatchTypeIds.Full, false, DataSourceIds.KeeleyPortfolio, DataSourceIds.FMContViewLadder);
             return output;
         }
