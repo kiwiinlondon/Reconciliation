@@ -20,7 +20,8 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
             switch (fieldName)
             {
                 
-                case "NetPosition":                    
+                case "NetPosition":
+                    return !GreaterThanZero(field1 - field2, (decimal)100);
                 case "TotalAccrual":
                 case "UnRealisedPNL":
                 case "RealisedPricePNL":
@@ -30,7 +31,8 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
                 case "DeltaMarketValue":
                     return GreaterThanZeroIgnoreSipp(matchingEngineOutputItem, fieldName, field1, field2, 20);
                 case "FXRate":
-                    return GreaterThanZeroIgnoreSipp(matchingEngineOutputItem, fieldName, field1, field2, null);
+                case "Price":
+                    return GreaterThanZeroIgnoreZeroPositions(matchingEngineOutputItem, fieldName, field1, field2, null);
                 default:
                     return base.DecimalsMatch(matchingEngineOutputItem, fieldName, field1, field2);
             }
@@ -75,6 +77,33 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
                 return true;
             }
             if (matchingEngineOutputItem.KeyValues["FMBookId"].ToString() == "11111")
+            {
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        private bool GreaterThanZeroIgnoreZeroPositions(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2, decimal? tolerance)
+        {
+            
+            if (!tolerance.HasValue && base.DecimalsMatch(matchingEngineOutputItem, fieldName, field1, field2))
+            {
+                return true;
+            }
+            else if (tolerance.HasValue && !GreaterThanZero(field1 - field2, tolerance.Value))
+            {
+                return true;
+            }
+
+            if (matchingEngineOutputItem.KeyValues["FMInstClass"].ToString() == "FWRD_FX")
+            {
+                int i = 0;
+            } 
+            if (!GreaterThanZero((decimal)matchingEngineOutputItem.NonKeyValues["NetPosition"].Value1 , 20))
             {
                 return true;
             }
