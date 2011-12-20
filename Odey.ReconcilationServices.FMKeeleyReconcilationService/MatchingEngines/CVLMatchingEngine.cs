@@ -21,7 +21,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
             {
                 
                 case "NetPosition":
-                    return !GreaterThanZero(field1 - field2, (decimal)100);
+                    return !GreaterThanZero(field1 - field2, (decimal)200);
                 case "TotalAccrual":
                 case "UnRealisedPNL":
                 case "RealisedPricePNL":
@@ -29,7 +29,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
                 case "TotalPNL":                
                     return !GreaterThanZero(field1 - field2, (decimal)30);
                 case "DeltaMarketValue":
-                    return GreaterThanZeroIgnoreSipp(matchingEngineOutputItem, fieldName, field1, field2, 20);
+                    return GreaterThanZeroIgnoreSipp(matchingEngineOutputItem, fieldName, field1, field2, 100);
                 case "FXRate":
                 case "Price":
                     return GreaterThanZeroIgnoreZeroPositions(matchingEngineOutputItem, fieldName, field1, field2, null);
