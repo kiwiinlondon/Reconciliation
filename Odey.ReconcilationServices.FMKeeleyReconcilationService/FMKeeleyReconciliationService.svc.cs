@@ -80,7 +80,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             //_dt.Columns.Add("RealisedPricePNL", typeof(decimal));
             //_dt.Columns.Add("UnRealisedPNL", typeof(decimal));
             dt.Columns.Add("TotalPNL", typeof(decimal));
-            dt.PrimaryKey = new DataColumn[] { refDate, bookId, instClass, fmSecId, ccyIso };
+            dt.PrimaryKey = new DataColumn[] { refDate, bookId, fmSecId, ccyIso };
             return dt;
 
         }

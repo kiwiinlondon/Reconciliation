@@ -99,10 +99,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
                 return true;
             }
 
-            if (matchingEngineOutputItem.KeyValues["FMInstClass"].ToString() == "FWRD_FX")
-            {
-                int i = 0;
-            } 
+            
             if (!GreaterThanZero((decimal)matchingEngineOutputItem.NonKeyValues["NetPosition"].Value1 , 20))
             {
                 return true;
