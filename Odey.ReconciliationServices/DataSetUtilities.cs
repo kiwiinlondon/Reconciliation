@@ -6,7 +6,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.Common;
-using Oracle.DataAccess.Client;
 
 namespace Odey.ReconciliationServices
 {
@@ -55,18 +54,6 @@ namespace Odey.ReconciliationServices
                 }
             }
         }
-
-        private static void AddParameters(OracleCommand command, Dictionary<string, object> parameters)
-        {
-            if (parameters != null)
-            {
-                foreach (KeyValuePair<string, object> parameter in parameters)
-                {
-                    OracleParameter param = new OracleParameter(parameter.Key, parameter.Value);
-                    command.Parameters.Add(param);
-                }
-            }
-        }
         #endregion 
 
         #region Add Column Mappings
@@ -103,35 +90,6 @@ namespace Odey.ReconciliationServices
         }
         #endregion
 
-        #region Fill FM Data Table
-        public static void FillFMDataTable(DataTable dt, string storedProcName, Dictionary<string, object> parameters, Dictionary<string, string> columnMappings)
-        {
-            DataSet ds = new DataSet();
-            ds.Tables.Add(dt);
-            using (OracleConnection connection = new OracleConnection(DataSetUtilities.FMConnectionString))
-            {
-                using (OracleCommand command = new OracleCommand(storedProcName, connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    using (OracleParameter refCursor = new OracleParameter())
-                    {
-                        refCursor.OracleDbType = OracleDbType.RefCursor;
-                        refCursor.Direction = ParameterDirection.ReturnValue;
-                        command.Parameters.Add(refCursor);
-                        AddParameters(command, parameters);
-
-                        using (OracleDataAdapter da = new OracleDataAdapter(command))
-                        {
-                            DataTableMapping mapping = da.TableMappings.Add("Table", dt.TableName);
-                            AddColumnMappings(mapping, columnMappings);
-                            connection.Open();
-                            da.FillSchema(ds, SchemaType.Mapped);
-                            da.Fill(ds);
-                        }
-                    }
-                }
-            }
-        }
-        #endregion           
+          
     }        
 }
