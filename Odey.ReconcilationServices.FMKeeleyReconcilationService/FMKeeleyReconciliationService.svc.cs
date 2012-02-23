@@ -14,6 +14,8 @@ using Odey.ReconciliationServices;
 using Odey.Framework.Keeley.Entities;
 using Odey.StaticServices.Clients;
 using Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngines;
+using BC = Odey.Beauchamp.Contracts;
+using Odey.Beauchamp.Clients;
 
 namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
 {
@@ -24,14 +26,17 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
 
         public MatchingEngineOutput GetUnmatchedCVLPositions(int fundId, DateTime fromDate, DateTime toDate, bool returnOnlyMismatches)
         {
-            Logger.Info(String.Format("Fund {0}", fundId));
-            Logger.Info(String.Format("From Date {0} -> {1}", fromDate, toDate));
-            DataTable dt1 = GetKeeleyPositions(fundId, fromDate, toDate);
-            Logger.Info(String.Format("Keeeley {0}", dt1.Rows.Count));
+            
             FundClient client = new FundClient();
             Fund fund = client.Get(fundId);
             DataTable dt2 = GetFMPositions(fund.FMOrgId, fromDate, toDate);
             Logger.Info(String.Format("CVL {0}", dt2.Rows.Count));
+
+            Logger.Info(String.Format("Fund {0}", fundId));
+            Logger.Info(String.Format("From Date {0} -> {1}", fromDate, toDate));
+            DataTable dt1 = GetKeeleyPositions(fundId, fromDate, toDate);
+            Logger.Info(String.Format("Keeeley {0}", dt1.Rows.Count));
+
             CVLMatchingEngine engine = new CVLMatchingEngine(Logger);
             MatchingEngineOutput output = engine.Match(dt1, dt2, MatchTypeIds.Full, returnOnlyMismatches,DataSourceIds.KeeleyPortfolio,DataSourceIds.FMContViewLadder);
             Logger.Info(String.Format("Outputs {0}", output.Outputs.Count));
@@ -48,8 +53,10 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
 
         public MatchingEngineOutput GetMatchedNavs(DateTime referenceDate)
         {
-            DataTable dt1 = GetKeeleyNavs(referenceDate);
-            DataTable dt2 = GetFMNavs(referenceDate);
+            FundClient client = new FundClient();
+            List<Fund> funds = client.GetAll().Where(a=>a.PositionsExist == true).ToList();
+            DataTable dt2 = GetFMNavs(referenceDate, funds);
+            DataTable dt1 = GetKeeleyNavs(referenceDate);            
             NavMatchingEngine engine = new NavMatchingEngine(Logger);
             MatchingEngineOutput output = engine.Match(dt1, dt2, MatchTypeIds.Full, false, DataSourceIds.KeeleyPortfolio, DataSourceIds.FMContViewLadder);
             return output;
@@ -149,7 +156,23 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
         public static DataTable GetFMPositions(int bftFundId, DateTime fromDate, DateTime toDate)
         {
             DataTable dt = GetNewCVLDataTable();
-            DataSetUtilities.FillFMDataTable(dt, "reconcilation.get_cvl_positions", CreateDataSet2Parameters(bftFundId, fromDate, toDate), CreateDataSet2ColumnMappings());
+            PortfolioClient client = new PortfolioClient();
+            List<BC.Portfolio> portfolioItems = client.Get(bftFundId, fromDate, toDate);
+            foreach (BC.Portfolio portfolio in portfolioItems)
+            {
+                DataRow row = dt.NewRow();
+                row["ReferenceDate"] = portfolio.LadderDate;
+                row["FMBookId"] = portfolio.BookId;
+                row["FMSecId"] = portfolio.IsecId;
+                row["CcyIso"] = portfolio.Currency;
+                row["NetPosition"] = portfolio.NetPosition;
+                row["Price"] = portfolio.Price;
+                row["FXRate"] = portfolio.FXRate;
+                row["MarketValue"] = portfolio.MarkValue;
+                row["DeltaMarketValue"] = portfolio.DeltaMarkValue;
+                row["TotalPNL"] = portfolio.TotalPnl;                              
+                dt.Rows.Add(row);
+            }            
             return dt;
         }
         #endregion
@@ -200,10 +223,18 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             return dt;
         }
 
-        public static DataTable GetFMNavs(DateTime referenceDate)
+        public static DataTable GetFMNavs(DateTime referenceDate, List<Fund> funds)
         {
             DataTable dt = GetNewNavDataTable();
-            DataSetUtilities.FillFMDataTable(dt, "reconcilation.get_navs", CreateNavDataSet2Parameters(referenceDate), CreateNavDataSet2ColumnMappings());
+            PortfolioClient client = new PortfolioClient();
+            List<BC.FundNAV> navs = client.GetFundNavs(funds.Select(a=>a.FMOrgId).ToArray(), referenceDate);
+            foreach (BC.FundNAV fundNav in navs)
+            {
+                DataRow row = dt.NewRow();
+                row["FMFundId"] = fundNav.FundId;
+                row["MarketValue"] = fundNav.MarketValue;                
+                dt.Rows.Add(row);
+            }
             return dt;
         }
         #endregion

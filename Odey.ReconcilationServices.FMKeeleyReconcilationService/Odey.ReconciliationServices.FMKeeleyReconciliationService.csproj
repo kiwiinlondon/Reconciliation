@@ -37,6 +37,12 @@
       <HintPath>..\Binaries\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Odey.Beauchamp.Clients">
+      <HintPath>..\Binaries\Odey.Beauchamp\Odey.Beauchamp.Clients.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Beauchamp.Contracts">
+      <HintPath>..\Binaries\Odey.Beauchamp\Odey.Beauchamp.Contracts.dll</HintPath>
+    </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Caches">
       <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Caches.dll</HintPath>
     </Reference>
