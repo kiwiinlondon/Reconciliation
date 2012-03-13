@@ -55,8 +55,8 @@ namespace Testing
             //DataTable dt2 = FMKeeleyReconciliationService.GetFMPositions(2100, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
 
             FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
-            //service.GetUnmatchedCVLPositions(3609, new DateTime(2012, 2, 21), new DateTime(2012, 2, 21), true);
-            service.GetMatchedNavs(new DateTime(2012, 2, 21));
+            service.GetUnmatchedCVLPositions(3609, new DateTime(2012, 3, 7), new DateTime(2012, 3, 7), true);
+            //service.GetMatchedNavs(new DateTime(2012, 2, 21));
             //command.Parameters = parameters;
             //SqlParameter fundParam = new SqlParameter("@fundId", SqlDbType.Int);
             //fundParam.Value = fundId;
