@@ -50,7 +50,13 @@ namespace Testing
         //}
 
         static void Main(string[] args)
-        {            
+        {
+            EzeReconciliationClient client = new EzeReconciliationClient();
+            client.GetMatchedNavs(DateTime.Today);
+
+            Odey.ReconciliationServices.EzeReconciliationService.EzeReconciliationService nav = new Odey.ReconciliationServices.EzeReconciliationService.EzeReconciliationService();
+
+            nav.GetMatchedNavs(DateTime.Today);
             //DataTable dt1 = FMKeeleyReconciliationService.GetKeeleyPositions(27, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
             //DataTable dt2 = FMKeeleyReconciliationService.GetFMPositions(2100, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
 

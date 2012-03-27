@@ -38,11 +38,20 @@
     <Reference Include="log4net">
       <HintPath>..\Binaries\log4net\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Odey.Framework.Infrastructure.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
+    </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Services">
       <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceModelEx.IdentityCallStack, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d0f8277329bba7a0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,6 +74,10 @@
     <ProjectReference Include="..\Odey.ReconcilationServices.FMKeeleyReconcilationService\Odey.ReconciliationServices.FMKeeleyReconciliationService.csproj">
       <Project>{A8DB4F98-D955-4B77-A8CF-92F3D4424097}</Project>
       <Name>Odey.ReconciliationServices.FMKeeleyReconciliationService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Odey.ReconciliationServices.EZEReconciliationService\Odey.ReconciliationServices.EZEReconciliationService.csproj">
+      <Project>{C2FF7789-4E01-4067-80B8-177597A3F68A}</Project>
+      <Name>Odey.ReconciliationServices.EZEReconciliationService</Name>
     </ProjectReference>
     <ProjectReference Include="..\Odey.ReconciliationServices\Odey.ReconciliationServices.csproj">
       <Project>{B4CCD4CF-9F24-4265-B24C-D790F5DB9758}</Project>

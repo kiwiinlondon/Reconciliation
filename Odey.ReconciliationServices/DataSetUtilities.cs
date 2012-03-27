@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.Common;
+using GenericParsing;
 
 namespace Odey.ReconciliationServices
 {
@@ -90,6 +91,27 @@ namespace Odey.ReconciliationServices
         }
         #endregion
 
-          
-    }        
+
+
+        #region Fill From File
+        public static void FillFromFile(DataTable dt, string fileName, Dictionary<int, string> columnMappings)
+        {
+            using (GenericParserAdapter parser = new GenericParserAdapter(fileName))
+            {
+                //DataTable rawDataTable = parser.GetDataTable();
+                parser.FirstRowHasHeader = false;
+                while (parser.Read())
+                {
+                    DataRow dr = dt.NewRow();
+                    foreach(KeyValuePair<int,string> columnMapping in columnMappings)
+                    {                        
+                        dr[columnMapping.Value] = parser[columnMapping.Key];
+                    }
+                    dt.Rows.Add(dr);
+                }      
+            }
+        }
+        #endregion
+
+    }
 }

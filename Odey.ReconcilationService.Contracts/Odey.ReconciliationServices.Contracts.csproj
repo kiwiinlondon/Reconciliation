@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataSourceIds.cs" />
+    <Compile Include="IEzeReconciliation.cs" />
     <Compile Include="IFMKeeleyReconciliation.cs" />
     <Compile Include="MatchingEngineOutput.cs" />
     <Compile Include="MatchingEngineOutputItem.cs" />

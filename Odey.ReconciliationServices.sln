@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices.Clients", "Odey.ReconcilationServices.Clients\Odey.ReconciliationServices.Clients.csproj", "{308D646B-9E1B-44C2-B89A-710AAE5E103A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices.EZEReconciliationService", "Odey.ReconciliationServices.EZEReconciliationService\Odey.ReconciliationServices.EZEReconciliationService.csproj", "{C2FF7789-4E01-4067-80B8-177597A3F68A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,16 @@ Global
 		{308D646B-9E1B-44C2-B89A-710AAE5E103A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{308D646B-9E1B-44C2-B89A-710AAE5E103A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{308D646B-9E1B-44C2-B89A-710AAE5E103A}.Release|x86.ActiveCfg = Release|Any CPU
+		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

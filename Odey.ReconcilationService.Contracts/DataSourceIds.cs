@@ -14,6 +14,8 @@ namespace Odey.ReconciliationServices.Contracts
         [EnumMember]
         FMContViewLadder = 1,
         [EnumMember]
-        KeeleyPortfolio = 2    
+        KeeleyPortfolio = 2,
+        [EnumMember]
+        EZEPortfolio = 3   
     }
 }

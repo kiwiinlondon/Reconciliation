@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EzeReconciliationClient.cs" />
     <Compile Include="FMKeeleyReconcilationClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

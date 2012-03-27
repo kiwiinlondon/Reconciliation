@@ -276,7 +276,21 @@ namespace Odey.ReconciliationServices
         {
             return (!(-tolerance < value && value < tolerance));
         }
+        
+        protected static bool DifferenceGreaterThanPercentage(decimal value1, decimal value2, decimal tolerance)
+        {
+            decimal smallestValue = value1;
+            decimal difference = value2 - value1;
+            if (smallestValue > value2)
+            {
+                smallestValue = value2;
+                difference = value1 - value2;
+            }
+
+            return (difference / smallestValue > tolerance);
+        }
         #endregion
+
 
         #region Match
         public MatchingEngineOutput Match(DataTable dt1, DataTable dt2, MatchTypeIds matchType, bool returnOnlyMismatches, DataSourceIds dataSource1, DataSourceIds dataSource2)
