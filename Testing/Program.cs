@@ -51,17 +51,17 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            EzeReconciliationClient client = new EzeReconciliationClient();
-            client.GetMatchedNavs(DateTime.Today);
+          //  EzeReconciliationClient client = new EzeReconciliationClient();
+          //  client.GetMatchedNavs(DateTime.Today);
 
-            Odey.ReconciliationServices.EzeReconciliationService.EzeReconciliationService nav = new Odey.ReconciliationServices.EzeReconciliationService.EzeReconciliationService();
+          //  Odey.ReconciliationServices.EzeReconciliationService.EzeReconciliationService nav = new Odey.ReconciliationServices.EzeReconciliationService.EzeReconciliationService();
 
-            nav.GetMatchedNavs(DateTime.Today);
+          //  nav.GetMatchedNavs(DateTime.Today);
             //DataTable dt1 = FMKeeleyReconciliationService.GetKeeleyPositions(27, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
             //DataTable dt2 = FMKeeleyReconciliationService.GetFMPositions(2100, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
 
             FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
-            service.GetUnmatchedCVLPositions(3609, new DateTime(2012, 3, 7), new DateTime(2012, 3, 7), true);
+            service.GetUnmatchedCVLPositions(5913, new DateTime(2012, 4, 25), new DateTime(2012, 4, 02), true);
             //service.GetMatchedNavs(new DateTime(2012, 2, 21));
             //command.Parameters = parameters;
             //SqlParameter fundParam = new SqlParameter("@fundId", SqlDbType.Int);
