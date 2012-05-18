@@ -25,7 +25,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
             switch (fieldName)
             {
                 case "MarketValue":                
-                    return !GreaterThanZero(field1 - field2, (decimal)20);
+                    return !GreaterThanZero(field1 - field2, (decimal)99);
                 default:
                     return base.DecimalsMatch(matchingEngineOutputItem, fieldName, field1, field2);
             }

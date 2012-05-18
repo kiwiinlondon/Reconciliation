@@ -60,11 +60,10 @@ namespace Odey.ReconciliationServices
                 }
                 string part = String.Format("{{{0}}}",count++);
 
-                if (dc.DataType == typeof(string) || dc.DataType == typeof(DateTime))
+                if (dc.DataType == typeof(string) || dc.DataType == typeof(DateTime) && !dc.AllowDBNull)
                 {
                     part = String.Format("'{0}'", part);
-                }
-
+                }               
                 format = String.Format("{0}{1} = {2}", format, dc.ColumnName, part);
             }
             return format;
@@ -220,6 +219,11 @@ namespace Odey.ReconciliationServices
             foreach (MatchingEngineOutputProperty property in keyProperties)
             {
                 object value = GetValueFromDataRow(dr, property.PropertyName);
+                if (value.GetType()== typeof(DateTime) && (DateTime)value == new DateTime(1976,5,20))
+                {
+                    value = null;
+                }
+                    
                 matchingEngineOutputItem.KeyValues.Add(property.PropertyName, value);
             }
          

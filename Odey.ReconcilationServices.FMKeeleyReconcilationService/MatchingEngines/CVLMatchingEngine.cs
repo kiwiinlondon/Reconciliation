@@ -26,10 +26,9 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
                 case "UnRealisedPNL":
                 case "RealisedPricePNL":
                 case "MarketValue":
-                case "TotalPNL":                
-                    return !GreaterThanZero(field1 - field2, (decimal)30);
+                case "TotalPNL":
                 case "DeltaMarketValue":
-                    return GreaterThanZeroIgnoreSipp(matchingEngineOutputItem, fieldName, field1, field2, 100);
+                    return !GreaterThanZero(field1 - field2, (decimal)100);                
                 case "FXRate":
                 case "Price":
                     return GreaterThanZeroIgnoreZeroPositions(matchingEngineOutputItem, fieldName, field1, field2, null);
@@ -112,8 +111,8 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
 
         public static bool IsZero(
             decimal netPosition,
-            decimal marketValue//,
-            //decimal deltaEquityPosition,
+            decimal marketValue,
+            decimal accrual
             //decimal realisedFXPNL,
             //decimal unRealisedFXPNL,
             //decimal realisedPricePNL,
@@ -126,7 +125,8 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
             {
                 return false;
             }
-            if (GreaterThanZero(marketValue,1)) return false;
+            if (GreaterThanZero(marketValue,5)) return false;
+            if (GreaterThanZero(accrual, 1)) return false;
             //if (GreaterThanZero(deltaEquityPosition)) return false;
             //if (GreaterThanZero(realisedFXPNL)) return false;
             //if (GreaterThanZero(unRealisedFXPNL)) return false;
@@ -140,7 +140,8 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
         protected override bool RowCanBeIgnored(DataRow dr)
         {
             return IsZero(decimal.Parse(dr["NetPosition"].ToString()),
-                    decimal.Parse(dr["MarketValue"].ToString())//,
+                    decimal.Parse(dr["MarketValue"].ToString()),
+                    decimal.Parse(dr["TotalAccrual"].ToString())
                     //decimal.Parse(dr["DeltaEquityPosition"].ToString()),
                     //decimal.Parse(dr["Accrual"].ToString()),
                     //decimal.Parse(dr["CashIncome"].ToString()),

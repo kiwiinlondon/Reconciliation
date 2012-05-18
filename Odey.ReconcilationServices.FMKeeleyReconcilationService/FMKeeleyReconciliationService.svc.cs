@@ -74,7 +74,8 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             DataColumn bookId = dt.Columns.Add("FMBookId", typeof(int));
             DataColumn fmSecId = dt.Columns.Add("FMSecId", typeof(int));
             DataColumn ccyIso = dt.Columns.Add("CcyIso", typeof(string));
-            DataColumn instClass = dt.Columns.Add("FMInstClass", typeof(string));
+            DataColumn maturityDate = dt.Columns.Add("MaturityDate", typeof(DateTime));
+            
             dt.Columns.Add("NetPosition", typeof(decimal));
             dt.Columns.Add("UnitCost", typeof(decimal));
             dt.Columns.Add("Price", typeof(decimal));
@@ -87,7 +88,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             //_dt.Columns.Add("RealisedPricePNL", typeof(decimal));
             //_dt.Columns.Add("UnRealisedPNL", typeof(decimal));
             dt.Columns.Add("TotalPNL", typeof(decimal));
-            dt.PrimaryKey = new DataColumn[] { refDate, bookId, fmSecId, ccyIso };
+            dt.PrimaryKey = new DataColumn[] { refDate, maturityDate, bookId, fmSecId, ccyIso };
             return dt;
 
         }
@@ -164,13 +165,22 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
                 row["ReferenceDate"] = portfolio.LadderDate;
                 row["FMBookId"] = portfolio.BookId;
                 row["FMSecId"] = portfolio.IsecId;
+                if (portfolio.MaturityDate.HasValue)
+                {
+                    row["MaturityDate"] = portfolio.MaturityDate.Value;
+                }
+                else
+                {
+                    row["MaturityDate"] = new DateTime(1976,05,20);
+                }
                 row["CcyIso"] = portfolio.Currency;
                 row["NetPosition"] = portfolio.NetPosition;
                 row["Price"] = portfolio.Price;
                 row["FXRate"] = portfolio.FXRate;
                 row["MarketValue"] = portfolio.MarkValue;
                 row["DeltaMarketValue"] = portfolio.DeltaMarkValue;
-                row["TotalPNL"] = portfolio.TotalPnl;                              
+                row["TotalPNL"] = portfolio.TotalPnl;
+                row["TotalAccrual"] = portfolio.TotalAccrual;              
                 dt.Rows.Add(row);
             }            
             return dt;
