@@ -79,6 +79,10 @@
       <Project>{C2FF7789-4E01-4067-80B8-177597A3F68A}</Project>
       <Name>Odey.ReconciliationServices.EZEReconciliationService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Odey.ReconciliationServices.ValuationReconciliationService\Odey.ReconciliationServices.ValuationReconciliationService.csproj">
+      <Project>{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}</Project>
+      <Name>Odey.ReconciliationServices.ValuationReconciliationService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Odey.ReconciliationServices\Odey.ReconciliationServices.csproj">
       <Project>{B4CCD4CF-9F24-4265-B24C-D790F5DB9758}</Project>
       <Name>Odey.ReconciliationServices</Name>

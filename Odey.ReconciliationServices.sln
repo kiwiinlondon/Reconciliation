@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices.EZEReconciliationService", "Odey.ReconciliationServices.EZEReconciliationService\Odey.ReconciliationServices.EZEReconciliationService.csproj", "{C2FF7789-4E01-4067-80B8-177597A3F68A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices.ValuationReconciliationService", "Odey.ReconciliationServices.ValuationReconciliationService\Odey.ReconciliationServices.ValuationReconciliationService.csproj", "{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,16 @@ Global
 		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C2FF7789-4E01-4067-80B8-177597A3F68A}.Release|x86.ActiveCfg = Release|Any CPU
+		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

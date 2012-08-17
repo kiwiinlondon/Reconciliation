@@ -45,6 +45,7 @@
     <Compile Include="DataSourceIds.cs" />
     <Compile Include="IEzeReconciliation.cs" />
     <Compile Include="IFMKeeleyReconciliation.cs" />
+    <Compile Include="IValuationReconciliation.cs" />
     <Compile Include="MatchingEngineOutput.cs" />
     <Compile Include="MatchingEngineOutputItem.cs" />
     <Compile Include="MatchingEngineOutputProperty.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="MatchOutputTypeIds.cs" />
     <Compile Include="MatchTypeIds.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PortfolioReconciliationItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
