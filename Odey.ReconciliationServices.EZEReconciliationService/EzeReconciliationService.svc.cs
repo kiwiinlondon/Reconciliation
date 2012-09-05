@@ -12,6 +12,10 @@ using System.Data;
 using Odey.ReconciliationServices.EZEReconciliationService.MatchingEngines;
 using GenericParsing;
 using System.Configuration;
+using BC = Odey.Beauchamp.Contracts;
+using Odey.Framework.Keeley.Entities;
+using Odey.Beauchamp.Clients;
+
 
 namespace Odey.ReconciliationServices.EzeReconciliationService
 {
@@ -75,5 +79,30 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             return dt;
         }
 
+
+        public static DataTable GetFMNavs(DateTime referenceDate, List<Fund> funds)
+        {
+            DataTable dt = GetNewNavDataTable();
+            PortfolioClient client = new PortfolioClient();
+            List<BC.FundNAV> navs = client.GetFundNavs(funds.Select(a => a.FMOrgId).ToArray(), referenceDate);
+            foreach (BC.FundNAV fundNav in navs)
+            {
+                DataRow row = dt.NewRow();
+                row["FMFundId"] = fundNav.FundId;
+                row["MarketValue"] = fundNav.MarketValue;
+                dt.Rows.Add(row);
+            }
+            return dt;
+        }
+
+        #region IEzeReconciliation Members
+
+
+        public ThreeWayFundNavRecOutput GetThreeWayRecOutput(DateTime referenceDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }

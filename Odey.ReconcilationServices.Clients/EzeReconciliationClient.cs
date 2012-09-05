@@ -30,6 +30,27 @@ namespace Odey.ReconciliationServices.Clients
         }
 
         #endregion
+
+        #region IEzeReconciliation Members
+
+
+        public ThreeWayFundNavRecOutput GetThreeWayRecOutput(DateTime referenceDate)
+        {
+            IEzeReconciliation proxy = factory.CreateChannel();
+            try
+            {
+                ThreeWayFundNavRecOutput e = proxy.GetThreeWayRecOutput(referenceDate);
+                ((ICommunicationObject)proxy).Close();
+                return e;
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
+        #endregion
     }
     
 }

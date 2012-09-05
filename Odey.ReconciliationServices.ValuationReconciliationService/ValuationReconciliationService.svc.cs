@@ -30,6 +30,7 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
             {
                 DataRow dr = dt.NewRow();
                 dr["InstrumentMarketId"] = reconciliationItem.InstrumentMarketId;
+                dr["IsAccrual"] = reconciliationItem.IsAccrual;
                 dr["NetPosition"] = reconciliationItem.Holding;
                 dr["Price"] = reconciliationItem.Price;
                 dr["FXRate"] = reconciliationItem.FXRate;
@@ -44,12 +45,13 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
 
             DataTable dt = new DataTable("Positions");
             DataColumn instrumentMarketId = dt.Columns.Add("InstrumentMarketId", typeof(int));
+            DataColumn isAccrual = dt.Columns.Add("IsAccrual", typeof(bool));
 
             dt.Columns.Add("NetPosition", typeof(decimal));         
             dt.Columns.Add("Price", typeof(decimal));
             dt.Columns.Add("FXRate", typeof(decimal));
             dt.Columns.Add("MarketValue", typeof(decimal));   
-            dt.PrimaryKey = new DataColumn[] { instrumentMarketId };
+            dt.PrimaryKey = new DataColumn[] { instrumentMarketId, isAccrual };
             return dt;
 
         }

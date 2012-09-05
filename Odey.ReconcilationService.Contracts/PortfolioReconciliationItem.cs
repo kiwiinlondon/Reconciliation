@@ -11,6 +11,9 @@ namespace Odey.ReconciliationServices.Contracts
     {
         [DataMember]
         public int InstrumentMarketId { get; set; }
+
+        [DataMember]
+        public bool IsAccrual { get; set; }
         
         [DataMember]
         public decimal Holding { get; set; }
