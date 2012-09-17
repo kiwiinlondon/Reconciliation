@@ -7,18 +7,18 @@ using System.Runtime.Serialization;
 namespace Odey.ReconciliationServices.Contracts
 {
     [DataContract]
-    public class ThreeWayFundNavRecOutput
+    public class ThreeWayNavRecOutput
     {
         [DataMember]
-        public int FundId { get; set; }
+        public string Identifier { get; set; }
 
         [DataMember]
-        public object EZE { get; set; }
+        public decimal EZE { get; set; }
 
         [DataMember]
-        public object FundManager { get; set; }
+        public decimal FundManager { get; set; }
 
         [DataMember]
-        public object Keeley { get; set; }
+        public decimal Keeley { get; set; }
     }
 }

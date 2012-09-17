@@ -13,7 +13,7 @@ namespace Odey.ReconciliationServices.Contracts
         MatchingEngineOutput GetMatchedNavs(DateTime referenceDate);
 
         [OperationContract]
-        ThreeWayFundNavRecOutput GetThreeWayRecOutput (DateTime referenceDate);
+        List<ThreeWayNavRecOutput> GetThreeWayRecOutput (DateTime referenceDate);
     }
 }
 

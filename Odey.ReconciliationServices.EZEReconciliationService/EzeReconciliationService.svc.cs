@@ -98,9 +98,88 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         #region IEzeReconciliation Members
 
 
-        public ThreeWayFundNavRecOutput GetThreeWayRecOutput(DateTime referenceDate)
+        public static Dictionary<string,decimal> GetFMBookNavs(DateTime referenceDate)
         {
-            throw new NotImplementedException();
+            FundClient fundClient = new FundClient();
+            List<Fund> funds = fundClient.GetAll().Where(a => a.PositionsExist == true).ToList();
+            BookClient bookClient = new BookClient();
+            List<Book> books = bookClient.GetAll().Where(a => a.FMOrgId.HasValue).ToList();
+
+            PortfolioClient client = new PortfolioClient();
+            List<BC.BookNAV> navsByBookId = client.GetBookNavs(funds.Select(a => a.FMOrgId).ToArray(), referenceDate);
+            var tempQuery = navsByBookId.Join(books,
+                NAV => NAV.BookId,
+                Book => Book.FMOrgId,
+                (NAV, Book) => new { EZEIdentifier = string.IsNullOrWhiteSpace(Book.EZEIdentifier) ? Book.Fund.EZEIdentifier : Book.EZEIdentifier, NAV.MarketValue }).ToList()
+                ;
+
+            return tempQuery.GroupBy(g => g.EZEIdentifier).ToDictionary(a => a.Key, a => a.Sum(b => b.MarketValue));
+        }
+
+       
+        public List<ThreeWayNavRecOutput> GetThreeWayRecOutput(DateTime referenceDate)
+        {
+            
+            Dictionary<string, ThreeWayNavRecOutput> output = new Dictionary<string, ThreeWayNavRecOutput>();
+            Dictionary<string, decimal> fmNavs = GetFMBookNavs(referenceDate);
+            foreach (KeyValuePair<string, decimal> fmNav in fmNavs)
+            {
+                AddToOutput(fmNav.Key, null, fmNav.Value, null, output);
+            }
+            DataTable ezeNavs = GetEzeNavs();
+            AddDataTableToOutput(ezeNavs, output, true);
+            DataTable keeleyNavs = GetKeeleyNavs(referenceDate);
+            AddDataTableToOutput(keeleyNavs, output, false);
+
+            return output.Values.ToList();
+        }
+
+        private void AddDataTableToOutput(DataTable dt, Dictionary<string, ThreeWayNavRecOutput> output,bool isEze)
+        {
+            foreach (DataRow dr in dt.Rows)
+            {
+                string ezeIdentifier = dr[EZEIdentifierColumnName].ToString();
+                decimal marketValue = decimal.Parse(dr[MarketValueColumnName].ToString());
+
+                decimal? ezeNav = null;
+                decimal? keeleyNav = null;
+                if (isEze)
+                {
+                    ezeNav = marketValue;
+                }
+                else
+                {
+                    keeleyNav = marketValue;
+                }
+                AddToOutput(ezeIdentifier, ezeNav, null, keeleyNav, output);
+            }
+        }
+
+
+
+        public void AddToOutput(string ezeIdentifier, decimal? ezeNav, decimal? fmNav, decimal? keelyNav, Dictionary<string, ThreeWayNavRecOutput> outputs)
+        {
+            ThreeWayNavRecOutput output;
+            if (!outputs.TryGetValue(ezeIdentifier, out output))
+            {
+                output = new ThreeWayNavRecOutput();
+                output.Identifier = ezeIdentifier;
+                outputs.Add(ezeIdentifier, output);
+            }
+            if (ezeNav.HasValue)
+            {
+                output.EZE = ezeNav.Value;
+            }
+
+            if (fmNav.HasValue)
+            {
+                output.FundManager = fmNav.Value;
+            }
+
+            if (keelyNav.HasValue)
+            {
+                output.Keeley = keelyNav.Value;
+            }
         }
 
         #endregion

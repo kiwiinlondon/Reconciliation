@@ -8,6 +8,7 @@ using Odey.ReconciliationServices.FMKeeleyReconciliationService;
 using Odey.ReconciliationServices.Clients;
 using Odey.ReconciliationServices.ValuationReconciliationService;
 using Odey.ReconciliationServices.Contracts;
+using Odey.ReconciliationServices.EzeReconciliationService;
 
 namespace Testing
 {
@@ -53,10 +54,14 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            ValuationReconciliationClient vrs = new ValuationReconciliationClient();
-            MatchingEngineOutput a =  vrs.MatchPositionsAgainstKeeley(3609, DateTime.Today, new List<PortfolioReconciliationItem> { });
-          //  EzeReconciliationClient client = new EzeReconciliationClient();
-          //  client.GetMatchedNavs(DateTime.Today);
+
+            //EzeReconciliationClient client = new EzeReconciliationClient();
+            EzeReconciliationService client = new EzeReconciliationService();
+            client.GetThreeWayRecOutput(DateTime.Today);
+            //  client.GetMatchedNavs(DateTime.Today);
+          //  ValuationReconciliationClient vrs = new ValuationReconciliationClient();
+           // MatchingEngineOutput a =  vrs.MatchPositionsAgainstKeeley(3609, DateTime.Today, new List<PortfolioReconciliationItem> { });
+          // 
 
           //  Odey.ReconciliationServices.EzeReconciliationService.EzeReconciliationService nav = new Odey.ReconciliationServices.EzeReconciliationService.EzeReconciliationService();
 
