@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices", "Odey.ReconciliationServices\Odey.ReconciliationServices.csproj", "{B4CCD4CF-9F24-4265-B24C-D790F5DB9758}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{708545D8-A007-4BBF-A18C-70429F88DA88}"
