@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataSourceIds.cs" />
+    <Compile Include="IClientPortfolio.cs" />
     <Compile Include="IEzeReconciliation.cs" />
     <Compile Include="IFMKeeleyReconciliation.cs" />
     <Compile Include="IValuationReconciliation.cs" />

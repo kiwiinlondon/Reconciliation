@@ -9,6 +9,7 @@ using Odey.ReconciliationServices.Clients;
 using Odey.ReconciliationServices.ValuationReconciliationService;
 using Odey.ReconciliationServices.Contracts;
 using Odey.ReconciliationServices.EzeReconciliationService;
+using Odey.ReconciliationServices.ClientPortfolioReconciliationService;
 
 namespace Testing
 {
@@ -54,7 +55,8 @@ namespace Testing
 
         static void Main(string[] args)
         {
-
+            ClientPortfolioReconciliationService cpr = new ClientPortfolioReconciliationService();
+            cpr.ReconcileDaiwa(@"C:\Temp\Client\Daiwa\Feb 2 2013\share_register_by_lot 15-02-2013.xlsx", new int[] {741,4927}, new DateTime(2013, 2, 25));
             //EzeReconciliationClient client = new EzeReconciliationClient();
             EzeReconciliationService client = new EzeReconciliationService();
             client.GetThreeWayRecOutput(DateTime.Today);

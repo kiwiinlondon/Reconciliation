@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices.ValuationReconciliationService", "Odey.ReconciliationServices.ValuationReconciliationService\Odey.ReconciliationServices.ValuationReconciliationService.csproj", "{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices.ClientPortfolioReconciliationService", "Odey.ReconciliationServices.ClientPortfolioReconciliationService\Odey.ReconciliationServices.ClientPortfolioReconciliationService.csproj", "{6700C148-3795-4A8B-BB6F-D6E50B777A2D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,16 @@ Global
 		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FFCCCEFD-BC50-443F-A405-D2A84C0CC755}.Release|x86.ActiveCfg = Release|Any CPU
+		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

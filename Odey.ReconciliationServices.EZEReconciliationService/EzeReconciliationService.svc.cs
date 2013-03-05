@@ -101,11 +101,12 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         public static Dictionary<string,decimal> GetFMBookNavs(DateTime referenceDate)
         {
             FundClient fundClient = new FundClient();
-            List<Fund> funds = fundClient.GetAll().Where(a => a.PositionsExist == true).ToList();
+            List<Fund> funds = fundClient.GetAll().Where(a => a.PositionsExist == true && a.IsActive).ToList();
             BookClient bookClient = new BookClient();
             List<Book> books = bookClient.GetAll().Where(a => a.FMOrgId.HasValue).ToList();
 
             PortfolioClient client = new PortfolioClient();
+            string bookString = string.Join(",", funds.Select(a => a.FMOrgId));
             List<BC.BookNAV> navsByBookId = client.GetBookNavs(funds.Select(a => a.FMOrgId).ToArray(), referenceDate);
             var tempQuery = navsByBookId.Join(books,
                 NAV => NAV.BookId,

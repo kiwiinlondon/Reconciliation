@@ -18,6 +18,10 @@ namespace Odey.ReconciliationServices.Contracts
         [EnumMember]
         EZEPortfolio = 3 ,
         [EnumMember]
-        ExternalPortfolio = 4   
+        ExternalPortfolio = 4,   
+        [EnumMember]
+        AdministratorClientFile = 5,  
+        [EnumMember]
+        KeeleyClientPortfolio = 6  
     }
 }
