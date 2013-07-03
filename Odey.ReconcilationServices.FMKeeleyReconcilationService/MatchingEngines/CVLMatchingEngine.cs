@@ -30,6 +30,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
                 case "DeltaMarketValue":
                     return !GreaterThanZero(field1 - field2, (decimal)100);                
                 case "FXRate":
+                    return GreaterThanZeroIgnoreZeroPositions(matchingEngineOutputItem, fieldName, field1, field2, 0.0001m);
                 case "Price":
                     return GreaterThanZeroIgnoreZeroPositions(matchingEngineOutputItem, fieldName, field1, field2, null);
                 default:
