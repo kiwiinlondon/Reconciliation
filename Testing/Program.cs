@@ -55,8 +55,8 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            ClientPortfolioReconciliationService cpr = new ClientPortfolioReconciliationService();
-            cpr.ReconcileDaiwa(@"C:\Temp\Client\Daiwa\Apr 2013\share_register_by_lot 02-04-2013.xlsx", new int[] {741,4927}, new DateTime(2013,4, 10));
+          //  ClientPortfolioReconciliationService cpr = new ClientPortfolioReconciliationService();
+          //  cpr.ReconcileDaiwa(@"C:\Temp\Client\Daiwa\Apr 2013\share_register_by_lot 02-04-2013.xlsx", new int[] {741,4927}, new DateTime(2013,4, 10));
             //EzeReconciliationClient client = new EzeReconciliationClient();
             EzeReconciliationService client = new EzeReconciliationService();
             client.GetThreeWayRecOutput(DateTime.Today);

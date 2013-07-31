@@ -98,13 +98,15 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         #region IEzeReconciliation Members
 
 
-        public static Dictionary<string,decimal> GetFMBookNavs(DateTime referenceDate)
+        public static Dictionary<string,decimal> GetFMBookNavs(DateTime referenceDate, out Dictionary<string,int> ezeIdentifierToOutputMapping)
         {
+            
             FundClient fundClient = new FundClient();
             List<Fund> funds = fundClient.GetAll().Where(a => a.PositionsExist == true && a.IsActive).ToList();
+            //funds.ForEach(a=> ezeIdentifierToFundTypeMapping.Add(a=>a.
             BookClient bookClient = new BookClient();
             List<Book> books = bookClient.GetAll().Where(a => a.FMOrgId.HasValue).ToList();
-
+            ezeIdentifierToOutputMapping = books.Select(g => new { Order = g.Fund.FundTypeId == 7 ? 1 : 0, EzeIdentifier = string.IsNullOrWhiteSpace(g.EZEIdentifier) ? g.Fund.EZEIdentifier : g.EZEIdentifier }).Distinct().ToDictionary(a => a.EzeIdentifier, a => a.Order);
             PortfolioClient client = new PortfolioClient();
             string bookString = string.Join(",", funds.Select(a => a.FMOrgId));
             List<BC.BookNAV> navsByBookId = client.GetBookNavs(funds.Select(a => a.FMOrgId).ToArray(), referenceDate);
@@ -113,7 +115,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
                 Book => Book.FMOrgId,
                 (NAV, Book) => new { EZEIdentifier = string.IsNullOrWhiteSpace(Book.EZEIdentifier) ? Book.Fund.EZEIdentifier : Book.EZEIdentifier, NAV.MarketValue }).ToList()
                 ;
-
+            
             return tempQuery.GroupBy(g => g.EZEIdentifier).ToDictionary(a => a.Key, a => a.Sum(b => b.MarketValue));
         }
 
@@ -122,8 +124,9 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         {
             
             Dictionary<string, ThreeWayNavRecOutput> output = new Dictionary<string, ThreeWayNavRecOutput>();
-            Dictionary<string, decimal> fmNavs = GetFMBookNavs(referenceDate);
-            foreach (KeyValuePair<string, decimal> fmNav in fmNavs)
+            Dictionary<string,int> ezeIdentifierToOutputMapping;
+            Dictionary<string, decimal> fmNavs = GetFMBookNavs(referenceDate, out ezeIdentifierToOutputMapping);
+            foreach (KeyValuePair<string, decimal> fmNav in fmNavs.OrderBy(a => ezeIdentifierToOutputMapping[a.Key]).ThenBy(a=>a.Key))
             {
                 AddToOutput(fmNav.Key, null, fmNav.Value, null, output);
             }
