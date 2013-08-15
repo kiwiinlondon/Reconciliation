@@ -74,8 +74,11 @@ namespace Odey.ReconciliationServices
         #region Fill Keeley Data Table
         public static void FillKeeleyDataTable(DataTable dt, string storedProcName, Dictionary<string,object> parameters, Dictionary<string,string> columnMappings)
         {
-            DataSet ds = new DataSet();
-            ds.Tables.Add(dt);
+            if (dt.DataSet == null)
+            {
+                DataSet ds = new DataSet();
+                ds.Tables.Add(dt);
+            }            
             using (SqlConnection connection = new SqlConnection(DataSetUtilities.KeeleyConnectionString))
             {
                 SqlCommand command = new SqlCommand(storedProcName, connection);
@@ -102,7 +105,7 @@ namespace Odey.ReconciliationServices
             return selectText;
         }        
 
-        public static void FillFromExcelFile(string fileName, string worksheetName, DataTable dt, Dictionary<string, string> columnMappings,List<string> columnsToGroupBy)
+        public static void FillFromExcelFile(string fileName, string worksheetName, DataTable dt, Dictionary<string, string> columnMappings,List<string> columnsToGroupBy,Dictionary<string,object[]>exclusionColumnsAndExclusions)
         {
 
             string selectClause = string.Join(",", columnMappings.Select(a => String.Format("{0} as {1}", AddAggregator(a.Key, a.Value, columnsToGroupBy), a.Value)));
@@ -115,7 +118,23 @@ namespace Odey.ReconciliationServices
             if (columnsToGroupBy != null)
             {
                 string groupByClause = string.Join(",", columnMappings.Where(a => columnsToGroupBy.Contains(a.Value)).Select(a => a.Key));
-                query = string.Format("{0} where fund_id not like 'GIANO%'group by {1}", query, groupByClause);
+                if (exclusionColumnsAndExclusions != null && exclusionColumnsAndExclusions.Count > 0)
+                {
+                    string exclusionString = null;
+                    string exclusionClause = "Where";
+                    foreach (KeyValuePair<string, object[]> exclusionColumnAndExclusions in exclusionColumnsAndExclusions)
+                    {
+                        object[] exclusions = exclusionColumnAndExclusions.Value;
+                        if (exclusions != null && exclusions.Length > 0)
+                        {
+                            exclusionString = string.Join(",", exclusionColumnAndExclusions.Value.Select(a => string.Format("'{0}'", a)));
+                            exclusionString = string.Format("{0} {1} in ({2}) ", exclusionClause, exclusionColumnAndExclusions.Key, exclusionString);
+                            exclusionClause = "And";
+                        }
+                    }
+                    query = string.Format("{0}{1}", query, exclusionString);
+                }
+                query = string.Format("{0} group by {1}", query, groupByClause);
             }
 
 
@@ -125,7 +144,6 @@ namespace Odey.ReconciliationServices
             //"select * frfunds_fundid & '~' & trans_holderid & '~' & trans_acctid"
             DataTableMapping mapping = adapter.TableMappings.Add("Table", dt.TableName);
             AddColumnMappings(mapping, columnMappings);
-            (new DataSet()).Tables.Add(dt);
             adapter.FillSchema(dt.DataSet, SchemaType.Mapped);
             adapter.Fill(dt.DataSet);            
         }

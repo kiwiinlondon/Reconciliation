@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Odey.ReconciliationServices.Contracts
 {
+    [ServiceContract(Namespace = "Odey.ReconciliationServices.Contracts")]
     public interface IClientPortfolioReconciliation
     {
         [OperationContract]
-        MatchingEngineOutput ReconcileDaiwa(string fileName, int[] fundIds, DateTime referenceDate);
+        MatchingEngineOutput Reconcile(string fileName, int fundId, DateTime referenceDate);
     }
 }

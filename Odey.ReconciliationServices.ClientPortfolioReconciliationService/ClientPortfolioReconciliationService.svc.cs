@@ -1,5 +1,7 @@
 ﻿using Odey.Framework.Infrastructure.Services;
+using Odey.Framework.Keeley.Entities;
 using Odey.ReconciliationServices.Contracts;
+using Odey.StaticServices.Clients;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,83 +18,70 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class ClientPortfolioReconciliationService : OdeyServiceBase, IClientPortfolioReconciliation
     {
-        
 
-        private const string DataTableName = "Portfolio";
-        private const string AccountReferenceColumnName = "AccountReference";
-        private const string QuantityColumnName = "Quantity";
-        private const string MarketValueColumnName = "MarketValue";
 
-        private static DataTable GetPortfolioDataTable()
+        public const string DataTableName = "Portfolio";
+        public const string AccountReferenceColumnName = "AccountReference";
+        public const string FundReferenceColumnName = "Fund";
+        public const string QuantityColumnName = "Quantity";
+        public const string MarketValueColumnName = "MarketValue";
+
+        public static DataTable GetPortfolioDataTable()
         {
-
-            DataTable dt = new DataTable(DataTableName);
+            DataSet ds = new DataSet();
+            DataTable dt = ds.Tables.Add(DataTableName);
             DataColumn accountReferenceColumn = dt.Columns.Add(AccountReferenceColumnName, typeof(string));
+            DataColumn fundReferenceColumn = dt.Columns.Add(FundReferenceColumnName, typeof(string));
             dt.Columns.Add(QuantityColumnName, typeof(decimal));
             dt.Columns.Add(MarketValueColumnName, typeof(decimal));
-        //    dt.PrimaryKey = new DataColumn[] { accountReferenceColumn };
+            dt.PrimaryKey = new DataColumn[] { accountReferenceColumn, fundReferenceColumn };
+            dt.DataSet.EnforceConstraints = false;
             return dt;
         }
 
-        public MatchingEngineOutput Reconcile(DataTable administratorValues, int[] fundIds, DateTime referenceDate)
+        public MatchingEngineOutput Reconcile(DataTable administratorValues, int fundId, DateTime referenceDate)
         {
-            DataTable keeleyValues = GetKeeleyValues(fundIds, referenceDate);
+            DataTable keeleyValues = GetKeeleyValues(fundId, referenceDate);
+            
             ClientPortfolioMatchingEngine engine = new ClientPortfolioMatchingEngine(Logger);
             MatchingEngineOutput output = engine.Match(administratorValues, keeleyValues, MatchTypeIds.Full, true, DataSourceIds.AdministratorClientFile, DataSourceIds.KeeleyClientPortfolio);            
 
             return output;
         }
 
-        #region Daiwa
+        
+        private static Dictionary<int,Fund> Funds = new FundClient().GetAll().ToDictionary(a => a.LegalEntityID,a=>a);
 
+        private static readonly Dictionary<int, string[]> AdministratorShareClassIdsByFund = Funds.Values.Where(a => a.AdministratorIdentifier != null).GroupBy(g => g.ParentFundId.HasValue ? g.ParentFundId.Value : g.LegalEntityID).ToDictionary(a => a.Key, a => a.Select(s => s.AdministratorIdentifier).ToArray());
 
-        public MatchingEngineOutput ReconcileDaiwa(string fileName, int[] fundId, DateTime referenceDate)
+        public MatchingEngineOutput Reconcile(string fileName, int fundId, DateTime referenceDate)
         {
-            DataTable values = GetDaiwaValues(fileName);
-            values.PrimaryKey = new DataColumn[] { values.Columns[AccountReferenceColumnName] };
+            FileReader fileReader = FileReaderFactory.Get(fileName, Funds[fundId], AdministratorShareClassIdsByFund[fundId]);
+            DataTable values = fileReader.GetData();
+
             return Reconcile(values, fundId, referenceDate);
         }
-        private static Dictionary<string, string> CreateDaiwaColumnMappings()
-        {
-            Dictionary<string, string> columnMappings = new Dictionary<string, string>();
-            columnMappings.Add("fund_id & '~' & holder_id & '~' & acct_id", AccountReferenceColumnName);
+        
 
-            columnMappings.Add("shares", QuantityColumnName);
-            columnMappings.Add("market_value", MarketValueColumnName);
-            
-            return columnMappings;
-        }
-
-        private static List<string> CreateDaiwaGrouping()
-        {
-            return new List<string>() { AccountReferenceColumnName };
-        }
-
-        public static DataTable GetDaiwaValues(string fileName)
-        {
-            DataTable dt = GetPortfolioDataTable();
-            DataSetUtilities.FillFromExcelFile(fileName, "share_register_by_lot", dt, CreateDaiwaColumnMappings(), CreateDaiwaGrouping());
-            return dt;
-        }
-        #endregion
+    
 
         #region Keeley
-        private static Dictionary<string, object> CreateKeeleyParameters(int[] fundIds, DateTime referenceDate)
+        private static Dictionary<string, object> CreateKeeleyParameters(int fundId, DateTime referenceDate)
         {
-            string fundIdString = string.Join(",", fundIds);
             Dictionary<string, object> parameters = new Dictionary<string, object>();
 
             parameters.Add("@referenceDate", referenceDate);
 
-            parameters.Add("@fundIds", fundIdString);
+            parameters.Add("@fundIds", fundId.ToString());
 
             return parameters;
         }
 
-        public static DataTable GetKeeleyValues(int[] fundId, DateTime referenceDate)
+        public static DataTable GetKeeleyValues(int fundId, DateTime referenceDate)
         {
             DataTable dt = GetPortfolioDataTable();
             DataSetUtilities.FillKeeleyDataTable(dt, KeeleyStoredProcedureName, CreateKeeleyParameters(fundId, referenceDate), null);
+            dt.DataSet.EnforceConstraints = true;
             return dt;
         }
 

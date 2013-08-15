@@ -31,12 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=e6924b5c5be258b9, processorArchitecture=MSIL">
@@ -44,8 +45,28 @@
       <HintPath>..\Binaries\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Odey.Framework.Infrastructure.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
+    </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Services">
       <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Framework.Keeley.Entities">
+      <HintPath>..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Framework.Keeley.Entities.Enums, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.Enums.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.StaticServices.Clients">
+      <HintPath>..\Binaries\Odey.StaticServices\Odey.StaticServices.Clients.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.StaticServices.Contracts">
+      <HintPath>..\Binaries\Odey.StaticServices\Odey.StaticServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceModelEx.IdentityCallStack">
+      <HintPath>..\..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -74,12 +95,16 @@
     <Compile Include="ClientPortfolioReconciliationService.svc.cs">
       <DependentUpon>ClientPortfolioReconciliationService.svc</DependentUpon>
     </Compile>
+    <Compile Include="File Readers\FileReader.cs" />
+    <Compile Include="File Readers\FileReaderFactory.cs" />
+    <Compile Include="File Readers\QuintillionFileReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\PROD.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
