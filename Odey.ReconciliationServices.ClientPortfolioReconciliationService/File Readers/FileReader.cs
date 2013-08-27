@@ -19,7 +19,7 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
         }
 
         protected abstract  Dictionary<string, string> CreateColumnMappings();
-        protected abstract string SheetName { get; }
+        protected virtual string SheetName { get { return null; } }
         protected abstract string FundColumnName { get; }
 
         private static List<string> CreateGrouping()

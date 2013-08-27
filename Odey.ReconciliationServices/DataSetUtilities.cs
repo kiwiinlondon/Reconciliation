@@ -26,6 +26,7 @@ namespace Odey.ReconciliationServices
 
         #region FM Connection String
         private static string FMConnectionString
+
         {
             get
             {
@@ -103,7 +104,16 @@ namespace Odey.ReconciliationServices
                 return String.Format("Sum({0})", selectText);
             }
             return selectText;
-        }        
+        }
+
+        private static DataTable GetDataSetSchema(string connectionString)
+        {
+            using (OleDbConnection conObj = new OleDbConnection(connectionString))
+            {
+                if (conObj.State != ConnectionState.Open) conObj.Open();
+                return conObj.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
+            }
+        }
 
         public static void FillFromExcelFile(string fileName, string worksheetName, DataTable dt, Dictionary<string, string> columnMappings,List<string> columnsToGroupBy,Dictionary<string,object[]>exclusionColumnsAndExclusions)
         {
@@ -112,6 +122,14 @@ namespace Odey.ReconciliationServices
 
             
             string connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 8.0;IMEX=1;HDR=YES;\"", fileName);
+
+            if (string.IsNullOrWhiteSpace(worksheetName))
+            {
+                DataTable schema = GetDataSetSchema(connectionString);
+                DataRow row = schema.Rows[0];
+                worksheetName = row["TABLE_NAME"].ToString();
+                worksheetName = worksheetName.Substring(1, worksheetName.Length - 3);
+            }
             //string query = "SELECT funds_fundid & '~' & trans_holderid & '~' & trans_acctid a;s AccountReference,sum (sumorigshares) as Quantity FROM [Register_summ$] group by funds_fundid & '~' & trans_holderid & '~' & trans_acctid";
             string query = String.Format("SELECT {0} FROM [{1}$]", selectClause, worksheetName);
 

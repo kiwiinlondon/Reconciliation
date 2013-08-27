@@ -15,8 +15,6 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
 
         protected override string FundColumnName { get { return "Classmantraid"; } }
 
-        protected override string SheetName { get { return "Sheet1"; } }
-
         protected override Dictionary<string, string> CreateColumnMappings()
         {
             Dictionary<string, string> columnMappings = new Dictionary<string, string>();

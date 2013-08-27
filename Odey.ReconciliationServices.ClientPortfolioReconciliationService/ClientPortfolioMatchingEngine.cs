@@ -25,7 +25,7 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
                 {
                     return true;
                 }
-                else if ((field1-field2)/field1<0.000015m)
+                else if ((field1-field2)/field1<0.000030m)
                 {
                     return true;
                 }
