@@ -95,9 +95,11 @@
     <Compile Include="ClientPortfolioReconciliationService.svc.cs">
       <DependentUpon>ClientPortfolioReconciliationService.svc</DependentUpon>
     </Compile>
+    <Compile Include="File Readers\CapitaIrelandFileReader.cs" />
     <Compile Include="File Readers\FileReader.cs" />
     <Compile Include="File Readers\FileReaderFactory.cs" />
     <Compile Include="File Readers\QuintillionFileReader.cs" />
+    <Compile Include="File Readers\RBCFileReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

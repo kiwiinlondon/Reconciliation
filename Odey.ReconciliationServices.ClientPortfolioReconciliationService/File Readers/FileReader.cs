@@ -16,11 +16,28 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
             FundId = fundId;
             FileName = fileName;
             ShareClassIdentifiers = shareClassIdentifiers;
+          //  FirstRowIsHeader = true;
         }
 
-        protected abstract  Dictionary<string, string> CreateColumnMappings();
         protected virtual string SheetName { get { return null; } }
         protected abstract string FundColumnName { get; }
+        protected abstract string AccountReferenceColumnName { get; }
+        protected abstract string QuantityColumnName { get; }
+        protected abstract string MarketValueColumnName { get; }
+        protected virtual bool FirstRowIsHeader { get { return true; } }
+        protected virtual string[] FundsToExclude { get { return null; } }
+
+        protected virtual Dictionary<string, string> CreateColumnMappings()
+        {
+            Dictionary<string, string> columnMappings = new Dictionary<string, string>();
+            columnMappings.Add(AccountReferenceColumnName, ClientPortfolioReconciliationService.AccountReferenceColumnName);
+            columnMappings.Add(FundColumnName, ClientPortfolioReconciliationService.FundReferenceColumnName);
+            columnMappings.Add(QuantityColumnName, ClientPortfolioReconciliationService.QuantityColumnName);
+            columnMappings.Add(MarketValueColumnName, ClientPortfolioReconciliationService.MarketValueColumnName);
+
+            return columnMappings;
+        }
+
 
         private static List<string> CreateGrouping()
         {
@@ -31,7 +48,16 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
         public DataTable GetData()
         {
             DataTable dt = ClientPortfolioReconciliationService.GetPortfolioDataTable();
-            DataSetUtilities.FillFromExcelFile(FileName, SheetName, dt, CreateColumnMappings(), CreateGrouping(), new Dictionary<string, object[]>() { { FundColumnName, ShareClassIdentifiers } });
+
+
+            Dictionary<string, object[]> fundsToExclude = new Dictionary<string,object[]>();
+            if (FundsToExclude!=null)
+            {
+                fundsToExclude = new Dictionary<string,object[]>(){{FundColumnName,FundsToExclude}};
+            }
+           
+            DataSetUtilities.FillFromExcelFile(FileName,FirstRowIsHeader, SheetName, dt, CreateColumnMappings(), CreateGrouping(), new Dictionary<string, object[]>() { { FundColumnName, ShareClassIdentifiers } },
+                fundsToExclude);
             dt.DataSet.EnforceConstraints = true;
             return dt;
         }

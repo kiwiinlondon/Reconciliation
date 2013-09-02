@@ -17,6 +17,10 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
             {
                 case AdministratorIds.Quintillion:
                     return new QuintillionFileReader(fileName, fund.LegalEntityID, shareClassIdentifiers);
+                case AdministratorIds.CapitaIRE:
+                    return new CapitaIrelandFileReader(fileName, fund.LegalEntityID, shareClassIdentifiers);
+                case AdministratorIds.RBCDexia:
+                    return new RBCFileReader(fileName, fund.LegalEntityID, shareClassIdentifiers);
                 default:
                     throw new ApplicationException(String.Format("Unknown Administrator for fund {0}", fund.Name));
             }

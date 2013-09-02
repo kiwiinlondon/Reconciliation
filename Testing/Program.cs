@@ -59,7 +59,7 @@ namespace Testing
 
 
 
-            cpr.Reconcile(@"\\app02\FileShare\Quintillion\Client\share_register_by_lot OEI 23-08-2013.xls", 741, new DateTime(2013, 8, 15));
+            cpr.Reconcile(@"C:\Temp\Client\RBC Dexia\Odey register 28.8.13.xls", 5327, new DateTime(2013, 8, 28));
             //EzeReconciliationClient client = new EzeReconciliationClient();
             EzeReconciliationService client = new EzeReconciliationService();
             client.GetThreeWayRecOutput(DateTime.Today);

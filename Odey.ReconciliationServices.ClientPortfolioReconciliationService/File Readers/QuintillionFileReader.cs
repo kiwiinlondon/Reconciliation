@@ -14,17 +14,9 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
         }
 
         protected override string FundColumnName { get { return "Classmantraid"; } }
-
-        protected override Dictionary<string, string> CreateColumnMappings()
-        {
-            Dictionary<string, string> columnMappings = new Dictionary<string, string>();
-            columnMappings.Add("Investormantraid", ClientPortfolioReconciliationService.AccountReferenceColumnName);
-            columnMappings.Add(FundColumnName, ClientPortfolioReconciliationService.FundReferenceColumnName);
-            columnMappings.Add("Units", ClientPortfolioReconciliationService.QuantityColumnName);
-            columnMappings.Add("Totalmv", ClientPortfolioReconciliationService.MarketValueColumnName);
-
-            return columnMappings;
-        }
+        protected override string AccountReferenceColumnName { get { return "Investormantraid"; } }
+        protected override string QuantityColumnName { get { return "Units"; } }
+        protected override string MarketValueColumnName { get { return "Totalmv"; } }       
 
     }
 }
