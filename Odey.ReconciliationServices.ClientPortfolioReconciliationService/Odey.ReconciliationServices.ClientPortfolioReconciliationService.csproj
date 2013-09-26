@@ -96,6 +96,7 @@
       <DependentUpon>ClientPortfolioReconciliationService.svc</DependentUpon>
     </Compile>
     <Compile Include="File Readers\CapitaIrelandFileReader.cs" />
+    <Compile Include="File Readers\CapitaUKFileReader.cs" />
     <Compile Include="File Readers\FileReader.cs" />
     <Compile Include="File Readers\FileReaderFactory.cs" />
     <Compile Include="File Readers\QuintillionFileReader.cs" />

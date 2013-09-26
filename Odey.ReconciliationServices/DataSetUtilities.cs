@@ -132,9 +132,9 @@ namespace Odey.ReconciliationServices
                 DataTable schema = GetDataSetSchema(connectionString);
                 DataRow row = schema.Rows[0];
                 worksheetName = row["TABLE_NAME"].ToString();
-                if (worksheetName == "Sheet1$")
+                if (worksheetName.EndsWith("$"))
                 {
-                    worksheetName = "Sheet1";
+                    worksheetName = worksheetName.Substring(0,worksheetName.Length-1);
                 }
                 else
                 {

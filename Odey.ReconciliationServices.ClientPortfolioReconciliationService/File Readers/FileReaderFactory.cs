@@ -21,6 +21,8 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
                     return new CapitaIrelandFileReader(fileName, fund.LegalEntityID, shareClassIdentifiers);
                 case AdministratorIds.RBCDexia:
                     return new RBCFileReader(fileName, fund.LegalEntityID, shareClassIdentifiers);
+                case AdministratorIds.CapitaUK:
+                    return new CapitaUKFileReader(fileName, fund.LegalEntityID, shareClassIdentifiers);
                 default:
                     throw new ApplicationException(String.Format("Unknown Administrator for fund {0}", fund.Name));
             }
