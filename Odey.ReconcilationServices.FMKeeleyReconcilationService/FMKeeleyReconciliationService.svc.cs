@@ -154,17 +154,6 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             return dt;
         }
 
-        public static int GetBookId(int fmBookId)
-        {
-            switch (fmBookId)
-            {
-                case 50949:
-                case 52107:
-                    return 50948;
-                default:
-                    return fmBookId;
-            }
-        }
 
         public static DataTable GetFMPositions(int bftFundId, DateTime fromDate, DateTime toDate)
         {
@@ -175,7 +164,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             {
                 DataRow row = dt.NewRow();
                 row["ReferenceDate"] = portfolio.LadderDate;
-                row["FMBookId"] = GetBookId(portfolio.BookId);
+                row["FMBookId"] = portfolio.BookId;
                 row["FMSecId"] = portfolio.IsecId;
                 if (portfolio.MaturityDate.HasValue)
                 {
