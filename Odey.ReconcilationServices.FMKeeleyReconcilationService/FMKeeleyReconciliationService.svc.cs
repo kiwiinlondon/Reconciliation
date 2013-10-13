@@ -119,7 +119,6 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
         {
             Dictionary<string, string> columnMappings = new Dictionary<string, string>();
             columnMappings.Add("FMOrgId", "FMBookId");
-            columnMappings.Add("Name", "CcyIso");
          
             return columnMappings;
         }
@@ -150,7 +149,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
         public static DataTable GetKeeleyPositions(int fundId, DateTime fromDate, DateTime toDate)
         {
             DataTable dt = GetNewCVLDataTable();
-            DataSetUtilities.FillKeeleyDataTable(dt, "Portfolio_GetForFMRec", CreateDataSet1Parameters(fundId, fromDate, toDate), CreateDataSet1ColumnMappings());
+            DataSetUtilities.FillKeeleyDataTable(dt, "Portfolio_GetForFMRec", CreateDataSet1Parameters(fundId, fromDate, toDate), null);
             return dt;
         }
 

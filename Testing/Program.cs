@@ -55,6 +55,10 @@ namespace Testing
 
         static void Main(string[] args)
         {
+
+            FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
+            service.GetUnmatchedCVLPositions(4849, new DateTime(2013, 10, 11), new DateTime(2013, 10, 11), true);
+
             ClientPortfolioReconciliationService cpr = new ClientPortfolioReconciliationService();
 
 
@@ -74,8 +78,7 @@ namespace Testing
             //DataTable dt1 = FMKeeleyReconciliationService.GetKeeleyPositions(27, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
             //DataTable dt2 = FMKeeleyReconciliationService.GetFMPositions(2100, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
 
-            FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
-            service.GetUnmatchedCVLPositions(741, new DateTime(2012, 7, 2), new DateTime(2012, 7, 9), true);
+           
             //service.GetMatchedNavs(new DateTime(2012, 2, 21));
             //command.Parameters = parameters;
             //SqlParameter fundParam = new SqlParameter("@fundId", SqlDbType.Int);
