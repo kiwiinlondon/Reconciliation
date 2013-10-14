@@ -109,7 +109,10 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             ezeIdentifierToOutputMapping = books.Select(g => new { Order = g.Fund.FundTypeId == 7 ? 1 : 0, EzeIdentifier = string.IsNullOrWhiteSpace(g.EZEIdentifier) ? g.Fund.EZEIdentifier : g.EZEIdentifier }).Distinct().ToDictionary(a => a.EzeIdentifier, a => a.Order);
             PortfolioClient client = new PortfolioClient();
             string bookString = string.Join(",", funds.Select(a => a.FMOrgId));
-            List<BC.BookNAV> navsByBookId = client.GetBookNavs(funds.Select(a => a.FMOrgId).ToArray(), referenceDate);
+
+            List<int> fmBookIds = funds.Select(a => a.FMOrgId).ToList();
+            //fmBookIds.Add(
+            List<BC.BookNAV> navsByBookId = client.GetBookNavs(fmBookIds.ToArray(), referenceDate);
             var tempQuery = navsByBookId.Join(books,
                 NAV => NAV.BookId,
                 Book => Book.FMOrgId,

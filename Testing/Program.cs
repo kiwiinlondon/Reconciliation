@@ -55,6 +55,9 @@ namespace Testing
 
         static void Main(string[] args)
         {
+            EzeReconciliationService client = new EzeReconciliationService();
+            client.GetThreeWayRecOutput(DateTime.Today);
+
 
             FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
             service.GetUnmatchedCVLPositions(4849, new DateTime(2013, 10, 11), new DateTime(2013, 10, 11), true);
@@ -65,8 +68,7 @@ namespace Testing
 
             cpr.Reconcile(@"\\app02\FileShare\CapitaUK\Odey register 12 9 13 clean.xls", 5082, new DateTime(2013, 8, 30));
             //EzeReconciliationClient client = new EzeReconciliationClient();
-            EzeReconciliationService client = new EzeReconciliationService();
-            client.GetThreeWayRecOutput(DateTime.Today);
+           
             //  client.GetMatchedNavs(DateTime.Today);
           //  ValuationReconciliationClient vrs = new ValuationReconciliationClient();
            // MatchingEngineOutput a =  vrs.MatchPositionsAgainstKeeley(3609, DateTime.Today, new List<PortfolioReconciliationItem> { });
