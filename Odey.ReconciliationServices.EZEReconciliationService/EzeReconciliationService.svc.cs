@@ -23,6 +23,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
     {        
         public MatchingEngineOutput GetMatchedNavs(DateTime referenceDate)
         {
+            Logger.Info(String.Format("Reference Date is {0}",referenceDate));
             DataTable dt2 = GetEzeNavs();
             DataTable dt1 = GetKeeleyNavs(referenceDate);
             NavMatchingEngine engine = new NavMatchingEngine(Logger);
@@ -58,6 +59,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         public static DataTable GetKeeleyNavs(DateTime referenceDate)
         {
             DataTable dt = GetNewNavDataTable();
+            Logger.Info(String.Format("Keeley ReferenceDate is {0}",referenceDate));
             DataSetUtilities.FillKeeleyDataTable(dt, KeeleyStoredProcedureName, CreateNavDataSet1Parameters(referenceDate), null);
             return dt;
         }
@@ -84,6 +86,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         {
             DataTable dt = GetNewNavDataTable();
             PortfolioClient client = new PortfolioClient();
+            Logger.Info(String.Format("FM ReferenceDate is {0}", referenceDate));
             List<BC.FundNAV> navs = client.GetFundNavs(funds.Select(a => a.FMOrgId).ToArray(), referenceDate);
             foreach (BC.FundNAV fundNav in navs)
             {
@@ -125,7 +128,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
        
         public List<ThreeWayNavRecOutput> GetThreeWayRecOutput(DateTime referenceDate)
         {
-            
+            Logger.Info(String.Format("Reference Date is {0}", referenceDate));
             Dictionary<string, ThreeWayNavRecOutput> output = new Dictionary<string, ThreeWayNavRecOutput>();
             Dictionary<string,int> ezeIdentifierToOutputMapping;
             Dictionary<string, decimal> fmNavs = GetFMBookNavs(referenceDate, out ezeIdentifierToOutputMapping);
