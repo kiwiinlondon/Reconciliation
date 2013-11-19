@@ -21,16 +21,16 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
             {
                 
                 case "NetPosition":
-                    return !GreaterThanZero(field1 - field2, (decimal)200);
+                    return !GreaterThanZero(field1 - field2, (decimal)10);
                 case "TotalAccrual":
                 case "UnRealisedPNL":
                 case "RealisedPricePNL":
                 case "MarketValue":
                 case "TotalPNL":
                 case "DeltaMarketValue":
-                    return !GreaterThanZero(field1 - field2, (decimal)100);                
+                    return !DifferenceGreaterThanPercentage(field1 ,field2, .001m);                
                 case "FXRate":
-                    return GreaterThanZeroIgnoreZeroPositions(matchingEngineOutputItem, fieldName, field1, field2, 0.0001m);
+                    return GreaterThanZeroIgnoreZeroPositions(matchingEngineOutputItem, fieldName, field1, field2, 0.1m);
                 case "Price":
                     return GreaterThanZeroIgnoreZeroPositions(matchingEngineOutputItem, fieldName, field1, field2, null);
                 default:
