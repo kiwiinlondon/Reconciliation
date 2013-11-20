@@ -281,16 +281,23 @@ namespace Odey.ReconciliationServices
             return (!(-tolerance < value && value < tolerance));
         }
         
-        protected static bool DifferenceGreaterThanPercentage(decimal value1, decimal value2, decimal tolerance)
+        public static bool DifferenceGreaterThanPercentage(decimal value1, decimal value2, decimal tolerance)
         {
-            decimal smallestValue = value1;
             decimal difference = value2 - value1;
+            if (difference == 0)
+            {
+                return false;
+            }
+            decimal smallestValue = value1;
             if (smallestValue > value2)
             {
-                smallestValue = value2;
                 difference = value1 - value2;
+                smallestValue = value2;
             }
-
+            if (smallestValue == 0)
+            {
+                return true;
+            }
             return (difference / smallestValue > tolerance);
         }
         #endregion

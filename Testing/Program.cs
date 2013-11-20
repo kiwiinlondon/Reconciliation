@@ -55,18 +55,17 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            EzeReconciliationService client = new EzeReconciliationService();
-            client.GetThreeWayRecOutput(DateTime.Today);
+        //    var ret = MatchingEngine.DifferenceGreaterThanPercentage(-6, 5, .01m);
+        //    EzeReconciliationService client = new EzeReconciliationService();
+        //    client.GetThreeWayRecOutput(DateTime.Today);
 
 
-            FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
-            service.GetUnmatchedCVLPositions(4849, new DateTime(2013, 10, 11), new DateTime(2013, 10, 11), true);
+         //   FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
+          //  service.GetUnmatchedCVLPositions(4849, new DateTime(2013, 10, 11), new DateTime(2013, 10, 11), true);
 
             ClientPortfolioReconciliationService cpr = new ClientPortfolioReconciliationService();
 
-
-
-            cpr.Reconcile(@"\\app02\FileShare\CapitaUK\Odey register 12 9 13 clean.xls", 5082, new DateTime(2013, 8, 30));
+            cpr.Reconcile(@"\\App02\FileShare\CapitaIRE\Giano register Oct 2013.xls", 5590, new DateTime(2013, 10, 31));
             //EzeReconciliationClient client = new EzeReconciliationClient();
            
             //  client.GetMatchedNavs(DateTime.Today);
