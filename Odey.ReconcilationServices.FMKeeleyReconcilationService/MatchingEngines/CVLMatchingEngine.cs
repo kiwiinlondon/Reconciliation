@@ -28,7 +28,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
                 case "MarketValue":
                 case "TotalPNL":
                 case "DeltaMarketValue":
-                    return !DifferenceGreaterThanPercentage(field1 ,field2, .001m);                
+                    return !DifferenceGreaterThanPercentage(field1 ,field2, .01m);                
                 case "FXRate":
                     return GreaterThanZeroIgnoreZeroPositions(matchingEngineOutputItem, fieldName, field1, field2, 0.1m);
                 case "Price":
