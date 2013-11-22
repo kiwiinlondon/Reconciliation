@@ -25,10 +25,11 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
                 case "TotalAccrual":
                 case "UnRealisedPNL":
                 case "RealisedPricePNL":
-                case "MarketValue":
-                case "TotalPNL":
+                case "MarketValue":                
                 case "DeltaMarketValue":
-                    return !DifferenceGreaterThanPercentage(field1 ,field2, .01m);                
+                    return !DifferenceGreaterThanPercentage(Math.Round(field1,0) ,Math.Round(field2,0), .01m);
+                case "TotalPNL":
+                    return GreaterThanZeroIgnoreZeroPositions(matchingEngineOutputItem, fieldName, field1, field2, 9999999999999);
                 case "FXRate":
                     return GreaterThanZeroIgnoreZeroPositions(matchingEngineOutputItem, fieldName, field1, field2, 0.1m);
                 case "Price":

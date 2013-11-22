@@ -65,7 +65,7 @@ namespace Testing
 
             ClientPortfolioReconciliationService cpr = new ClientPortfolioReconciliationService();
 
-            cpr.Reconcile(@"\\App02\FileShare\CapitaIRE\Giano register Oct 2013.xls", 5590, new DateTime(2013, 10, 31));
+            cpr.Reconcile(@"\\app02\FileShare\CapitaUK\Odey register 19 11 13 clean.xlsx", 5328, new DateTime(2013, 11, 19));
             //EzeReconciliationClient client = new EzeReconciliationClient();
            
             //  client.GetMatchedNavs(DateTime.Today);

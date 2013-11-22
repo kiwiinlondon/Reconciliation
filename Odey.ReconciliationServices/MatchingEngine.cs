@@ -316,7 +316,10 @@ namespace Odey.ReconciliationServices
                 DataRow dr2 = GetCorrespondingRow(dr1, dt2, selectFormat);
                 MatchingEngineOutputItem item = MatchRows(dr1, dr2, matchingEngineOutput.Key, matchingEngineOutput.NonKeyProperties);
                 AddToOutput(matchingEngineOutput,item,returnOnlyMismatches);
-                d2FoundRows.Add(dr2); 
+                if (dr2 != null)
+                {
+                    d2FoundRows.Add(dr2);
+                }
             }
 
             if (matchType == MatchTypeIds.Full)
