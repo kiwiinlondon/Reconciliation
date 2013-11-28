@@ -105,7 +105,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         {
             
             FundClient fundClient = new FundClient();
-            List<Fund> funds = fundClient.GetAll().Where(a => a.PositionsExist == true && a.IsActive).ToList();
+            List<Fund> funds = fundClient.GetAll().Where(a => a.PositionsExist == true && a.IsActive && a.FMOrgId > 0).ToList();
             //funds.ForEach(a=> ezeIdentifierToFundTypeMapping.Add(a=>a.
             BookClient bookClient = new BookClient();
             List<Book> books = bookClient.GetAll().Where(a => a.FMOrgId.HasValue).ToList();
