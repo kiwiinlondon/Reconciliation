@@ -56,8 +56,8 @@ namespace Testing
         static void Main(string[] args)
         {
         //    var ret = MatchingEngine.DifferenceGreaterThanPercentage(-6, 5, .01m);
-        //    EzeReconciliationService client = new EzeReconciliationService();
-        //    client.GetThreeWayRecOutput(DateTime.Today);
+            EzeReconciliationService client = new EzeReconciliationService();
+            client.GetThreeWayRecOutput(DateTime.Today.AddDays(-1));
 
 
          //   FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
