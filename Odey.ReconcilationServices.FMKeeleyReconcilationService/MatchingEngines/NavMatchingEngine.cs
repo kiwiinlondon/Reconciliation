@@ -20,7 +20,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
 
         
 
-        protected override bool DecimalsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2)
+        public override bool DecimalsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2)
         {
             switch (fieldName)
             {

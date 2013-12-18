@@ -17,11 +17,11 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
 
         }
 
-        protected override bool DecimalsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2)
+        public override bool DecimalsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2)
         {
             if (fieldName == "MarketValue")
             {
-                if (base.DecimalsMatch(matchingEngineOutputItem, fieldName, Math.Round(field1, 1), Math.Round(field2, 1)))
+                if (base.DecimalsMatch(matchingEngineOutputItem, fieldName, field1, field2,1))
                 {
                     return true;
                 }

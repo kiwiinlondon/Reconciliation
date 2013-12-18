@@ -15,7 +15,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
     public class CVLMatchingEngine : MatchingEngine
     {
         public CVLMatchingEngine(ILog logger) : base(logger) { }
-        protected override bool DecimalsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2)
+        public override bool DecimalsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2)
         {
             switch (fieldName)
             {

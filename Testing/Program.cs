@@ -55,6 +55,7 @@ namespace Testing
 
         static void Main(string[] args)
         {
+            (new ClientPortfolioMatchingEngine(null)).DecimalsMatch(null,"MarketValue",180.5m,180.51m);
         //    var ret = MatchingEngine.DifferenceGreaterThanPercentage(-6, 5, .01m);
             EzeReconciliationService client = new EzeReconciliationService();
             client.GetThreeWayRecOutput(DateTime.Today.AddDays(-1));

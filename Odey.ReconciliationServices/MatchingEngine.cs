@@ -106,9 +106,13 @@ namespace Odey.ReconciliationServices
 
         protected virtual bool StringsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, string field1, string field2) { return (field1.Equals(field2) ? true : false); }
         protected virtual bool IntegersMatch(MatchingEngineOutputItem matchingEngineOutputItem,string fieldName, int field1, int field2) { return (field1.Equals(field2) ? true : false); }
-        protected virtual bool DecimalsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2) 
+        public virtual bool DecimalsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2)
         {
-            if (Math.Abs(field1 - field2) < new decimal(0.00001))
+            return DecimalsMatch(matchingEngineOutputItem, fieldName, field1, field2, new decimal(0.00001));
+        }
+        public virtual bool DecimalsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2, decimal tolerance) 
+        {
+            if (Math.Abs(field1 - field2) < tolerance)
             {
                 return true;
             }
