@@ -29,7 +29,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             
             FundClient client = new FundClient();
             Fund fund = client.Get(fundId);
-            DataTable dt2 = GetFMPositions(fund.FMOrgId, fromDate, toDate);
+            DataTable dt2 = GetFMPositions(fund.FMOrgId.Value, fromDate, toDate);
             Logger.Info(String.Format("CVL {0}", dt2.Rows.Count));
 
             Logger.Info(String.Format("Fund {0}", fundId));
@@ -54,7 +54,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
         public MatchingEngineOutput GetMatchedNavs(DateTime referenceDate)
         {
             FundClient client = new FundClient();
-            List<Fund> funds = client.GetAll().Where(a=>a.PositionsExist == true).ToList();
+            List<Fund> funds = client.GetAll().Where(a=>a.PositionsExist == true && a.FMOrgId.HasValue).ToList();
             DataTable dt2 = GetFMNavs(referenceDate, funds);
             DataTable dt1 = GetKeeleyNavs(referenceDate);            
             NavMatchingEngine engine = new NavMatchingEngine(Logger);
@@ -237,7 +237,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
         {
             DataTable dt = GetNewNavDataTable();
             PortfolioClient client = new PortfolioClient();
-            List<BC.FundNAV> navs = client.GetFundNavs(funds.Select(a=>a.FMOrgId).ToArray(), referenceDate);
+            List<BC.FundNAV> navs = client.GetFundNavs(funds.Select(a=>a.FMOrgId.Value).ToArray(), referenceDate);
             foreach (BC.FundNAV fundNav in navs)
             {
                 DataRow row = dt.NewRow();

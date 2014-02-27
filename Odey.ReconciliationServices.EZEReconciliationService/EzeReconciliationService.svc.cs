@@ -82,21 +82,21 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         }
 
 
-        public static DataTable GetFMNavs(DateTime referenceDate, List<Fund> funds)
-        {
-            DataTable dt = GetNewNavDataTable();
-            PortfolioClient client = new PortfolioClient();
-            Logger.Info(String.Format("FM ReferenceDate is {0}", referenceDate));
-            List<BC.FundNAV> navs = client.GetFundNavs(funds.Select(a => a.FMOrgId).ToArray(), referenceDate);
-            foreach (BC.FundNAV fundNav in navs)
-            {
-                DataRow row = dt.NewRow();
-                row["FMFundId"] = fundNav.FundId;
-                row["MarketValue"] = fundNav.MarketValue;
-                dt.Rows.Add(row);
-            }
-            return dt;
-        }
+        //public static DataTable GetFMNavs(DateTime referenceDate, List<Fund> funds)
+        //{
+        //    DataTable dt = GetNewNavDataTable();
+        //    PortfolioClient client = new PortfolioClient();
+        //    Logger.Info(String.Format("FM ReferenceDate is {0}", referenceDate));
+        //    List<BC.FundNAV> navs = client.GetFundNavs(funds.Select(a => a.FMOrgId).ToArray(), referenceDate);
+        //    foreach (BC.FundNAV fundNav in navs)
+        //    {
+        //        DataRow row = dt.NewRow();
+        //        row["FMFundId"] = fundNav.FundId;
+        //        row["MarketValue"] = fundNav.MarketValue;
+        //        dt.Rows.Add(row);
+        //    }
+        //    return dt;
+        //}
 
         #region IEzeReconciliation Members
 
@@ -105,7 +105,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         {
             
             FundClient fundClient = new FundClient();
-            List<Fund> funds = fundClient.GetAll().Where(a => a.PositionsExist == true && a.IsActive && a.FMOrgId > 0).ToList();
+            List<Fund> funds = fundClient.GetAll().Where(a => a.PositionsExist == true && a.IsActive && a.FMOrgId.HasValue && a.FMOrgId > 0).ToList();
             //funds.ForEach(a=> ezeIdentifierToFundTypeMapping.Add(a=>a.
             BookClient bookClient = new BookClient();
             List<Book> books = bookClient.GetAll().Where(a => a.FMOrgId.HasValue).ToList();
@@ -113,7 +113,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             PortfolioClient client = new PortfolioClient();
             string bookString = string.Join(",", funds.Select(a => a.FMOrgId));
 
-            List<int> fmBookIds = funds.Select(a => a.FMOrgId).ToList();
+            List<int> fmBookIds = funds.Select(a => a.FMOrgId.Value).ToList();
             //fmBookIds.Add(
             List<BC.BookNAV> navsByBookId = client.GetBookNavs(fmBookIds.ToArray(), referenceDate);
             var tempQuery = navsByBookId.Join(books,
