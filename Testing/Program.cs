@@ -55,14 +55,16 @@ namespace Testing
 
         static void Main(string[] args)
         {
+               FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
+               service.GetUnmatchedCVLPositions(6137, new DateTime(2014, 3, 17), new DateTime(2014, 3, 18), true);
+
             (new ClientPortfolioMatchingEngine(null)).DecimalsMatch(null,"MarketValue",180.5m,180.51m);
         //    var ret = MatchingEngine.DifferenceGreaterThanPercentage(-6, 5, .01m);
             EzeReconciliationService client = new EzeReconciliationService();
             client.GetThreeWayRecOutput(DateTime.Today.AddDays(-1));
 
 
-         //   FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
-          //  service.GetUnmatchedCVLPositions(4849, new DateTime(2013, 10, 11), new DateTime(2013, 10, 11), true);
+        
 
             ClientPortfolioReconciliationService cpr = new ClientPortfolioReconciliationService();
 
