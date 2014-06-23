@@ -11,12 +11,12 @@ namespace Odey.ReconciliationServices.Clients
     public class ValuationReconciliationClient : OdeyClientBase<IValuationReconciliation>, IValuationReconciliation
     {
 
-        public MatchingEngineOutput MatchPositionsAgainstKeeley(int fundId, DateTime referenceDate, List<PortfolioReconciliationItem> portfolioItems)
+        public MatchingEngineOutput MatchPositionsAgainstKeeley(int fundId, DateTime referenceDate, List<PortfolioReconciliationItem> portfolioItems, int[] instrumentClassIdsToExclude)
         {
             IValuationReconciliation proxy = factory.CreateChannel();
             try
             {
-                MatchingEngineOutput e = proxy.MatchPositionsAgainstKeeley(fundId, referenceDate, portfolioItems);
+                MatchingEngineOutput e = proxy.MatchPositionsAgainstKeeley(fundId, referenceDate, portfolioItems, instrumentClassIdsToExclude);
                 ((ICommunicationObject)proxy).Close();
                 return e;
             }

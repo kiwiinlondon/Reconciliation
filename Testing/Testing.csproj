@@ -28,6 +28,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'UAT|AnyCPU'">
     <OutputPath>bin\UAT\</OutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseDebug|AnyCPU'">
+    <OutputPath>bin\ReleaseDebug\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
@@ -102,6 +110,9 @@
       <DependentUpon>App.Base.config</DependentUpon>
     </None>
     <None Include="App.UAT.config">
+      <DependentUpon>App.Base.config</DependentUpon>
+    </None>
+    <None Include="App.ReleaseDebug.config">
       <DependentUpon>App.Base.config</DependentUpon>
     </None>
     <None Include="packages.config" />

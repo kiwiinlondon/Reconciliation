@@ -11,12 +11,12 @@ using System.Data;
 
 namespace Odey.ReconciliationServices.ValuationReconciliationService
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
+    
     public class ValuationReconciliationService : OdeyServiceBase , IValuationReconciliation
     {
-        public MatchingEngineOutput MatchPositionsAgainstKeeley(int fundId, DateTime referenceDate, List<PortfolioReconciliationItem> portfolioItems)
+        public MatchingEngineOutput MatchPositionsAgainstKeeley(int fundId, DateTime referenceDate, List<PortfolioReconciliationItem> portfolioItems, int[] instrumentClassIdsToExclude)
         {
-            DataTable dt1 = GetKeeleyPortfolioAtValuationTime(fundId, referenceDate);
+            DataTable dt1 = GetKeeleyPortfolioAtValuationTime(fundId, referenceDate, instrumentClassIdsToExclude);
             DataTable dt2 = ConvertExternalPortfolioToDataSet(portfolioItems);
             ValuationMatchingEngine engine = new ValuationMatchingEngine(Logger);
             MatchingEngineOutput output = engine.Match(dt1, dt2, MatchTypeIds.Full, false, DataSourceIds.KeeleyPortfolio, DataSourceIds.ExternalPortfolio);
@@ -31,6 +31,9 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
                 DataRow dr = dt.NewRow();
                 dr["InstrumentMarketId"] = reconciliationItem.InstrumentMarketId;
                 dr["IsAccrual"] = reconciliationItem.IsAccrual;
+                dr["InstrumentClassID"] = reconciliationItem.InstrumentClassId;
+                dr["MaturityDate"] = reconciliationItem.MaturityDate;
+
                 dr["NetPosition"] = reconciliationItem.Holding;
                 dr["Price"] = reconciliationItem.Price;
                 dr["FXRate"] = reconciliationItem.FXRate;
@@ -46,12 +49,15 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
             DataTable dt = new DataTable("Positions");
             DataColumn instrumentMarketId = dt.Columns.Add("InstrumentMarketId", typeof(int));
             DataColumn isAccrual = dt.Columns.Add("IsAccrual", typeof(bool));
+            DataColumn instClassId = dt.Columns.Add("InstrumentClassID", typeof(int));
+            DataColumn maturityDate = dt.Columns.Add("MaturityDate", typeof(DateTime));
 
             dt.Columns.Add("NetPosition", typeof(decimal));         
             dt.Columns.Add("Price", typeof(decimal));
             dt.Columns.Add("FXRate", typeof(decimal));
-            dt.Columns.Add("MarketValue", typeof(decimal));   
-            dt.PrimaryKey = new DataColumn[] { instrumentMarketId, isAccrual };
+            dt.Columns.Add("MarketValue", typeof(decimal));
+
+            dt.PrimaryKey = new DataColumn[] { instrumentMarketId, isAccrual, instClassId, maturityDate };
             return dt;
 
         }
@@ -66,10 +72,22 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
             return parameters;
         }
 
-        private DataTable GetKeeleyPortfolioAtValuationTime(int fundId, DateTime referenceDate)
+        private DataTable GetKeeleyPortfolioAtValuationTime(int fundId, DateTime referenceDate, int[] instrumentClassIdsToExclude)
         {
             DataTable dt = GetNewDataTable();
             DataSetUtilities.FillKeeleyDataTable(dt, "Portfolio_GetValuation", CreateParameters(fundId, referenceDate), null);
+
+            //filter table by instrumentClassIdsToExclude
+            if (instrumentClassIdsToExclude != null)
+            {
+                dt = dt
+                    .AsEnumerable()
+                    .Where(row => !instrumentClassIdsToExclude.Contains(int.Parse(row.Field<String>("InstrumentClassID"))))
+                    .CopyToDataTable();
+            }
+
+            var testFirstRow = dt.AsEnumerable().ToList().FirstOrDefault();
+
             return dt;
         }
 

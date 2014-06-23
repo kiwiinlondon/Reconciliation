@@ -14,7 +14,13 @@ namespace Odey.ReconciliationServices.Contracts
 
         [DataMember]
         public bool IsAccrual { get; set; }
-        
+
+        [DataMember]
+        public int InstrumentClassId { get; set; }
+
+        [DataMember]
+        public DateTime MaturityDate { get; set; }
+
         [DataMember]
         public decimal Holding { get; set; }
 

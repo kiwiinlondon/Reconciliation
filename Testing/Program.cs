@@ -15,9 +15,39 @@ namespace Testing
 {
     class Program
     {
+        
+      
+      
+
+        static void Main(string[] args)
+        {
+
+            var s = new ValuationReconciliationService();
+
+            var i = new PortfolioReconciliationItem()
+            {
+                FXRate = 0.801402m,
+                Holding = -60111153.13m,
+                InstrumentClassId = 26,
+                InstrumentMarketId = 35,
+                IsAccrual = false,
+                MarketValue = -75007469.27m,
+                MaturityDate = DateTime.Parse("30-Jun-2014"),
+                Price = 1m,
+            };
+
+
+            var ret = s.MatchPositionsAgainstKeeley(6184, DateTime.Parse("18-Jun-2014"), new List<PortfolioReconciliationItem>(){ i }, null);
+
+            var m = ret.Outputs.Where(a => a.KeyValues.ContainsValue(35)).ToList();
+            
+            ret = ret;
+
+        }
+
         static void AddDataRow(DataTable dt, int secId, int fundId, DateTime refDate, string ccy, decimal pos, DateTime matDate, string plCcy, int uSecId)
         {
-            DataRow dr1 = dt.NewRow();            
+            DataRow dr1 = dt.NewRow();
             dr1["securityId"] = secId;
             dr1["FundId"] = fundId;
             dr1["ReferenceDate"] = refDate;
@@ -28,74 +58,8 @@ namespace Testing
             dr1["UnderlyingSecurityId"] = uSecId;
             dt.Rows.Add(dr1);
         }
-        //static void Main(string[] args)
-        //{
-        //    DataTable dt1 = new DataTable("Test 1");
-        //    DataColumn secId = dt1.Columns.Add("securityId",typeof(int));
-        //    DataColumn fundId = dt1.Columns.Add("FundId",typeof(int));
-        //    DataColumn refDate = dt1.Columns.Add("ReferenceDate",typeof(DateTime));
-        //    DataColumn ccy = dt1.Columns.Add("Ccy",typeof(string));
 
-        //    dt1.PrimaryKey = new DataColumn[] { secId, fundId, refDate, ccy };
-
-        //    DataColumn pos = dt1.Columns.Add("NetPosition", typeof(decimal));
-        //    DataColumn maturityDate = dt1.Columns.Add("MaturityDate", typeof(DateTime));
-        //    DataColumn plCcy = dt1.Columns.Add("PlCcy", typeof(String));
-        //    DataColumn uSecId = dt1.Columns.Add("UnderlyingSecurityId", typeof(int));
-
-        //    AddDataRow(dt1,1, 2, DateTime.Today, "USD", new decimal(5.6), DateTime.Now.AddDays(5), "NZD", 3);
-        //    DataTable dt2 = dt1.Clone();
-        //    AddDataRow(dt2, 1, 2, DateTime.Today, "USD", new decimal(5.6), DateTime.Now.AddDays(5), "NZD", 3);
-        //    MatchingEngine engine = new MatchingEngine();
-        //    List<MatchingEngineOutput> outputs = engine.Match(dt1, dt2,MatchType.Full);
-
-            
-
-        //}
-
-        static void Main(string[] args)
-        {
-               FMKeeleyReconciliationService service = new FMKeeleyReconciliationService();
-               service.GetUnmatchedCVLPositions(6137, new DateTime(2014, 3, 17), new DateTime(2014, 3, 18), true);
-
-            (new ClientPortfolioMatchingEngine(null)).DecimalsMatch(null,"MarketValue",180.5m,180.51m);
-        //    var ret = MatchingEngine.DifferenceGreaterThanPercentage(-6, 5, .01m);
-            EzeReconciliationService client = new EzeReconciliationService();
-            client.GetThreeWayRecOutput(DateTime.Today.AddDays(-1));
-
-
-        
-
-            ClientPortfolioReconciliationService cpr = new ClientPortfolioReconciliationService();
-
-            cpr.Reconcile(@"\\app02\FileShare\CapitaUK\Odey register 19 11 13 clean.xlsx", 5328, new DateTime(2013, 11, 19));
-            //EzeReconciliationClient client = new EzeReconciliationClient();
-           
-            //  client.GetMatchedNavs(DateTime.Today);
-          //  ValuationReconciliationClient vrs = new ValuationReconciliationClient();
-           // MatchingEngineOutput a =  vrs.MatchPositionsAgainstKeeley(3609, DateTime.Today, new List<PortfolioReconciliationItem> { });
-          // 
-
-          //  Odey.ReconciliationServices.EzeReconciliationService.EzeReconciliationService nav = new Odey.ReconciliationServices.EzeReconciliationService.EzeReconciliationService();
-
-          //  nav.GetMatchedNavs(DateTime.Today);
-            //DataTable dt1 = FMKeeleyReconciliationService.GetKeeleyPositions(27, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
-            //DataTable dt2 = FMKeeleyReconciliationService.GetFMPositions(2100, new DateTime(2010, 1, 1), new DateTime(2010, 1, 31));
-
-           
-            //service.GetMatchedNavs(new DateTime(2012, 2, 21));
-            //command.Parameters = parameters;
-            //SqlParameter fundParam = new SqlParameter("@fundId", SqlDbType.Int);
-            //fundParam.Value = fundId;
-            //command.Parameters.Add(fundParam);
-
-            //SqlParameter fromParam = new SqlParameter("@fromDt", SqlDbType.DateTime);
-            //fromParam.Value = fromDate;
-            //command.Parameters.Add(fromParam);
-
-            //SqlParameter toParam = new SqlParameter("@toDt", SqlDbType.DateTime);
-            //toParam.Value = toDate;
-            //command.Parameters.Add(toParam);
-        }
     }
+
+
 }
