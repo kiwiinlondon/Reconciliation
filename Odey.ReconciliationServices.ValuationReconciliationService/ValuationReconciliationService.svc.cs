@@ -82,11 +82,9 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
             {
                 dt = dt
                     .AsEnumerable()
-                    .Where(row => !instrumentClassIdsToExclude.Contains(int.Parse(row.Field<String>("InstrumentClassID"))))
+                    .Where(row => !instrumentClassIdsToExclude.Contains(row.Field<int>("InstrumentClassID")))
                     .CopyToDataTable();
             }
-
-            var testFirstRow = dt.AsEnumerable().ToList().FirstOrDefault();
 
             return dt;
         }
