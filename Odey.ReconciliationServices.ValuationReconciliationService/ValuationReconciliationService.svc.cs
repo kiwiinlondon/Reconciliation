@@ -77,13 +77,16 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
             DataTable dt = GetNewDataTable();
             DataSetUtilities.FillKeeleyDataTable(dt, "Portfolio_GetValuation", CreateParameters(fundId, referenceDate), null);
 
-            //filter table by instrumentClassIdsToExclude
+            //delete rows where inst class id in instrumentClassIdsToExclude
             if (instrumentClassIdsToExclude != null)
             {
-                dt = dt
-                    .AsEnumerable()
-                    .Where(row => !instrumentClassIdsToExclude.Contains(row.Field<int>("InstrumentClassID")))
-                    .CopyToDataTable();
+                string toDeleteQuery = string.Format("InstrumentClassID IN ({0})", string.Join(",", instrumentClassIdsToExclude));
+                var rows = dt.Select(toDeleteQuery);
+                foreach (var row in rows)
+                {
+                    row.Delete();
+                }
+                dt.AcceptChanges();
             }
 
             return dt;
