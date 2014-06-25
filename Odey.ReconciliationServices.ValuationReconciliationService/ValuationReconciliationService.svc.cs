@@ -33,6 +33,7 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
                 dr["IsAccrual"] = reconciliationItem.IsAccrual;
                 dr["InstrumentClassID"] = reconciliationItem.InstrumentClassId;
                 dr["MaturityDate"] = reconciliationItem.MaturityDate;
+                dr["FundId"] = reconciliationItem.FundId;
 
                 dr["NetPosition"] = reconciliationItem.Holding;
                 dr["Price"] = reconciliationItem.Price;
@@ -51,13 +52,14 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
             DataColumn isAccrual = dt.Columns.Add("IsAccrual", typeof(bool));
             DataColumn instClassId = dt.Columns.Add("InstrumentClassID", typeof(int));
             DataColumn maturityDate = dt.Columns.Add("MaturityDate", typeof(DateTime));
+            DataColumn fundId = dt.Columns.Add("FundId", typeof(int));
 
             dt.Columns.Add("NetPosition", typeof(decimal));         
             dt.Columns.Add("Price", typeof(decimal));
             dt.Columns.Add("FXRate", typeof(decimal));
             dt.Columns.Add("MarketValue", typeof(decimal));
 
-            dt.PrimaryKey = new DataColumn[] { instrumentMarketId, isAccrual, instClassId, maturityDate };
+            dt.PrimaryKey = new DataColumn[] { instrumentMarketId, isAccrual, instClassId, maturityDate, fundId };
             return dt;
 
         }

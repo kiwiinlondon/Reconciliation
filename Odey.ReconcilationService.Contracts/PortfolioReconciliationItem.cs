@@ -13,6 +13,10 @@ namespace Odey.ReconciliationServices.Contracts
         public int InstrumentMarketId { get; set; }
 
         [DataMember]
+        public int FundId { get; set; }
+
+
+        [DataMember]
         public bool IsAccrual { get; set; }
 
         [DataMember]
