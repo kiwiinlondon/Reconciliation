@@ -89,9 +89,10 @@ namespace Odey.ReconciliationServices
                 DataTableMapping mapping = adapter.TableMappings.Add("Table", dt.TableName);
                 AddColumnMappings(mapping, columnMappings);
                 connection.Open();
-
+                
                 adapter.FillSchema(dt.DataSet, SchemaType.Mapped);
                 adapter.Fill(dt.DataSet);
+
             }
         }
         #endregion

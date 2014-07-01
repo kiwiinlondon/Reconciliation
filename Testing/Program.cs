@@ -37,7 +37,7 @@ namespace Testing
             };
 
 
-            var ret = s.MatchPositionsAgainstKeeley(6184, DateTime.Parse("18-Jun-2014"), new List<PortfolioReconciliationItem>() {i}, new int[] {3});
+            var ret = s.MatchPositionsAgainstKeeley(6121, DateTime.Parse("30-Jun-2014"), new List<PortfolioReconciliationItem>() { i }, new int[] { 3 });
 
             var m = ret.Outputs.Where(a => a.KeyValues.ContainsValue(35)).ToList();
             
