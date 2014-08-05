@@ -108,8 +108,15 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             List<Fund> funds = fundClient.GetAll().Where(a => a.PositionsExist == true && a.IsActive && a.FMOrgId.HasValue && a.FMOrgId > 0).ToList();
             //funds.ForEach(a=> ezeIdentifierToFundTypeMapping.Add(a=>a.
             BookClient bookClient = new BookClient();
-            List<Book> books = bookClient.GetAll().Where(a => a.FMOrgId.HasValue).ToList();
-            ezeIdentifierToOutputMapping = books.Select(g => new { Order = g.Fund.FundTypeId == 7 ? 1 : 0, EzeIdentifier = string.IsNullOrWhiteSpace(g.EZEIdentifier) ? g.Fund.EZEIdentifier : g.EZEIdentifier }).Distinct().ToDictionary(a => a.EzeIdentifier, a => a.Order);
+            List<Book> books = bookClient.GetAll().Where(a => a.FMOrgId.HasValue
+                && (!string.IsNullOrWhiteSpace(a.EZEIdentifier) || !string.IsNullOrWhiteSpace(a.Fund.EZEIdentifier))).ToList();
+            ezeIdentifierToOutputMapping = books.Select(g => new
+            {
+                Order = g.Fund.FundTypeId == 7 ? 1 : 0, 
+                EzeIdentifier = string.IsNullOrWhiteSpace(g.EZEIdentifier) ? g.Fund.EZEIdentifier : g.EZEIdentifier
+            })
+            .Distinct()
+            .ToDictionary(a => a.EzeIdentifier, a => a.Order);
             PortfolioClient client = new PortfolioClient();
             string bookString = string.Join(",", funds.Select(a => a.FMOrgId));
 

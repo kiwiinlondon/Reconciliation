@@ -21,27 +21,8 @@ namespace Testing
 
         static void Main(string[] args)
         {
-
-            var s = new ValuationReconciliationService();
-
-            var i = new PortfolioReconciliationItem()
-            {
-                FXRate = 0.801402m,
-                Holding = -60111153.13m,
-                InstrumentClassId = 26,
-                InstrumentMarketId = 35,
-                IsAccrual = false,
-                MarketValue = -75007469.27m,
-                MaturityDate = DateTime.Parse("30-Jun-2014"),
-                Price = 1m,
-            };
-
-
-            var ret = s.MatchPositionsAgainstKeeley(6121, DateTime.Parse("30-Jun-2014"), new List<PortfolioReconciliationItem>() { i }, new int[] { 3 });
-
-            var m = ret.Outputs.Where(a => a.KeyValues.ContainsValue(35)).ToList();
-            
-            ret = ret;
+            var s = new EzeReconciliationService();
+            s.GetThreeWayRecOutput(DateTime.Today);
 
         }
 
