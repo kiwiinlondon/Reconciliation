@@ -21,8 +21,10 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            var s = new EzeReconciliationService();
-            s.GetThreeWayRecOutput(DateTime.Today);
+
+            ClientPortfolioReconciliationService s = new ClientPortfolioReconciliationService();
+            s.Reconcile(@"\\App02\FileShare\CapitaIRE\Giano register Jul 2014.xls",6184,DateTime.Parse("31/07/2014 00:00:00"));
+
 
         }
 
