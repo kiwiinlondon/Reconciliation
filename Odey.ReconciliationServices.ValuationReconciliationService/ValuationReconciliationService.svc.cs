@@ -80,7 +80,7 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
             DataSetUtilities.FillKeeleyDataTable(dt, "Portfolio_GetValuation", CreateParameters(fundId, referenceDate), null);
 
             //delete rows where inst class id in instrumentClassIdsToExclude
-            if (instrumentClassIdsToExclude != null)
+            if (instrumentClassIdsToExclude != null && instrumentClassIdsToExclude.Length>0)
             {
                 string toDeleteQuery = string.Format("InstrumentClassID IN ({0})", string.Join(",", instrumentClassIdsToExclude));
                 var rows = dt.Select(toDeleteQuery);

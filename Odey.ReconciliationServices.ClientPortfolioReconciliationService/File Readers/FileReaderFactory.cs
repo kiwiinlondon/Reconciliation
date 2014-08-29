@@ -13,7 +13,7 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
     {
         public static FileReader Get(string fileName, Fund fund,string[] shareClassIdentifiers)
         {
-            switch ((AdministratorIds)fund.AdministratorId.Value)
+            switch ((AdministratorIds)fund.AdministratorId)
             {
                 case AdministratorIds.Quintillion:
                     return new QuintillionFileReader(fileName, fund.LegalEntityID, shareClassIdentifiers);
