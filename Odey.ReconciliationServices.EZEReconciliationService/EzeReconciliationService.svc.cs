@@ -100,16 +100,30 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
 
         #region IEzeReconciliation Members
 
-
+        /// <summary>
+        /// get keeley navs for EZE rec email
+        /// </summary>
+        /// <param name="referenceDate"></param>
+        /// <param name="ezeIdentifierToOutputMapping"></param>
+        /// <returns></returns>
         public static Dictionary<string,decimal> GetFMBookNavs(DateTime referenceDate, out Dictionary<string,int> ezeIdentifierToOutputMapping)
         {
-            
+            //only get active parent funds that exist in FM
             FundClient fundClient = new FundClient();
-            List<Fund> funds = fundClient.GetAll().Where(a => a.PositionsExist == true && a.IsActive && a.FMOrgId.HasValue && a.FMOrgId > 0).ToList();
-            //funds.ForEach(a=> ezeIdentifierToFundTypeMapping.Add(a=>a.
+            List<Fund> funds = fundClient.GetAll().Where(
+                a => a.PositionsExist
+                    && a.IsActive 
+                    && !a.ParentFundId.HasValue
+                    && a.FMOrgId.HasValue 
+                    && a.FMOrgId > 0)
+                    .ToList();
+            
             BookClient bookClient = new BookClient();
-            List<Book> books = bookClient.GetAll().Where(a => a.FMOrgId.HasValue
-                && (!string.IsNullOrWhiteSpace(a.EZEIdentifier) || !string.IsNullOrWhiteSpace(a.Fund.EZEIdentifier))).ToList();
+            List<Book> books = bookClient.GetAll().Where(
+                a => a.FMOrgId.HasValue
+                && (!string.IsNullOrWhiteSpace(a.EZEIdentifier) || !string.IsNullOrWhiteSpace(a.Fund.EZEIdentifier)))
+                .ToList();
+
             ezeIdentifierToOutputMapping = books.Select(g => new
             {
                 Order = g.Fund.FundTypeId == 7 ? 1 : 0, 
@@ -117,17 +131,22 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             })
             .Distinct()
             .ToDictionary(a => a.EzeIdentifier, a => a.Order);
+
             PortfolioClient client = new PortfolioClient();
             string bookString = string.Join(",", funds.Select(a => a.FMOrgId));
 
             List<int> fmBookIds = funds.Select(a => a.FMOrgId.Value).ToList();
-            //fmBookIds.Add(
+            
             List<BC.BookNAV> navsByBookId = client.GetBookNavs(fmBookIds.ToArray(), referenceDate);
             var tempQuery = navsByBookId.Join(books,
                 NAV => NAV.BookId,
                 Book => Book.FMOrgId,
-                (NAV, Book) => new { EZEIdentifier = string.IsNullOrWhiteSpace(Book.EZEIdentifier) ? Book.Fund.EZEIdentifier : Book.EZEIdentifier, NAV.MarketValue }).ToList()
-                ;
+                (NAV, Book) => new
+                {
+                    EZEIdentifier = string.IsNullOrWhiteSpace(Book.EZEIdentifier) ? Book.Fund.EZEIdentifier : Book.EZEIdentifier, 
+                    NAV.MarketValue
+                })
+                .ToList();
             
             return tempQuery.GroupBy(g => g.EZEIdentifier).ToDictionary(a => a.Key, a => a.Sum(b => b.MarketValue));
         }
