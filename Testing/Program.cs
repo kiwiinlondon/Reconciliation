@@ -21,11 +21,8 @@ namespace Testing
 
         static void Main(string[] args)
         {
-
-            //ClientPortfolioReconciliationService s = new ClientPortfolioReconciliationService();
-            //s.Reconcile(@"\\App02\FileShare\CapitaIRE\Giano register Jul 2014.xls",6184,DateTime.Parse("31/07/2014 00:00:00"));
-            ValuationReconciliationService s = new ValuationReconciliationService();
-            s.MatchPositionsAgainstKeeley(5333, new DateTime(2014, 8, 28),null, new int[0]);
+            Dictionary<string, int> ezeIdentifierToOutputMapping;
+            EzeReconciliationService.GetFMBookNavs(DateTime.Today, out ezeIdentifierToOutputMapping);
 
 
         }

@@ -117,10 +117,13 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
                     && a.FMOrgId.HasValue 
                     && a.FMOrgId > 0)
                     .ToList();
+
+            var fundIds = funds.Select(f => f.LegalEntityID).ToList();
             
             BookClient bookClient = new BookClient();
             List<Book> books = bookClient.GetAll().Where(
                 a => a.FMOrgId.HasValue
+                && fundIds.Contains(a.FundID)
                 && (!string.IsNullOrWhiteSpace(a.EZEIdentifier) || !string.IsNullOrWhiteSpace(a.Fund.EZEIdentifier)))
                 .ToList();
 
@@ -133,8 +136,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             .ToDictionary(a => a.EzeIdentifier, a => a.Order);
 
             PortfolioClient client = new PortfolioClient();
-            string bookString = string.Join(",", funds.Select(a => a.FMOrgId));
-
+            
             List<int> fmBookIds = funds.Select(a => a.FMOrgId.Value).ToList();
             
             List<BC.BookNAV> navsByBookId = client.GetBookNavs(fmBookIds.ToArray(), referenceDate);
@@ -147,8 +149,14 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
                     NAV.MarketValue
                 })
                 .ToList();
-            
-            return tempQuery.GroupBy(g => g.EZEIdentifier).ToDictionary(a => a.Key, a => a.Sum(b => b.MarketValue));
+
+            var ret = tempQuery
+                .GroupBy(g => g.EZEIdentifier)
+                .ToDictionary(
+                    a => a.Key,
+                    a => a.Sum(b => b.MarketValue));
+
+            return ret;
         }
 
        
