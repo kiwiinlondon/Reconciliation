@@ -12,10 +12,10 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
         {
         }
 
-        protected override string FundColumnName { get { return "Class"; } }
-        protected override string AccountReferenceColumnName { get { return "Investor ID"; } }
-        protected override string QuantityColumnName { get { return "Unit Holding"; } }
-        protected override string MarketValueColumnName { get { return "Value of Holding"; } }
+        protected override string FundColumnName { get { return "Classdescription"; } }
+        protected override string AccountReferenceColumnName { get { return "Investormantraid"; } }
+        protected override string QuantityColumnName { get { return "Endunits"; } }
+        protected override string MarketValueColumnName { get { return "Endamount"; } }
                 
     }
 }
