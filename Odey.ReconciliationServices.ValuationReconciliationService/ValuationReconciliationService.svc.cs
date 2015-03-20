@@ -51,7 +51,7 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
             DataColumn instrumentMarketId = dt.Columns.Add("InstrumentMarketId", typeof(int));
             DataColumn isAccrual = dt.Columns.Add("IsAccrual", typeof(bool));
             DataColumn instClassId = dt.Columns.Add("InstrumentClassID", typeof(int));
-            DataColumn maturityDate = dt.Columns.Add("MaturityDate", typeof(DateTime));
+            DataColumn maturityDate = dt.Columns.Add("MaturityDate", typeof(DateTime?));
             DataColumn fundId = dt.Columns.Add("FundId", typeof(int));
 
             dt.Columns.Add("NetPosition", typeof(decimal));         
