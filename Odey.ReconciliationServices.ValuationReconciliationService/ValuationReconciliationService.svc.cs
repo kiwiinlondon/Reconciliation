@@ -32,7 +32,7 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
                 dr["InstrumentMarketId"] = reconciliationItem.InstrumentMarketId;
                 dr["IsAccrual"] = reconciliationItem.IsAccrual;
                 dr["InstrumentClassID"] = reconciliationItem.InstrumentClassId;
-                dr["MaturityDate"] = reconciliationItem.MaturityDate;
+                dr["MaturityDate"] = reconciliationItem.MaturityDate.HasValue ? reconciliationItem.MaturityDate.Value : (object) DBNull.Value;
                 dr["FundId"] = reconciliationItem.FundId;
 
                 dr["NetPosition"] = reconciliationItem.Holding;
