@@ -10,6 +10,7 @@ using Odey.ReconciliationServices.ValuationReconciliationService;
 using Odey.ReconciliationServices.Contracts;
 using Odey.ReconciliationServices.EzeReconciliationService;
 using Odey.ReconciliationServices.ClientPortfolioReconciliationService;
+using Odey.ReconciliationServices.FMPortfolioCollectionService;
 
 namespace Testing
 {
@@ -21,6 +22,13 @@ namespace Testing
 
         static void Main(string[] args)
         {
+            FMKeeleyReconciliationService s = new FMKeeleyReconciliationService();
+            s.GetUnmatchedCVLPositions(6053, DateTime.Today, DateTime.Today,true);
+
+            FMPortfolioCollectionService service = new FMPortfolioCollectionService();
+        //    FMPortfolioCollectionClient service = new FMPortfolioCollectionClient();
+            service.CollectForFMFundId(68298, DateTime.Today.AddDays(-1), DateTime.Today);
+
             Dictionary<string, int> ezeIdentifierToOutputMapping;
             EzeReconciliationService.GetFMBookNavs(DateTime.Today, out ezeIdentifierToOutputMapping);
 

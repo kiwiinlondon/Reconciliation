@@ -14,6 +14,8 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,8 +38,13 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\Binaries\log4net\log4net.dll</HintPath>
     </Reference>
@@ -53,6 +60,7 @@
       <HintPath>..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
@@ -77,6 +85,10 @@
     <ProjectReference Include="..\Odey.ReconcilationServices.FMKeeleyReconcilationService\Odey.ReconciliationServices.FMKeeleyReconciliationService.csproj">
       <Project>{A8DB4F98-D955-4B77-A8CF-92F3D4424097}</Project>
       <Name>Odey.ReconciliationServices.FMKeeleyReconciliationService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Odey.ReconcilationServices.FMPortfolioCollectionService\Odey.ReconciliationServices.FMPortfolioCollectionService.csproj">
+      <Project>{afec4f5f-9909-4967-bf71-e6767632b3b0}</Project>
+      <Name>Odey.ReconciliationServices.FMPortfolioCollectionService</Name>
     </ProjectReference>
     <ProjectReference Include="..\Odey.ReconciliationServices.ClientPortfolioReconciliationService\Odey.ReconciliationServices.ClientPortfolioReconciliationService.csproj">
       <Project>{6700c148-3795-4a8b-bb6f-d6e50b777a2d}</Project>
@@ -115,7 +127,6 @@
     <None Include="App.ReleaseDebug.config">
       <DependentUpon>App.Base.config</DependentUpon>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

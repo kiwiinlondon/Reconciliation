@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices", "Odey.ReconciliationServices\Odey.ReconciliationServices.csproj", "{B4CCD4CF-9F24-4265-B24C-D790F5DB9758}"
 EndProject
@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{37DEC3
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices.FMPortfolioCollectionService", "Odey.ReconcilationServices.FMPortfolioCollectionService\Odey.ReconciliationServices.FMPortfolioCollectionService.csproj", "{AFEC4F5F-9909-4967-BF71-E6767632B3B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -202,6 +204,26 @@ Global
 		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.UAT|Mixed Platforms.ActiveCfg = UAT|Any CPU
 		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.UAT|Mixed Platforms.Build.0 = UAT|Any CPU
 		{6700C148-3795-4A8B-BB6F-D6E50B777A2D}.UAT|x86.ActiveCfg = UAT|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.Release|x86.ActiveCfg = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.ReleaseDebug|Any CPU.ActiveCfg = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.ReleaseDebug|Any CPU.Build.0 = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.ReleaseDebug|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.ReleaseDebug|Mixed Platforms.Build.0 = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.ReleaseDebug|x86.ActiveCfg = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.UAT|Any CPU.ActiveCfg = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.UAT|Any CPU.Build.0 = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.UAT|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.UAT|Mixed Platforms.Build.0 = Release|Any CPU
+		{AFEC4F5F-9909-4967-BF71-E6767632B3B0}.UAT|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

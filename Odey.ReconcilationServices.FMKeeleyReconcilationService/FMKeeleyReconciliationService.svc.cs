@@ -14,8 +14,8 @@ using Odey.ReconciliationServices;
 using Odey.Framework.Keeley.Entities;
 using Odey.StaticServices.Clients;
 using Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngines;
-using BC = Odey.Beauchamp.Contracts;
-using Odey.Beauchamp.Clients;
+using Odey.ReconciliationServices.Clients;
+
 
 namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
 {
@@ -49,18 +49,18 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
 
         #endregion
 
-        #region Get Matche dNavs
+        #region Get Matched Navs
 
-        public MatchingEngineOutput GetMatchedNavs(DateTime referenceDate)
-        {
-            FundClient client = new FundClient();
-            List<Fund> funds = client.GetAll().Where(a=>a.PositionsExist == true && a.FMOrgId.HasValue).ToList();
-            DataTable dt2 = GetFMNavs(referenceDate, funds);
-            DataTable dt1 = GetKeeleyNavs(referenceDate);            
-            NavMatchingEngine engine = new NavMatchingEngine(Logger);
-            MatchingEngineOutput output = engine.Match(dt1, dt2, MatchTypeIds.Full, false, DataSourceIds.KeeleyPortfolio, DataSourceIds.FMContViewLadder);
-            return output;
-        }
+        //public MatchingEngineOutput GetMatchedNavs(DateTime referenceDate)
+        //{
+        //    FundClient client = new FundClient();
+        //    List<Fund> funds = client.GetAll().Where(a=>a.PositionsExist == true && a.FMOrgId.HasValue).ToList();
+        //    DataTable dt2 = GetFMNavs(referenceDate, funds);
+        //    DataTable dt1 = GetKeeleyNavs(referenceDate);            
+        //    NavMatchingEngine engine = new NavMatchingEngine(Logger);
+        //    MatchingEngineOutput output = engine.Match(dt1, dt2, MatchTypeIds.Full, false, DataSourceIds.KeeleyPortfolio, DataSourceIds.FMContViewLadder);
+        //    return output;
+        //}
 
         #endregion
 
@@ -104,16 +104,27 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             return parameters;
         }
 
+
         private static Dictionary<string, object> CreateDataSet2Parameters(int fundId, DateTime fromDate, DateTime toDate)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
 
-            parameters.Add("@in_fund_Id", fundId);
-            parameters.Add("@in_from_Dt", fromDate);
-            parameters.Add("@in_to_Dt", toDate);
+            parameters.Add("@BFTFundId", fundId);
+            parameters.Add("@FromDate", fromDate);
+            parameters.Add("@ToDate", toDate);
 
             return parameters;
         }
+        //private static Dictionary<string, object> CreateDataSet2Parameters(int fundId, DateTime fromDate, DateTime toDate)
+        //{
+        //    Dictionary<string, object> parameters = new Dictionary<string, object>();
+
+        //    parameters.Add("@in_fund_Id", fundId);
+        //    parameters.Add("@in_from_Dt", fromDate);
+        //    parameters.Add("@in_to_Dt", toDate);
+
+        //    return parameters;
+        //}
 
         private static Dictionary<string, string> CreateDataSet1ColumnMappings()
         {
@@ -153,37 +164,45 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             return dt;
         }
 
+        public static DataTable GetCVLPositions(int bftFundId, DateTime fromDate, DateTime toDate)
+        {
+            DataTable dt = GetNewCVLDataTable();
+            DataSetUtilities.FillKeeleyDataTable(dt, "FMPortfolio_Get", CreateDataSet2Parameters(bftFundId, fromDate, toDate), null);
+            return dt;
+        }
 
         public static DataTable GetFMPositions(int bftFundId, DateTime fromDate, DateTime toDate)
         {
-            DataTable dt = GetNewCVLDataTable();
-            PortfolioClient client = new PortfolioClient();
-            List<BC.Portfolio> portfolioItems = client.Get(bftFundId, fromDate, toDate);
-            foreach (BC.Portfolio portfolio in portfolioItems)
-            {
-                DataRow row = dt.NewRow();
-                row["ReferenceDate"] = portfolio.LadderDate;
-                row["FMBookId"] = portfolio.BookId;
-                row["FMSecId"] = portfolio.IsecId;
-                if (portfolio.MaturityDate.HasValue)
-                {
-                    row["MaturityDate"] = portfolio.MaturityDate.Value;
-                }
-                else
-                {
-                    row["MaturityDate"] = new DateTime(1976,05,20);
-                }
-                row["CcyIso"] = portfolio.Currency;
-                row["NetPosition"] = portfolio.NetPosition;
-                row["Price"] = portfolio.Price;
-                row["FXRate"] = portfolio.FXRate;
-                row["MarketValue"] = portfolio.MarkValue;
-                row["DeltaMarketValue"] = portfolio.DeltaMarkValue;
-                row["TotalPNL"] = portfolio.TotalPnl;
-                row["TotalAccrual"] = portfolio.TotalAccrual;              
-                dt.Rows.Add(row);
-            }            
-            return dt;
+         //   DataTable dt = GetNewCVLDataTable();
+            FMPortfolioCollectionClient client = new FMPortfolioCollectionClient();
+            client.CollectForFMFundId(bftFundId, fromDate, toDate);
+            return GetCVLPositions(bftFundId, fromDate, toDate);
+            //List<BC.Portfolio> portfolioItems = client.Get(bftFundId, fromDate, toDate);
+            //foreach (BC.Portfolio portfolio in portfolioItems)
+            //{
+            //    DataRow row = dt.NewRow();
+            //    row["ReferenceDate"] = portfolio.LadderDate;
+            //    row["FMBookId"] = portfolio.BookId;
+            //    row["FMSecId"] = portfolio.IsecId;
+            //    if (portfolio.MaturityDate.HasValue)
+            //    {
+            //        row["MaturityDate"] = portfolio.MaturityDate.Value;
+            //    }
+            //    else
+            //    {
+            //        row["MaturityDate"] = new DateTime(1976,05,20);
+            //    }
+            //    row["CcyIso"] = portfolio.Currency;
+            //    row["NetPosition"] = portfolio.NetPosition;
+            //    row["Price"] = portfolio.Price;
+            //    row["FXRate"] = portfolio.FXRate;
+            //    row["MarketValue"] = portfolio.MarkValue;
+            //    row["DeltaMarketValue"] = portfolio.DeltaMarkValue;
+            //    row["TotalPNL"] = portfolio.TotalPnl;
+            //    row["TotalAccrual"] = portfolio.TotalAccrual;              
+            //    dt.Rows.Add(row);
+            //}            
+           // return dt;
         }
         #endregion
 
@@ -233,20 +252,20 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             return dt;
         }
 
-        public static DataTable GetFMNavs(DateTime referenceDate, List<Fund> funds)
-        {
-            DataTable dt = GetNewNavDataTable();
-            PortfolioClient client = new PortfolioClient();
-            List<BC.FundNAV> navs = client.GetFundNavs(funds.Select(a=>a.FMOrgId.Value).ToArray(), referenceDate);
-            foreach (BC.FundNAV fundNav in navs)
-            {
-                DataRow row = dt.NewRow();
-                row["FMFundId"] = fundNav.FundId;
-                row["MarketValue"] = fundNav.MarketValue;                
-                dt.Rows.Add(row);
-            }
-            return dt;
-        }
+        //public static DataTable GetFMNavs(DateTime referenceDate, List<Fund> funds)
+        //{
+        //    DataTable dt = GetNewNavDataTable();
+        //    PortfolioClient client = new PortfolioClient();
+        //    List<BC.FundNAV> navs = client.GetFundNavs(funds.Select(a=>a.FMOrgId.Value).ToArray(), referenceDate);
+        //    foreach (BC.FundNAV fundNav in navs)
+        //    {
+        //        DataRow row = dt.NewRow();
+        //        row["FMFundId"] = fundNav.FundId;
+        //        row["MarketValue"] = fundNav.MarketValue;                
+        //        dt.Rows.Add(row);
+        //    }
+        //    return dt;
+        //}
         #endregion
     }
 }

@@ -71,6 +71,7 @@
     <Compile Include="ClientPortfolioReconciliationClient.cs" />
     <Compile Include="EzeReconciliationClient.cs" />
     <Compile Include="FMKeeleyReconcilationClient.cs" />
+    <Compile Include="FMPortfolioCollectionClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValuationReconciliationClient.cs" />
   </ItemGroup>

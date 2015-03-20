@@ -70,6 +70,7 @@
     <Compile Include="IClientPortfolio.cs" />
     <Compile Include="IEzeReconciliation.cs" />
     <Compile Include="IFMKeeleyReconciliation.cs" />
+    <Compile Include="IFMPortfolioCollection.cs" />
     <Compile Include="IValuationReconciliation.cs" />
     <Compile Include="MatchingEngineOutput.cs" />
     <Compile Include="MatchingEngineOutputItem.cs" />
