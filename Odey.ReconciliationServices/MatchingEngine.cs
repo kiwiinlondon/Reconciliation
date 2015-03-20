@@ -223,7 +223,7 @@ namespace Odey.ReconciliationServices
             foreach (MatchingEngineOutputProperty property in keyProperties)
             {
                 object value = GetValueFromDataRow(dr, property.PropertyName);
-                if (value.GetType()== typeof(DateTime) && (DateTime)value == new DateTime(1976,5,20))
+                if (value.GetType()== typeof(DateTime) && (DateTime)value == new DateTime(1976,5,20)) //Geoff's birthday is null
                 {
                     value = null;
                 }

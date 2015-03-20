@@ -23,7 +23,7 @@ namespace Odey.ReconciliationServices.Contracts
         public int InstrumentClassId { get; set; }
 
         [DataMember]
-        public DateTime MaturityDate { get; set; }
+        public DateTime? MaturityDate { get; set; }
 
         [DataMember]
         public decimal Holding { get; set; }
