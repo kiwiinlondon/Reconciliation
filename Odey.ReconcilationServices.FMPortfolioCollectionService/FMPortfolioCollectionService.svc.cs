@@ -19,6 +19,12 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
     public class FMPortfolioCollectionService : OdeyServiceBase, IFMPortfolioCollection 
     {
 
+        private static readonly Dictionary<int, int> bookMappings = new Dictionary<int, int>()
+        {
+            { 61897, 2101 },
+            { 66218, 2101 }
+        };
+
         public void CollectForFMFundId(int fmFundId, DateTime fromDate, DateTime toDate)
         {
             PortfolioClient client = new PortfolioClient();
@@ -27,17 +33,23 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
             using (KeeleyModel context = new KeeleyModel(SecurityCallStackContext.Current))
             {
                 List<int> books = context.Books.Where(a => a.Fund.LegalEntity.FMOrgId == fmFundId).Select(a=>a.FMOrgId.Value).ToList();
+                books.AddRange(bookMappings.Keys);
                 Dictionary<Tuple<int,int,DateTime, DateTime?,string>, FMPortfolio> existingPortfolio =
                     context.FMPortfolios.Where(a => books.Contains(a.BookId) && fromDate <= a.ReferenceDate && a.ReferenceDate <= toDate).ToDictionary(k =>
                         new Tuple<int,int,DateTime, DateTime?,string>(k.BookId,k.ISecID,k.ReferenceDate,k.MaturityDate,k.Currency),v=>v);
                 foreach(BC.Portfolio portfolio in portfolioItems)
                 {
-                    Tuple<int, int, DateTime, DateTime?, string> key = new Tuple<int, int, DateTime, DateTime?, string>(portfolio.BookId, portfolio.IsecId, portfolio.LadderDate, portfolio.MaturityDate, portfolio.Currency);
+                    int bookId = portfolio.BookId;
+                    if (bookMappings.ContainsKey(bookId))
+                    {
+                        bookId = bookMappings[bookId];
+                    }
+                    Tuple<int, int, DateTime, DateTime?, string> key = new Tuple<int, int, DateTime, DateTime?, string>(bookId, portfolio.IsecId, portfolio.LadderDate, portfolio.MaturityDate, portfolio.Currency);
                     FMPortfolio existingPortfolioItem;
                     if (!existingPortfolio.TryGetValue(key, out existingPortfolioItem))
                     {
                         existingPortfolioItem = new FMPortfolio();
-                        existingPortfolioItem.BookId = portfolio.BookId;
+                        existingPortfolioItem.BookId = bookId;
                         existingPortfolioItem.ISecID = portfolio.IsecId;
                         existingPortfolioItem.ReferenceDate = portfolio.LadderDate;
                         existingPortfolioItem.MaturityDate = portfolio.MaturityDate;
