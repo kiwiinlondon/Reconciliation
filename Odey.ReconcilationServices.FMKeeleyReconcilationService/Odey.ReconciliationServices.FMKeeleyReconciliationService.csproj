@@ -25,6 +25,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,6 +57,10 @@
     <Reference Include="Odey.Framework.Infrastructure.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Framework.Infrastructure.ErrorReporting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.ErrorReporting.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Services">
       <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>

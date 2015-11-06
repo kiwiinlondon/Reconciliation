@@ -10,6 +10,7 @@ using Odey.Framework.Infrastructure.Services;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.Common;
+using Odey.Framework.Infrastructure.ErrorReporting;
 using Odey.ReconciliationServices;
 using Odey.Framework.Keeley.Entities;
 using Odey.StaticServices.Clients;
@@ -173,36 +174,40 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
 
         public static DataTable GetFMPositions(int bftFundId, DateTime fromDate, DateTime toDate)
         {
-         //   DataTable dt = GetNewCVLDataTable();
-            FMPortfolioCollectionClient client = new FMPortfolioCollectionClient();
-            client.CollectForFMFundId(bftFundId, fromDate, toDate);
-            return GetCVLPositions(bftFundId, fromDate, toDate);
-            //List<BC.Portfolio> portfolioItems = client.Get(bftFundId, fromDate, toDate);
-            //foreach (BC.Portfolio portfolio in portfolioItems)
-            //{
-            //    DataRow row = dt.NewRow();
-            //    row["ReferenceDate"] = portfolio.LadderDate;
-            //    row["FMBookId"] = portfolio.BookId;
-            //    row["FMSecId"] = portfolio.IsecId;
-            //    if (portfolio.MaturityDate.HasValue)
-            //    {
-            //        row["MaturityDate"] = portfolio.MaturityDate.Value;
-            //    }
-            //    else
-            //    {
-            //        row["MaturityDate"] = new DateTime(1976,05,20);
-            //    }
-            //    row["CcyIso"] = portfolio.Currency;
-            //    row["NetPosition"] = portfolio.NetPosition;
-            //    row["Price"] = portfolio.Price;
-            //    row["FXRate"] = portfolio.FXRate;
-            //    row["MarketValue"] = portfolio.MarkValue;
-            //    row["DeltaMarketValue"] = portfolio.DeltaMarkValue;
-            //    row["TotalPNL"] = portfolio.TotalPnl;
-            //    row["TotalAccrual"] = portfolio.TotalAccrual;              
-            //    dt.Rows.Add(row);
-            //}            
-           // return dt;
+            //try a few times before failing
+            int errorCount = 0;
+            const int maxErrorCount = 3;
+            var tryAgain = true;
+
+            while (tryAgain)
+            {
+                try
+                {
+                    FMPortfolioCollectionClient client = new FMPortfolioCollectionClient();
+                    client.CollectForFMFundId(bftFundId, fromDate, toDate);
+                    return GetCVLPositions(bftFundId, fromDate, toDate);
+                }
+                catch (Exception e)
+                {
+                    errorCount++;
+                    if (errorCount >= maxErrorCount)
+                    {
+                        tryAgain = false;
+                        string errMsg = $"Error Count {errorCount} : Error in FMKeeleyReconciliationService.GetFMPositions calling FMPortfolioCollectionClient.CollectForFMFundId for bftFundId {bftFundId}, fromDate {fromDate}, toDate {toDate}. TOO MANY ERRORS. Not Trying again. : {e.Message}";
+                        Logger.ErrorFormat(errMsg, e);
+                        new ErrorReportingClient().ReportException("FMKeeleyReconciliationService", errMsg);
+                    }
+                    else
+                    {
+                        string errMsg = $"Error Count {errorCount} : Error in FMKeeleyReconciliationService.GetFMPositions calling FMPortfolioCollectionClient.CollectForFMFundId for bftFundId {bftFundId}, fromDate {fromDate}, toDate {toDate}. Trying again. : {e.Message}";
+                        Logger.ErrorFormat(errMsg, e);
+                        new ErrorReportingClient().ReportException("FMKeeleyReconciliationService", errMsg);
+                    }
+                }
+            }
+            //too many errors. 
+            throw new Exception($"Too Many Exceptions in FMKeeleyReconciliationService.GetFMPositions calling FMPortfolioCollectionClient.CollectForFMFundId for bftFundId { bftFundId}, fromDate { fromDate}, toDate { toDate}. Throwing Exception.");
+
         }
         #endregion
 

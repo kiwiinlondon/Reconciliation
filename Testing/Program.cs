@@ -27,9 +27,7 @@ namespace Testing
             FMPortfolioCollectionService service = new FMPortfolioCollectionService();
         //    FMPortfolioCollectionClient service = new FMPortfolioCollectionClient();
             service.CollectForFMFundId(68298, DateTime.Today.AddDays(-1), DateTime.Today);
-
-            Dictionary<string, int> ezeIdentifierToOutputMapping;
-            EzeReconciliationService.GetFMBookNavs(DateTime.Today, out ezeIdentifierToOutputMapping);
+            
 
 
         }
