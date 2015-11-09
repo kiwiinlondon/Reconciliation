@@ -21,13 +21,8 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            FMKeeleyReconciliationService s = new FMKeeleyReconciliationService();
-            s.GetUnmatchedCVLPositions(6053, DateTime.Today, DateTime.Today,true);
+            var t = new EzeReconciliationService().GetThreeWayRecOutput(DateTime.Today);
 
-            FMPortfolioCollectionService service = new FMPortfolioCollectionService();
-        //    FMPortfolioCollectionClient service = new FMPortfolioCollectionClient();
-            service.CollectForFMFundId(68298, DateTime.Today.AddDays(-1), DateTime.Today);
-            
 
 
         }

@@ -101,82 +101,98 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         #region IEzeReconciliation Members
 
         /// <summary>
-        /// get keeley navs for EZE rec email
+        /// get FM navs for EZE rec email
         /// </summary>
         /// <param name="referenceDate"></param>
         /// <param name="ezeIdentifierToOutputMapping"></param>
         /// <returns></returns>
-        //public static Dictionary<string,decimal> GetFMBookNavs(DateTime referenceDate, out Dictionary<string,int> ezeIdentifierToOutputMapping)
-        //{
-        //    //only get active parent funds that exist in FM
-        //    FundClient fundClient = new FundClient();
-        //    List<Fund> funds = fundClient.GetAll().Where(
-        //        a => a.PositionsExist
-        //            && a.IsActive 
-        //            && !a.ParentFundId.HasValue
-        //            && a.FMOrgId.HasValue 
-        //            && a.FMOrgId > 0)
-        //            .ToList();
+        public static Dictionary<string, decimal> GetFMBookNavs(DateTime referenceDate, out Dictionary<string, int> ezeIdentifierToOutputMapping)
+        {
+            //only get active parent funds that exist in FM
+            FundClient fundClient = new FundClient();
+            List<Fund> funds = fundClient.GetAll().Where(
+                a => a.PositionsExist
+                    && a.IsActive
+                    && !a.ParentFundId.HasValue
+                    && a.FMOrgId.HasValue
+                    && a.FMOrgId > 0)
+                    .ToList();
 
-        //    var fundIds = funds.Select(f => f.LegalEntityID).ToList();
+            var fundIds = funds.Select(f => f.LegalEntityID).ToList();
+
+            BookClient bookClient = new BookClient();
+            List<Book> books = bookClient.GetAll().Where(
+                a => a.FMOrgId.HasValue
+                && fundIds.Contains(a.FundID)
+                && (!string.IsNullOrWhiteSpace(a.EZEIdentifier) || !string.IsNullOrWhiteSpace(a.Fund.EZEIdentifier)))
+                .ToList();
+
+            ezeIdentifierToOutputMapping = books.Select(g => new
+            {
+                Order = g.Fund.FundTypeId == 7 ? 1 : 0,
+                EzeIdentifier = string.IsNullOrWhiteSpace(g.EZEIdentifier) ? g.Fund.EZEIdentifier : g.EZEIdentifier
+            })
+            .Distinct()
+            .ToDictionary(a => a.EzeIdentifier, a => a.Order);
+
+            PortfolioClient client = new PortfolioClient();
+
             
-        //    BookClient bookClient = new BookClient();
-        //    List<Book> books = bookClient.GetAll().Where(
-        //        a => a.FMOrgId.HasValue
-        //        && fundIds.Contains(a.FundID)
-        //        && (!string.IsNullOrWhiteSpace(a.EZEIdentifier) || !string.IsNullOrWhiteSpace(a.Fund.EZEIdentifier)))
-        //        .ToList();
+            //key is EZE book id, value is Book NAV 
+            var navByEZEBookId = new Dictionary<string, decimal>();
 
-        //    ezeIdentifierToOutputMapping = books.Select(g => new
-        //    {
-        //        Order = g.Fund.FundTypeId == 7 ? 1 : 0, 
-        //        EzeIdentifier = string.IsNullOrWhiteSpace(g.EZEIdentifier) ? g.Fund.EZEIdentifier : g.EZEIdentifier
-        //    })
-        //    .Distinct()
-        //    .ToDictionary(a => a.EzeIdentifier, a => a.Order);
+            //go to FM and get portfolio for each fund (and book)
+            //then sum by EZE identifier
+            foreach (var fund in funds)
+            {
+                var fmFundPortfolio = client.Get(fund.LegalEntityID, referenceDate, referenceDate);
+                var navsByBookId = fmFundPortfolio
+                    .GroupBy(f => f.BookId)
+                    .Select(f => new
+                    {
+                        FMBookId = f.Key,
+                        NAV = f.Sum(b => b.MarkValue)
+                    });
 
-        //    PortfolioClient client = new PortfolioClient();
+                foreach (var navByBookId in navsByBookId)
+                {
+                    var book = books.First(b => b.FMOrgId == navByBookId.FMBookId);
+                    var ezeBookId = string.IsNullOrWhiteSpace(book.EZEIdentifier)
+                        ? book.Fund.EZEIdentifier
+                        : book.EZEIdentifier;
+
+                    if (navByEZEBookId.ContainsKey(ezeBookId))
+                    {
+                        navByEZEBookId[ezeBookId] += navByBookId.NAV;
+                    }
+                    else
+                    {
+                        navByEZEBookId[ezeBookId] = navByBookId.NAV;
+                    }
+                }
+            }
             
-        //    List<int> fmBookIds = funds.Select(a => a.FMOrgId.Value).ToList();
-            
-        //    List<BC.BookNAV> navsByBookId = client.GetBookNavs(fmBookIds.ToArray(), referenceDate);
-        //    var tempQuery = navsByBookId.Join(books,
-        //        NAV => NAV.BookId,
-        //        Book => Book.FMOrgId,
-        //        (NAV, Book) => new
-        //        {
-        //            EZEIdentifier = string.IsNullOrWhiteSpace(Book.EZEIdentifier) ? Book.Fund.EZEIdentifier : Book.EZEIdentifier, 
-        //            NAV.MarketValue
-        //        })
-        //        .ToList();
+            return navByEZEBookId;
+        }
 
-        //    var ret = tempQuery
-        //        .GroupBy(g => g.EZEIdentifier)
-        //        .ToDictionary(
-        //            a => a.Key,
-        //            a => a.Sum(b => b.MarketValue));
 
-        //    return ret;
-        //}
+        public List<ThreeWayNavRecOutput> GetThreeWayRecOutput(DateTime referenceDate)
+        {
+            Logger.Info(String.Format("Reference Date is {0}", referenceDate));
+            Dictionary<string, ThreeWayNavRecOutput> output = new Dictionary<string, ThreeWayNavRecOutput>();
+            Dictionary<string, int> ezeIdentifierToOutputMapping;
+            Dictionary<string, decimal> fmNavs = GetFMBookNavs(referenceDate, out ezeIdentifierToOutputMapping);
+            foreach (KeyValuePair<string, decimal> fmNav in fmNavs.OrderBy(a => ezeIdentifierToOutputMapping[a.Key]).ThenBy(a => a.Key))
+            {
+                AddToOutput(fmNav.Key, null, fmNav.Value, null, output);
+            }
+            DataTable ezeNavs = GetEzeNavs();
+            AddDataTableToOutput(ezeNavs, output, true);
+            DataTable keeleyNavs = GetKeeleyNavs(referenceDate);
+            AddDataTableToOutput(keeleyNavs, output, false);
 
-       
-        //public List<ThreeWayNavRecOutput> GetThreeWayRecOutput(DateTime referenceDate)
-        //{
-        //    Logger.Info(String.Format("Reference Date is {0}", referenceDate));
-        //    Dictionary<string, ThreeWayNavRecOutput> output = new Dictionary<string, ThreeWayNavRecOutput>();
-        //    Dictionary<string,int> ezeIdentifierToOutputMapping;
-        //    Dictionary<string, decimal> fmNavs = GetFMBookNavs(referenceDate, out ezeIdentifierToOutputMapping);
-        //    foreach (KeyValuePair<string, decimal> fmNav in fmNavs.OrderBy(a => ezeIdentifierToOutputMapping[a.Key]).ThenBy(a=>a.Key))
-        //    {
-        //        AddToOutput(fmNav.Key, null, fmNav.Value, null, output);
-        //    }
-        //    DataTable ezeNavs = GetEzeNavs();
-        //    AddDataTableToOutput(ezeNavs, output, true);
-        //    DataTable keeleyNavs = GetKeeleyNavs(referenceDate);
-        //    AddDataTableToOutput(keeleyNavs, output, false);
-
-        //    return output.Values.ToList();
-        //}
+            return output.Values.ToList();
+        }
 
         private void AddDataTableToOutput(DataTable dt, Dictionary<string, ThreeWayNavRecOutput> output,bool isEze)
         {
