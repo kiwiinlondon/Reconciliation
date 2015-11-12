@@ -17,6 +17,10 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
         public CVLMatchingEngine(ILog logger) : base(logger) { }
         public override bool DecimalsMatch(MatchingEngineOutputItem matchingEngineOutputItem, string fieldName, decimal field1, decimal field2)
         {
+            if ((int)matchingEngineOutputItem.KeyValues["FMSecId"] == 2346702 && fieldName.StartsWith("Mark"))
+            {
+                int i = 0;
+            }
             switch (fieldName)
             {
                 
@@ -27,7 +31,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
                 case "RealisedPricePNL":
                 case "MarketValue":                
                 case "DeltaMarketValue":
-                    return !DifferenceGreaterThanPercentage(Math.Round(field1,0) ,Math.Round(field2,0), .01m);
+                    return !DifferenceGreaterThanPercentage(Math.Round(field1,0) ,Math.Round(field2,0), .01m,100);
                 case "TotalPNL":
                     return GreaterThanZeroIgnoreZeroPositions(matchingEngineOutputItem, fieldName, field1, field2, 9999999999999);
                 case "FXRate":

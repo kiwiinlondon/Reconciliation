@@ -21,7 +21,7 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            var t = new EzeReconciliationService().GetThreeWayRecOutput(DateTime.Today);
+            var t = new EzeReconciliationService().GetThreeWayRecOutput(DateTime.Today.AddDays(-1));
 
 
 

@@ -269,6 +269,27 @@ namespace Odey.ReconciliationServices
         }
         #endregion
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         #region Add To Values
         private void AddToOutput(MatchingEngineOutput matchingEngineOutput, MatchingEngineOutputItem item, bool returnOnlyMismatches)
         {
@@ -285,10 +306,10 @@ namespace Odey.ReconciliationServices
             return (!(-tolerance < value && value < tolerance));
         }
         
-        public static bool DifferenceGreaterThanPercentage(decimal value1, decimal value2, decimal tolerance)
+        public static bool DifferenceGreaterThanPercentage(decimal value1, decimal value2, decimal percentageTolerance, decimal? absoluteTolerance)
         {
             decimal difference = value2 - value1;
-            if (difference == 0)
+            if (absoluteTolerance.HasValue && Math.Abs(difference) <= absoluteTolerance.Value)
             {
                 return false;
             }
@@ -302,7 +323,7 @@ namespace Odey.ReconciliationServices
             {
                 return true;
             }
-            return (difference / smallestValue > tolerance);
+            return (difference / smallestValue > percentageTolerance);
         }
         #endregion
 
@@ -340,6 +361,30 @@ namespace Odey.ReconciliationServices
             return matchingEngineOutput;
         }
         #endregion
+
+        public string GetKeyAsString(DataRow row)
+        {
+            object[] key = GetPrimaryKeyValues(row);
+            return string.Join("~", key);
+        }
+
+        public void Match(Dictionary<DataSourceIds,DataTable> dataTables, MatchTypeIds matchType, bool returnOnlyMismatches)
+        {
+            Dictionary<string,Dictionary<DataSourceIds,DataRow>> matchedRecords = new Dictionary<string,Dictionary<DataSourceIds,DataRow>>();
+            foreach(DataTable dataTable in dataTables.Values)
+            {
+                foreach(DataRow row in dataTable.Rows)
+                {
+                    string key = GetKeyAsString(row);
+                    Dictionary<DataSourceIds,DataRow> dataRows;
+                    //if (matchedRecords.TryGetValue(key out.Contains(key))
+                    //{
+
+                    //}
+                }
+            }
+        }
+
 
         #region Missing Row Can Be Ignored
         protected virtual bool RowCanBeIgnored(DataRow item)

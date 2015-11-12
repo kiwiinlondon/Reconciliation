@@ -22,7 +22,7 @@ namespace Odey.ReconciliationServices.EZEReconciliationService.MatchingEngines
             switch (fieldName)
             {
                 case "MarketValue":
-                    return !DifferenceGreaterThanPercentage(field1, field2, Tolerance);
+                    return !DifferenceGreaterThanPercentage(field1, field2, Tolerance,1);
                 default:
                     return base.DecimalsMatch(matchingEngineOutputItem, fieldName, field1, field2);
             }
