@@ -16,9 +16,12 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
-    public class FMPortfolioCollectionService : OdeyServiceBase, IFMPortfolioCollection 
+    public class FMPortfolioCollectionService : OdeyServiceBase, IFMPortfolioCollection
     {
-
+        /// <summary>
+        /// FM Strategy name
+        /// </summary>
+        private static readonly string STRATEGY_NONE = "NONE";
 
         public void CollectForFMFundId(int fmFundId, DateTime fromDate, DateTime toDate)
         {
@@ -27,19 +30,24 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
             List<BC.Portfolio> portfolioItems = client.Get(fmFundId, fromDate, toDate);
             using (KeeleyModel context = new KeeleyModel(SecurityCallStackContext.Current))
             {
-                List<int> books = context.Books.Where(a => a.Fund.LegalEntity.FMOrgId == fmFundId).Select(a=>a.FMOrgId.Value).ToList();
+                List<int> books = context.Books
+                    .Where(a => a.Fund.LegalEntity.FMOrgId == fmFundId).Select(a=>a.FMOrgId.Value)
+                    .ToList();
+
                 Dictionary<Tuple<int,int,DateTime, DateTime?,string>, FMPortfolio> existingPortfolio =
-                    context.FMPortfolios.Where(a => books.Contains(a.BookId) && fromDate <= a.ReferenceDate && a.ReferenceDate <= toDate).ToDictionary(k =>
-                        new Tuple<int,int,DateTime, DateTime?,string>(k.BookId,k.ISecID,k.ReferenceDate,k.MaturityDate,k.Currency),v=>v);
+                    context.FMPortfolios
+                    .Where(a => books.Contains(a.BookId) && fromDate <= a.ReferenceDate && a.ReferenceDate <= toDate)
+                    .ToDictionary(k => new Tuple<int,int,DateTime, DateTime?,string>(k.BookId,k.ISecID,k.ReferenceDate,k.MaturityDate,k.Currency),
+                                  v=>v);
                 foreach(BC.Portfolio portfolio in portfolioItems)
                 {
-
-                    Tuple<int, int, DateTime, DateTime?, string> key = new Tuple<int, int, DateTime, DateTime?, string>(portfolio.BookId, portfolio.IsecId, portfolio.LadderDate, portfolio.MaturityDate, portfolio.Currency);
+                    int bookId = GetBookId(portfolio);
+                    var key = new Tuple<int, int, DateTime, DateTime?, string>(bookId, portfolio.IsecId, portfolio.LadderDate, portfolio.MaturityDate, portfolio.Currency);
                     FMPortfolio existingPortfolioItem;
                     if (!existingPortfolio.TryGetValue(key, out existingPortfolioItem))
                     {
                         existingPortfolioItem = new FMPortfolio();
-                        existingPortfolioItem.BookId = portfolio.BookId;
+                        existingPortfolioItem.BookId = bookId;
                         existingPortfolioItem.ISecID = portfolio.IsecId;
                         existingPortfolioItem.ReferenceDate = portfolio.LadderDate;
                         existingPortfolioItem.MaturityDate = portfolio.MaturityDate;
@@ -63,6 +71,27 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                 }
                 context.SaveChanges();
             }
+        }
+
+
+        /// <summary>
+        /// map OAR portfolio items with a strategy to BK-OUAR-AC for keeley rec
+        /// </summary>
+        /// <param name="portfolio"></param>
+        /// <returns></returns>
+        private int GetBookId(BC.Portfolio portfolio)
+        {
+            if (portfolio.BookId == 56778 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
+            {
+                //BK-OUAR -> BK-OUAR-AC
+                return 79419;
+            }
+            if (portfolio.BookId == 78663 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
+            {
+                //BK-ARFF -> BK-ARFF-AC
+                return 79420;
+            }
+            return portfolio.BookId;
         }
     }
 }

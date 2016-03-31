@@ -21,7 +21,7 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            var t = new EzeReconciliationService().GetThreeWayRecOutput(DateTime.Today.AddDays(-1));
+            new FMPortfolioCollectionService().CollectForFMFundId(56777, DateTime.Today, DateTime.Today);
 
 
 
