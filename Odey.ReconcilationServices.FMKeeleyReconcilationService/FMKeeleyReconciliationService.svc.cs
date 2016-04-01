@@ -76,7 +76,8 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             DataColumn fmSecId = dt.Columns.Add("FMSecId", typeof(int));
             DataColumn ccyIso = dt.Columns.Add("CcyIso", typeof(string));
             DataColumn maturityDate = dt.Columns.Add("MaturityDate", typeof(DateTime));
-            
+            DataColumn strategyFMCode = dt.Columns.Add("StrategyFMCode", typeof(string));
+
             dt.Columns.Add("NetPosition", typeof(decimal));
             dt.Columns.Add("UnitCost", typeof(decimal));
             dt.Columns.Add("Price", typeof(decimal));
@@ -89,7 +90,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             //_dt.Columns.Add("RealisedPricePNL", typeof(decimal));
             //_dt.Columns.Add("UnRealisedPNL", typeof(decimal));
             dt.Columns.Add("TotalPNL", typeof(decimal));
-            dt.PrimaryKey = new DataColumn[] { refDate, maturityDate, bookId, fmSecId, ccyIso };
+            dt.PrimaryKey = new DataColumn[] { refDate, maturityDate, bookId, fmSecId, ccyIso, strategyFMCode };
             return dt;
 
         }

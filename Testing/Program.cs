@@ -21,7 +21,7 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            new FMPortfolioCollectionService().CollectForFMFundId(56777, DateTime.Today, DateTime.Today);
+            new FMPortfolioCollectionClient().CollectForFMFundId(56777, DateTime.Parse("31-Mar-2016"), DateTime.Parse("31-Mar-2016"));
 
 
 
