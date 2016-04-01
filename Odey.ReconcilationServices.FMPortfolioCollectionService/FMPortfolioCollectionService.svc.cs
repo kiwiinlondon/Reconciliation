@@ -14,8 +14,7 @@ using System.Text;
 
 namespace Odey.ReconciliationServices.FMPortfolioCollectionService
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
+
     public class FMPortfolioCollectionService : OdeyServiceBase, IFMPortfolioCollection
     {
         /// <summary>
@@ -34,24 +33,28 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                     .Where(a => a.Fund.LegalEntity.FMOrgId == fmFundId).Select(a=>a.FMOrgId.Value)
                     .ToList();
 
-                Dictionary<Tuple<int,int,DateTime, DateTime?,string>, FMPortfolio> existingPortfolio =
+                var existingPortfolio =
                     context.FMPortfolios
                     .Where(a => books.Contains(a.BookId) && fromDate <= a.ReferenceDate && a.ReferenceDate <= toDate)
-                    .ToDictionary(k => new Tuple<int,int,DateTime, DateTime?,string>(k.BookId,k.ISecID,k.ReferenceDate,k.MaturityDate,k.Currency),
+                    .ToDictionary(k => new Tuple<int,int,DateTime, DateTime?,string, string>(k.BookId,k.ISecID,k.ReferenceDate,k.MaturityDate,k.Currency, k.StrategyFMCode),
                                   v=>v);
                 foreach(BC.Portfolio portfolio in portfolioItems)
                 {
                     int bookId = GetBookId(portfolio);
-                    var key = new Tuple<int, int, DateTime, DateTime?, string>(bookId, portfolio.IsecId, portfolio.LadderDate, portfolio.MaturityDate, portfolio.Currency);
+                    var key = new Tuple<int, int, DateTime, DateTime?, string, string>(bookId, portfolio.IsecId, portfolio.LadderDate, portfolio.MaturityDate, portfolio.Currency, portfolio.Strategy);
+
                     FMPortfolio existingPortfolioItem;
                     if (!existingPortfolio.TryGetValue(key, out existingPortfolioItem))
                     {
-                        existingPortfolioItem = new FMPortfolio();
-                        existingPortfolioItem.BookId = bookId;
-                        existingPortfolioItem.ISecID = portfolio.IsecId;
-                        existingPortfolioItem.ReferenceDate = portfolio.LadderDate;
-                        existingPortfolioItem.MaturityDate = portfolio.MaturityDate;
-                        existingPortfolioItem.Currency = portfolio.Currency;
+                        existingPortfolioItem = new FMPortfolio
+                        {
+                            BookId = bookId,
+                            ISecID = portfolio.IsecId,
+                            ReferenceDate = portfolio.LadderDate,
+                            MaturityDate = portfolio.MaturityDate,
+                            Currency = portfolio.Currency,
+                            StrategyFMCode = portfolio.Strategy
+                        };
                         context.FMPortfolios.Add(existingPortfolioItem);
                     }
                     else
