@@ -38,10 +38,12 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                     .Where(a => books.Contains(a.BookId) && fromDate <= a.ReferenceDate && a.ReferenceDate <= toDate)
                     .ToDictionary(k => new Tuple<int,int,DateTime, DateTime?,string, string>(k.BookId,k.ISecID,k.ReferenceDate,k.MaturityDate,k.Currency, k.StrategyFMCode),
                                   v=>v);
+
                 foreach(BC.Portfolio portfolio in portfolioItems)
                 {
                     int bookId = GetBookId(portfolio);
-                    var key = new Tuple<int, int, DateTime, DateTime?, string, string>(bookId, portfolio.IsecId, portfolio.LadderDate, portfolio.MaturityDate, portfolio.Currency, portfolio.Strategy);
+                    string strategy = GetStrategy(portfolio);
+                    var key = new Tuple<int, int, DateTime, DateTime?, string, string>(bookId, portfolio.IsecId, portfolio.LadderDate, portfolio.MaturityDate, portfolio.Currency, strategy);
 
                     FMPortfolio existingPortfolioItem;
                     if (!existingPortfolio.TryGetValue(key, out existingPortfolioItem))
@@ -53,7 +55,7 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                             ReferenceDate = portfolio.LadderDate,
                             MaturityDate = portfolio.MaturityDate,
                             Currency = portfolio.Currency,
-                            StrategyFMCode = portfolio.Strategy
+                            StrategyFMCode = strategy
                         };
                         context.FMPortfolios.Add(existingPortfolioItem);
                     }
@@ -95,6 +97,23 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                 return 79420;
             }
             return portfolio.BookId;
+        }
+
+        /// <summary>
+        /// Sometimes non-OAR and non-ARFF portfolio items from FM have a strategy
+        /// Set them to none here instead.
+        /// </summary>
+        /// <param name="portfolio"></param>
+        /// <returns></returns>
+        private string GetStrategy(BC.Portfolio portfolio)
+        {
+            if (portfolio.BookId == 56778 || portfolio.BookId == 78663 )
+            {
+                //BK-OUAR or BK-ARFF. Retain strategy
+                return portfolio.Strategy;
+            }
+
+            return STRATEGY_NONE;
         }
     }
 }
