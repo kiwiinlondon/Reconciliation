@@ -42,8 +42,7 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                 foreach(BC.Portfolio portfolio in portfolioItems)
                 {
                     int bookId = GetBookId(portfolio);
-                    string strategy = GetStrategy(portfolio);
-                    var key = new Tuple<int, int, DateTime, DateTime?, string, string>(bookId, portfolio.IsecId, portfolio.LadderDate, portfolio.MaturityDate, portfolio.Currency, strategy);
+                    var key = new Tuple<int, int, DateTime, DateTime?, string, string>(bookId, portfolio.IsecId, portfolio.LadderDate, portfolio.MaturityDate, portfolio.Currency, portfolio.Strategy);
 
                     FMPortfolio existingPortfolioItem;
                     if (!existingPortfolio.TryGetValue(key, out existingPortfolioItem))
@@ -55,7 +54,7 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                             ReferenceDate = portfolio.LadderDate,
                             MaturityDate = portfolio.MaturityDate,
                             Currency = portfolio.Currency,
-                            StrategyFMCode = strategy
+                            StrategyFMCode = portfolio.Strategy
                         };
                         context.FMPortfolios.Add(existingPortfolioItem);
                     }
@@ -98,22 +97,6 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
             }
             return portfolio.BookId;
         }
-
-        /// <summary>
-        /// Sometimes non-OAR and non-ARFF portfolio items from FM have a strategy
-        /// Set them to none here instead.
-        /// </summary>
-        /// <param name="portfolio"></param>
-        /// <returns></returns>
-        private string GetStrategy(BC.Portfolio portfolio)
-        {
-            if (portfolio.BookId == 56778 || portfolio.BookId == 78663 )
-            {
-                //BK-OUAR or BK-ARFF. Retain strategy
-                return portfolio.Strategy;
-            }
-
-            return STRATEGY_NONE;
-        }
+        
     }
 }
