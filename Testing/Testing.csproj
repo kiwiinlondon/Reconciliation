@@ -49,26 +49,26 @@
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\Binaries\log4net\log4net.dll</HintPath>
+      <HintPath>..\..\Binaries\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Beauchamp.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Binaries\Odey.Beauchamp\Odey.Beauchamp.Clients.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Beauchamp\Odey.Beauchamp.Clients.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Beauchamp.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Binaries\Odey.Beauchamp\Odey.Beauchamp.Contracts.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Beauchamp\Odey.Beauchamp.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Services">
-      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
     </Reference>
     <Reference Include="ServiceModelEx.IdentityCallStack, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d0f8277329bba7a0, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
+      <HintPath>..\..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

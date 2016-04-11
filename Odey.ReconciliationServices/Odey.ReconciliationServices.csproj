@@ -53,10 +53,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GenericParsing">
-      <HintPath>..\Binaries\GenericFileParser\GenericParsing.dll</HintPath>
+      <HintPath>..\..\Binaries\GenericFileParser\GenericParsing.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\Binaries\log4net\log4net.dll</HintPath>
+      <HintPath>..\..\Binaries\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />

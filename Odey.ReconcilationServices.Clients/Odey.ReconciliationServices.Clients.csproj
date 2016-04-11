@@ -53,10 +53,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Odey.Framework.Infrastructure.Clients">
-      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
     </Reference>
     <Reference Include="ServiceModelEx.IdentityCallStack">
-      <HintPath>..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
+      <HintPath>..\..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

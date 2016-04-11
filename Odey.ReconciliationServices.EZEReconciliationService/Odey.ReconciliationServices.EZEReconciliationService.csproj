@@ -48,37 +48,37 @@
   <ItemGroup>
     <Reference Include="GenericParsing, Version=1.1.3.20921, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Binaries\GenericFileParser\GenericParsing.dll</HintPath>
+      <HintPath>..\..\Binaries\GenericFileParser\GenericParsing.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\Binaries\log4net\log4net.dll</HintPath>
+      <HintPath>..\..\Binaries\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Odey.Beauchamp.Clients">
-      <HintPath>..\Binaries\Odey.Beauchamp\Odey.Beauchamp.Clients.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Beauchamp\Odey.Beauchamp.Clients.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Beauchamp.Contracts">
-      <HintPath>..\Binaries\Odey.Beauchamp\Odey.Beauchamp.Contracts.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Beauchamp\Odey.Beauchamp.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Services">
-      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Keeley.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Odey.StaticServices.Clients">
-      <HintPath>..\Binaries\Odey.StaticServices\Odey.StaticServices.Clients.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.StaticServices\Odey.StaticServices.Clients.dll</HintPath>
     </Reference>
     <Reference Include="Odey.StaticServices.Contracts">
-      <HintPath>..\Binaries\Odey.StaticServices\Odey.StaticServices.Contracts.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.StaticServices\Odey.StaticServices.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="ServiceModelEx.IdentityCallStack">
-      <HintPath>..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
+      <HintPath>..\..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.DynamicData" />

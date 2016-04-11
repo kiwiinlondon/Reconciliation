@@ -48,41 +48,41 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
-      <HintPath>..\Binaries\log4net\log4net.dll</HintPath>
+      <HintPath>..\..\Binaries\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Odey.Framework.Infrastructure.Caches">
-      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Caches.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Caches.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Infrastructure.ErrorReporting, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.ErrorReporting.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.ErrorReporting.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Services">
-      <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Keeley.Entities">
-      <HintPath>..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Keeley.Entities.Enums, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.Enums.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.Enums.dll</HintPath>
     </Reference>
     <Reference Include="Odey.StaticServices.Caches">
-      <HintPath>..\Binaries\Odey.StaticServices\Odey.StaticServices.Caches.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.StaticServices\Odey.StaticServices.Caches.dll</HintPath>
     </Reference>
     <Reference Include="Odey.StaticServices.Clients">
-      <HintPath>..\Binaries\Odey.StaticServices\Odey.StaticServices.Clients.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.StaticServices\Odey.StaticServices.Clients.dll</HintPath>
     </Reference>
     <Reference Include="Odey.StaticServices.Contracts">
-      <HintPath>..\Binaries\Odey.StaticServices\Odey.StaticServices.Contracts.dll</HintPath>
+      <HintPath>..\..\Binaries\Odey.StaticServices\Odey.StaticServices.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="ServiceModelEx.IdentityCallStack">
-      <HintPath>..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
+      <HintPath>..\..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.DynamicData" />
