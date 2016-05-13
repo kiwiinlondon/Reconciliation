@@ -85,6 +85,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Ode.ReconciliationServices.AttributionReconciliationService\Odey.ReconciliationServices.AttributionReconciliationService.csproj">
+      <Project>{fa813b76-aba2-4da2-b9f7-5ec9e1f9f91a}</Project>
+      <Name>Odey.ReconciliationServices.AttributionReconciliationService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Odey.ReconcilationService.Contracts\Odey.ReconciliationServices.Contracts.csproj">
       <Project>{D87B7FD6-CCFF-4DFA-9F00-04F686016E90}</Project>
       <Name>Odey.ReconciliationServices.Contracts</Name>

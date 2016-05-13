@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Ode.ReconciliationServices.AttributionReconciliationService.Service1" CodeBehind="AttributionReconciliationService.svc.cs" %>

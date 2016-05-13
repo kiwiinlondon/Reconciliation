@@ -10,6 +10,7 @@ using Odey.ReconciliationServices.Contracts;
 using Odey.ReconciliationServices.EzeReconciliationService;
 using Odey.ReconciliationServices.ClientPortfolioReconciliationService;
 using Odey.ReconciliationServices.FMPortfolioCollectionService;
+using Odey.ReconciliationServices.AttributionReconciliationService;
 
 namespace Testing
 {
@@ -21,7 +22,8 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            new FMPortfolioCollectionClient().CollectForFMFundId(56777, DateTime.Parse("31-Mar-2016"), DateTime.Parse("31-Mar-2016"));
+            AttributionReconciliationService service = new AttributionReconciliationService();
+            service.Reconcile(7504, new DateTime(2016, 4, 29));
 
 
 
