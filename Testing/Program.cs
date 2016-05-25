@@ -23,7 +23,7 @@ namespace Testing
         static void Main(string[] args)
         {
             AttributionReconciliationService service = new AttributionReconciliationService();
-            service.Reconcile(7504, new DateTime(2016, 4, 29));
+            service.Reconcile(7504, new DateTime(2016, 3, 31));
 
 
 
