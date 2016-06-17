@@ -28,6 +28,10 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
         public static readonly string STYLE_GREY_PERCENTAGE_2DP_SINGLE = "GREY_PERCENTAGE_2DP_SINGLE";
         public static readonly string STYLE_GREY_PERCENTAGE_2DP_DOUBLE = "GREY_PERCENTAGE_2DP_DOUBLE";
 
+        public static readonly string STYLE_PERCENTAGE_3DP = "WHITE_PERCENTAGE_3DP";
+        public static readonly string STYLE_PERCENTAGE_3DP_SINGLE = "WHITE_PERCENTAGE_3DP_SINGLE";
+        public static readonly string STYLE_GREY_PERCENTAGE_3DP = "GREY_PERCENTAGE_3DP";
+
         public static readonly string STYLE_MARKET_VALUE_DIFF_NAV = "STYLE_MARKET_VALUE_DIFF_NAV";
         public static readonly string STYLE_MARKET_VALUE_DIFF = "STYLE_MARKET_VALUE_DIFF";
         public static readonly string STYLE_PRICE_DIFF = "STYLE_PRICE_DIFF";
@@ -82,9 +86,17 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             style = GetNumericBaseStyle(SpreadsheetStyleManager.DEFAULT_PERCENTAGE_FORMAT, Color.LightGray, false);
             SaveStyle(STYLE_GREY_PERCENTAGE_2DP_SINGLE, style);
 
+            //While Percentage 3DP Single
+            style = GetNumericBaseStyle(SpreadsheetStyleManager.DEFAULT_PERCENTAGE_FORMAT_3DP, null, false);
+            SaveStyle(STYLE_PERCENTAGE_3DP_SINGLE, style);
+
             //Grey Percentage 2DP Double
-            style = GetNumericBaseStyle(SpreadsheetStyleManager.DEFAULT_PERCENTAGE_FORMAT, Color.LightGray, false);
-            SaveStyle(STYLE_GREY_PERCENTAGE_2DP_DOUBLE, style);
+            style = GetNumericBaseStyle(SpreadsheetStyleManager.DEFAULT_PERCENTAGE_FORMAT_3DP, null, null);
+            SaveStyle(STYLE_PERCENTAGE_3DP, style);
+
+            //White Percentage 2DP Double
+            style = GetNumericBaseStyle(SpreadsheetStyleManager.DEFAULT_PERCENTAGE_FORMAT_3DP, Color.LightGray, null);
+            SaveStyle(STYLE_GREY_PERCENTAGE_3DP, style);
 
             //MARKET_VALUE_DIFF_NAV
             style = GetNumericBaseStyle(SpreadsheetStyleManager.CreateFormatWithHighlightingPercent(_marketValueDiffNAVHighlightPoint), Color.LightGray, null);
@@ -171,7 +183,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
         public static readonly string DEFAULT_NUMERIC_FORMAT_2DP = @"#,###.00;-#,###.00;-";
         public static readonly string DEFAULT_NUMERIC_FORMAT_4DP = @"#,##0.0000;-#,###.0000;-";
         public static readonly string DEFAULT_PERCENTAGE_FORMAT = @"0.00%;-0.00%;-";
-
+        public static readonly string DEFAULT_PERCENTAGE_FORMAT_3DP = @"0.000%;-0.000%;-";
 
         public static string CreateFormatWithHighlightingPercent(decimal highlightDifferencePoint)
         {

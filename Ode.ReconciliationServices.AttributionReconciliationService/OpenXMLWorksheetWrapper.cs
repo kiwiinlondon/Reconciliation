@@ -315,6 +315,18 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
         #region Styles
 
+        public void FreezePanes(int endRow)
+        {
+            
+            SheetView sv = SheetView;
+            Selection selection = new Selection() { Pane = PaneValues.BottomLeft };
+
+            Pane pane1 = new Pane() { VerticalSplit = 2D, TopLeftCell = $"A{endRow}", ActivePane = PaneValues.BottomLeft, State = PaneStateValues.Frozen };
+
+            sv.Append(pane1);
+            sv.Append(selection);
+        }
+
         public void ApplyStyle(string startColumn, string endColumn, int startRow, int endRow, SpreadsheetStyle style)
         {
             string startAddress = GetCellAddress(startColumn, startRow);
