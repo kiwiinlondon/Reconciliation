@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{37DEC3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices.FMPortfolioCollectionService", "Odey.ReconcilationServices.FMPortfolioCollectionService\Odey.ReconciliationServices.FMPortfolioCollectionService.csproj", "{AFEC4F5F-9909-4967-BF71-E6767632B3B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices.AttributionReconciliationService", "Ode.ReconciliationServices.AttributionReconciliationService\Odey.ReconciliationServices.AttributionReconciliationService.csproj", "{FA813B76-ABA2-4DA2-B9F7-5EC9E1F9F91A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.ReconciliationServices.AttributionReconciliationService", "Odey.ReconciliationServices.AttributionReconciliationService\Odey.ReconciliationServices.AttributionReconciliationService.csproj", "{FA813B76-ABA2-4DA2-B9F7-5EC9E1F9F91A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
