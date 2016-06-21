@@ -160,7 +160,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 {
                     if (value.GetType() == typeof(decimal))
                     {
-                        WriteNumber(cellAddress, Math.Round((decimal)value,4), style);
+                        WriteNumber(cellAddress, Math.Round((decimal)value,5), style);
                     }
                     else
                     {

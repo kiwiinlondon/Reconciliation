@@ -75,6 +75,12 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 {
                     instrumentMarket = portfolio.InstrumentMarket;
                 }
+
+                if (instrumentMarket.IssuerID == 4775)
+                {
+                    int i = 0;
+                }
+
                 Tuple<int, int> key = new Tuple<int, int>(instrumentMarket.IssuerID, portfolio.CurrencyId);
                 AttributionReconciliationItem matchedItem;
                 if (!matchedItems.TryGetValue(key, out matchedItem))
@@ -86,6 +92,11 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             }
             foreach (var portfolio in portfolioCacheResults)
             {
+                if (portfolio.PositionId == 54468)
+                {
+                    int i = 0;
+                }
+
                 Tuple<int, int> key = new Tuple<int, int>(portfolio.IssuerId, portfolio.PositionCurrencyId);
                 AttributionReconciliationItem matchedItem;
                 if (!matchedItems.TryGetValue(key, out matchedItem))
