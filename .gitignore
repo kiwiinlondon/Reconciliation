@@ -1,3 +1,5 @@
+bin
+obj
 
 # /
 /*.suo
@@ -106,3 +108,4 @@
 /Testing/*.aps
 /Testing/*.eto
 /Testing/App.config
+Ode.ReconciliationServices.AttributionReconciliationService/obj/Debug/Odey.ReconciliationServices.AttributionReconciliationService.csproj.FileListAbsolute.txt
