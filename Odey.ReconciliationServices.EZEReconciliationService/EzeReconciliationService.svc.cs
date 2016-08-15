@@ -169,7 +169,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             Logger.Info(String.Format("Reference Date is {0}", referenceDate));
             Dictionary<string, ThreeWayNavRecOutput> output = new Dictionary<string, ThreeWayNavRecOutput>();
             DataTable fmNavs = GetFMBookNavs(referenceDate);
-            fmNavs.DefaultView.Sort = "EzeIdentifier";
+            fmNavs.DefaultView.Sort = EZEIdentifierColumnName;
             foreach (DataRow fmNav in fmNavs.Rows)
             {
                 string ezeIdentifier = fmNav[EZEIdentifierColumnName].ToString();
@@ -181,7 +181,8 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             DataTable keeleyNavs = GetKeeleyNavs(referenceDate);
             AddDataTableToOutput(keeleyNavs, output, false);
 
-            return output.Values.ToList();
+            var ret = output.Values.OrderBy(r => r.Identifier).ToList();
+            return ret;
         }
 
         private void AddDataTableToOutput(DataTable dt, Dictionary<string, ThreeWayNavRecOutput> output,bool isEze)
