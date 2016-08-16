@@ -20,5 +20,10 @@ namespace Odey.ReconciliationServices.Contracts
 
         [DataMember]
         public decimal Keeley { get; set; }
+
+        public override string ToString()
+        {
+            return $"EzeID: {Identifier}, EZE: {EZE:n}, FundManager: {FundManager:n}, Keeley: {Keeley:n}";
+        }
     }
 }
