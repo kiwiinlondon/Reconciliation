@@ -44,7 +44,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             return dt;
         }
 
-        private static Dictionary<string, object> CreateNavDataSet1Parameters(DateTime referenceDate)
+        private static Dictionary<string, object> CreateDBParameters(DateTime referenceDate)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
 
@@ -54,17 +54,17 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         }
 
         private static readonly string KeeleyStoredProcedureName = ConfigurationManager.AppSettings["KeeleyStoredProcedureName"];
+        private static readonly string FMStoredProcedureName = ConfigurationManager.AppSettings["FMStoredProcedureName"];
         private static readonly string EZEFileName = ConfigurationManager.AppSettings["EZEFileName"];
 
         public static DataTable GetKeeleyNavs(DateTime referenceDate)
         {
             DataTable dt = GetNewNavDataTable();
-            Logger.Info(String.Format("Keeley ReferenceDate is {0}",referenceDate));
-            DataSetUtilities.FillKeeleyDataTable(dt, KeeleyStoredProcedureName, CreateNavDataSet1Parameters(referenceDate), null);
+            DataSetUtilities.FillKeeleyDataTable(dt, KeeleyStoredProcedureName, CreateDBParameters(referenceDate), null);
             return dt;
         }
 
-        private static Dictionary<int, string> CreateNavDataSet2ColumnMappings()
+        private static Dictionary<int, string> CreateEZEColumnMappings()
         {
             Dictionary<int, string> columnMappings = new Dictionary<int, string>();
             columnMappings.Add(0, EZEIdentifierColumnName);
@@ -77,17 +77,17 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         {
             DataTable dt = GetNewNavDataTable();
             string fileName = EZEFileName;   
-            DataSetUtilities.FillFromFile(dt,fileName,CreateNavDataSet2ColumnMappings());
+            DataSetUtilities.FillFromFile(dt,fileName, CreateEZEColumnMappings());
             return dt;
         }
 
         public static DataTable GetFMBookNavs(DateTime referenceDate)
         {
             DataTable dt = GetNewNavDataTable();
-            Logger.Info($"GetFMBookNavs: Keeley ReferenceDate is {referenceDate}");
-            DataSetUtilities.FillKeeleyDataTable(dt, "FMPortfolio_GetForEZENavRec", CreateNavDataSet1Parameters(referenceDate), null);
+            DataSetUtilities.FillKeeleyDataTable(dt, FMStoredProcedureName, CreateDBParameters(referenceDate), null);
             return dt;
         }
+        
 
         /// <summary>
         /// load FM Portfolio via the FMPortfolio_GetForEZENavRec stored proc (have already grabbed FM Portfolio to FMPortfolio table)
@@ -102,8 +102,10 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         {
             Logger.Info($"GetThreeWayRecOutput: Reference Date is {referenceDate}");
             Dictionary<string, ThreeWayNavRecOutput> threeWayDict = new Dictionary<string, ThreeWayNavRecOutput>();
+
             DataTable fmNavs = GetFMBookNavs(referenceDate);
-            
+            Logger.Info($"Loaded {fmNavs.Rows.Count} FM funds from Stored Proc '{FMStoredProcedureName}' : {NAVTableToString(fmNavs)}");
+
             //init dictionary by EZE Id of FM Funds
             foreach (DataRow fmNav in fmNavs.Rows)
             {
@@ -120,13 +122,21 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
 
             //now fill in EZE and Keeley values. Ignore funds not in FM List above
             DataTable ezeNavs = GetEzeNavs();
+            Logger.Info($"Loaded {ezeNavs.Rows.Count} EZE funds from File '{EZEFileName}' : {NAVTableToString(ezeNavs)}");
             AddDataTabletoDict(ezeNavs, threeWayDict, true);
+
             DataTable keeleyNavs = GetKeeleyNavs(referenceDate);
+            Logger.Info($"Loaded {keeleyNavs.Rows.Count} Keeley funds from Stored Proc '{KeeleyStoredProcedureName}' : {NAVTableToString(keeleyNavs)}");
             AddDataTabletoDict(keeleyNavs, threeWayDict, false);
 
             var ret = threeWayDict.Values.OrderBy(r => r.Identifier).ToList();
             Logger.Info($"GetThreeWayRecOutput: Returning {ret.Count} funds");
             return ret;
+        }
+
+        private static string NAVTableToString(DataTable navTable)
+        {
+            return string.Join(", ", navTable.AsEnumerable().Select(f=> f[EZEIdentifierColumnName]).OrderBy(f=>f).ToList());
         }
 
         private void AddDataTabletoDict(DataTable dt, Dictionary<string, ThreeWayNavRecOutput> threeWayDict, bool isEze)
@@ -135,7 +145,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             {
                 string ezeIdentifier = dr[EZEIdentifierColumnName].ToString();
                 decimal marketValue = decimal.Parse(dr[MarketValueColumnName].ToString());
-
+                
                 ThreeWayNavRecOutput output;
                 if (!threeWayDict.TryGetValue(ezeIdentifier, out output))
                 {

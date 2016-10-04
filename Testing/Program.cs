@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using log4net.Config;
 using Odey.ReconciliationServices;
 using Odey.ReconciliationServices.FMKeeleyReconciliationService;
 using Odey.ReconciliationServices.Clients;
@@ -16,13 +17,12 @@ namespace Testing
 {
     class Program
     {
-        
       
-      
-
         static void Main(string[] args)
         {
-            new EzeReconciliationService().GetThreeWayRecOutput(DateTime.Parse("15-aug-2016"));
+            XmlConfigurator.Configure();
+
+            new EzeReconciliationService().GetThreeWayRecOutput(DateTime.Parse("03-oct-2016"));
         }
 
         static void AddDataRow(DataTable dt, int secId, int fundId, DateTime refDate, string ccy, decimal pos, DateTime matDate, string plCcy, int uSecId)
