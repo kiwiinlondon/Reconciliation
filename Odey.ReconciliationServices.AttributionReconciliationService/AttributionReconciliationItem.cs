@@ -63,7 +63,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
         public AttributionValues AdministratorValues { get; set; }
 
-        public void AddAdministrator(Fund fund, AdministratorPortfolio dto,AttributionFund attributionFund, AttributionFund openingAttributionFund, bool addToOther)
+        public void AddAdministrator(Fund fund, AdministratorPortfolio dto,AttributionFund attributionFund, AttributionFund openingAttributionFund, bool addToOther, decimal fxRate)
         {
             if (AdministratorPortfolioDTOs == null)
             {
@@ -71,12 +71,12 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 AdministratorValues = new AttributionValues();
             }
             AdministratorPortfolioDTOs.Add(dto);
-            decimal percentageOfFund = dto.IsShareClassSpecific ? 1 : attributionFund.PercentageOfFund;
+            decimal percentageOfFund = dto.IsShareClassSpecific ? 1 : attributionFund.PercentageOfFund ;
 
-            decimal pricePNL = (dto.RealisedPricePNL + dto.UnRealisedPricePNL);
-            decimal carryPNL = dto.CarryPNL;
-            decimal fxPNL = (dto.RealisedFXPNL + dto.UnRealisedFXPNL);
-            decimal otherPNL = dto.ManagementPerformanceFee;
+            decimal pricePNL = (dto.RealisedPricePNL + dto.UnRealisedPricePNL)/fxRate;
+            decimal carryPNL = dto.CarryPNL / fxRate;
+            decimal fxPNL = (dto.RealisedFXPNL + dto.UnRealisedFXPNL) / fxRate;
+            decimal otherPNL = dto.ManagementPerformanceFee / fxRate;
 
             decimal fundAdjustedPricePNL = pricePNL / attributionFund.AdjustmentFactor * percentageOfFund;
             decimal fundAdjustedCarryPNL = carryPNL / attributionFund.AdjustmentFactor * percentageOfFund;
@@ -90,7 +90,6 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
             if (addToOther)
             {
-
                 decimal amountToAdd = pricePNL +carryPNL + otherPNL;
                 decimal fundAdjustedAmountToAdd = fundAdjustedPricePNL + fundAdjustedCarryPNL + fundAdjustedOtherPNL;
                 decimal contribitonToAdd = priceContribution + carryContribution + otherContribution;

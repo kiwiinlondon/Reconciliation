@@ -21,7 +21,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     SpreadsheetStyleManager styles = new SpreadsheetStyleManager(doc);
 
                     WriteSheets(doc, styles, mtdMatchedItems, "MTD");
-                    WriteSheets(doc, styles, ytdMatchedItems, "YTD");
+                   WriteSheets(doc, styles, ytdMatchedItems, "YTD");
 
 
                     SpreadsheetWriter.Save(doc);

@@ -24,16 +24,26 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
         {
             using (KeeleyModel context = new KeeleyModel())
             {
-                DateTime ytdStartDate = new DateTime(referenceDate.Year, 1, 1);
+               DateTime ytdStartDate = new DateTime(2016, 01, 01);
+             //   DateTime ytdStartDate = new DateTime(2015, 11, 30);
                 DateTime mtdStartDate = new DateTime(referenceDate.Year, referenceDate.Month, 1);
 
                 var administratorPortfolio = context.AdministratorPortfolios.Include(a => a.InstrumentMarket.Instrument.Issuer.LegalEntity).Include(a=>a.Currency).Where(a => a.FundId == fundId && ytdStartDate <= a.ReferenceDate && a.ReferenceDate <= referenceDate).ToList();
 
+
+                var officialNavs = context.OfficialNetAssetValues.Where(a => a.FundId == fundId && ytdStartDate <= a.ReferenceDate && a.ReferenceDate <= referenceDate && a.ValueIsForReferenceDate).ToDictionary(a => a.ReferenceDate, a => a);
+
                 var attributionFunds = context.AttributionFunds.Where(a => a.FundId == fundId && ytdStartDate <= a.ReferenceDate && a.ReferenceDate <= referenceDate).ToDictionary(a => a.ReferenceDate, a => a);
+
+                var t = administratorPortfolio.Select(a => a.ReferenceDate).Distinct();
 
                 var ytdOpeningAttributionFund = context.AttributionFunds.OrderByDescending(a=>a.ReferenceDate).FirstOrDefault(a=> a.FundId == fundId && a.ReferenceDate < ytdStartDate);
               
                 var mtdOpeningAttributionFund = attributionFunds.OrderByDescending(a => a.Key).FirstOrDefault(a => a.Key < mtdStartDate).Value;
+                if (mtdOpeningAttributionFund==null)
+                {
+                    mtdOpeningAttributionFund = context.AttributionFunds.OrderByDescending(a => a.ReferenceDate).FirstOrDefault(a => a.FundId == fundId && a.ReferenceDate < mtdStartDate);
+                }
 
                 PortfolioCacheClient client = new PortfolioCacheClient();
                 var portfolioCacheResults = client.GetPortfolioExposures(new PortfolioRequestObject()
@@ -42,12 +52,13 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     ReferenceDates = new DateTime[] { referenceDate },
                     Scenarios = new ScenarioRequest[] { },
                     AttributionSourceIds = AttributionSourceIds.Master,
-                    AttributionPeriodIds = AttributionPeriodIds.MTD | AttributionPeriodIds.YTD
-
+                    AttributionPeriodIds = AttributionPeriodIds.MTD | AttributionPeriodIds.Custom,
+                    AttributionCustomFromDates = new DateTime[] {new DateTime(2015,12,31) }
                 });
-                Fund fund = context.Funds.Include(a => a.LegalEntity).FirstOrDefault(a => a.LegalEntityID == 741);
-                Dictionary<Tuple<int, int>, AttributionReconciliationItem> mtdMatchedItems = Build(fund, administratorPortfolio.Where(a=>a.ReferenceDate >= mtdStartDate).ToList(), attributionFunds, mtdOpeningAttributionFund, context, portfolioCacheResults,AttributionPeriodIds.MTD);
-                Dictionary<Tuple<int, int>, AttributionReconciliationItem> ytdMatchedItems = Build(fund, administratorPortfolio, attributionFunds, ytdOpeningAttributionFund, context, portfolioCacheResults, AttributionPeriodIds.YTD);
+                Fund fund = context.Funds.Include(a => a.LegalEntity).FirstOrDefault(a => a.LegalEntityID == fundId);
+                Dictionary<Tuple<int, int>, AttributionReconciliationItem> mtdMatchedItems = Build(fund, administratorPortfolio.Where(a=>a.ReferenceDate >= mtdStartDate).ToList(), attributionFunds, mtdOpeningAttributionFund ==null ? ytdOpeningAttributionFund : mtdOpeningAttributionFund, context, portfolioCacheResults,AttributionPeriodIds.MTD, officialNavs);
+
+                Dictionary <Tuple<int, int>, AttributionReconciliationItem> ytdMatchedItems = Build(fund, administratorPortfolio, attributionFunds, ytdOpeningAttributionFund, context, portfolioCacheResults, AttributionPeriodIds.Custom, officialNavs);
 
                 FileWriter writer = new FileWriter();
                 writer.Write(@"c:\temp\recout.xlsx", mtdMatchedItems, ytdMatchedItems);
@@ -56,7 +67,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
         }
                 
 
-        private Dictionary<Tuple<int, int>, AttributionReconciliationItem> Build(Fund fund, List<AdministratorPortfolio> administratorPortfolio, Dictionary<DateTime,AttributionFund> attributionFunds, AttributionFund openingAttributionFund, KeeleyModel context,List<PortfolioDTO> portfolioCacheResults,AttributionPeriodIds periodId)
+        private Dictionary<Tuple<int, int>, AttributionReconciliationItem> Build(Fund fund, List<AdministratorPortfolio> administratorPortfolio, Dictionary<DateTime,AttributionFund> attributionFunds, AttributionFund openingAttributionFund, KeeleyModel context,List<PortfolioDTO> portfolioCacheResults,AttributionPeriodIds periodId, Dictionary<DateTime, OfficialNetAssetValue> navs)
         {
             Dictionary<int, InstrumentMarket> currencyInstrumentMarketByInstrumentId = context.InstrumentMarkets.Include(a => a.Instrument).Where(a => a.Instrument.InstrumentClassID == (int)InstrumentClassIds.Currency)
                     .ToDictionary(a => a.InstrumentID, a => a);
@@ -76,7 +87,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     instrumentMarket = portfolio.InstrumentMarket;
                 }
 
-                if (instrumentMarket.IssuerID == 4775)
+                if (instrumentMarket.IssuerID == 4499)
                 {
                     int i = 0;
                 }
@@ -88,7 +99,15 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     matchedItem = new AttributionReconciliationItem(instrumentMarket.IssuerID, portfolio.Currency.IsoCode, instrumentMarket.Instrument.Issuer.Name);
                     matchedItems.Add(key,matchedItem);
                 }
-                matchedItem.AddAdministrator(fund,portfolio,attributionFunds[portfolio.ReferenceDate],openingAttributionFund, addToOther);
+                OfficialNetAssetValue nav = navs[portfolio.ReferenceDate];
+                decimal fxRate = 1;
+                if (nav.FXRateToBase.HasValue)
+                {
+                    fxRate = nav.FXRateToBase.Value;
+                }
+
+                
+                matchedItem.AddAdministrator(fund,portfolio,attributionFunds[portfolio.ReferenceDate],openingAttributionFund, addToOther, fxRate);
             }
             foreach (var portfolio in portfolioCacheResults)
             {

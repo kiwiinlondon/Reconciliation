@@ -30,7 +30,7 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
             using (KeeleyModel context = new KeeleyModel(SecurityCallStackContext.Current))
             {
                 List<int> books = context.Books
-                    .Where(a => a.Fund.LegalEntity.FMOrgId == fmFundId).Select(a=>a.FMOrgId.Value)
+                    .Where(a => a.Fund.LegalEntity.FMOrgId == fmFundId && a.FMOrgId.HasValue).Select(a=>a.FMOrgId.Value)
                     .ToList();
 
                 var existingPortfolio =
@@ -94,6 +94,12 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
             {
                 //BK-ARFF -> BK-ARFF-AC
                 return 79420;
+            }
+
+            if (portfolio.BookId == 80460 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
+            {
+                //BK-ARFF -> BK-ARFF-AC
+                return -9999;
             }
             return portfolio.BookId;
         }

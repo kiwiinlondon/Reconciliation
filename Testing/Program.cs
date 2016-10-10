@@ -22,8 +22,12 @@ namespace Testing
 
         static void Main(string[] args)
         {
+
+            FMPortfolioCollectionService d = new FMPortfolioCollectionService();
+            d.CollectForFMFundId(80459, new DateTime(2016, 10, 7), new DateTime(2016, 10, 7));
+
             AttributionReconciliationService service = new AttributionReconciliationService();
-            service.Reconcile(741, new DateTime(2016,5, 31));
+            service.Reconcile(5590, new DateTime(2016,09, 29));
 
 
 
