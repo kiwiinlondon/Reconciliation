@@ -44,7 +44,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             return dt;
         }
 
-        private static Dictionary<string, object> CreateNavDataSet1Parameters(DateTime referenceDate)
+        private static Dictionary<string, object> CreateDBParameters(DateTime referenceDate)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
 
@@ -54,17 +54,17 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         }
 
         private static readonly string KeeleyStoredProcedureName = ConfigurationManager.AppSettings["KeeleyStoredProcedureName"];
+        private static readonly string FMStoredProcedureName = ConfigurationManager.AppSettings["FMStoredProcedureName"];
         private static readonly string EZEFileName = ConfigurationManager.AppSettings["EZEFileName"];
 
         public static DataTable GetKeeleyNavs(DateTime referenceDate)
         {
             DataTable dt = GetNewNavDataTable();
-            Logger.Info(String.Format("Keeley ReferenceDate is {0}",referenceDate));
-            DataSetUtilities.FillKeeleyDataTable(dt, KeeleyStoredProcedureName, CreateNavDataSet1Parameters(referenceDate), null);
+            DataSetUtilities.FillKeeleyDataTable(dt, KeeleyStoredProcedureName, CreateDBParameters(referenceDate), null);
             return dt;
         }
 
-        private static Dictionary<int, string> CreateNavDataSet2ColumnMappings()
+        private static Dictionary<int, string> CreateEZEColumnMappings()
         {
             Dictionary<int, string> columnMappings = new Dictionary<int, string>();
             columnMappings.Add(0, EZEIdentifierColumnName);
@@ -77,165 +77,93 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
         {
             DataTable dt = GetNewNavDataTable();
             string fileName = EZEFileName;   
-            DataSetUtilities.FillFromFile(dt,fileName,CreateNavDataSet2ColumnMappings());
+            DataSetUtilities.FillFromFile(dt,fileName, CreateEZEColumnMappings());
             return dt;
         }
 
         public static DataTable GetFMBookNavs(DateTime referenceDate)
         {
             DataTable dt = GetNewNavDataTable();
-            Logger.Info(String.Format("Keeley ReferenceDate is {0}", referenceDate));
-            DataSetUtilities.FillKeeleyDataTable(dt, "FMPortfolio_GetForEZENavRec", CreateNavDataSet1Parameters(referenceDate), null);
+            DataSetUtilities.FillKeeleyDataTable(dt, FMStoredProcedureName, CreateDBParameters(referenceDate), null);
             return dt;
         }
-            
-        //public static DataTable GetFMNavs(DateTime referenceDate, List<Fund> funds)
-        //{
-        //    DataTable dt = GetNewNavDataTable();
-        //    PortfolioClient client = new PortfolioClient();
-        //    Logger.Info(String.Format("FM ReferenceDate is {0}", referenceDate));
-        //    List<BC.FundNAV> navs = client.GetFundNavs(funds.Select(a => a.FMOrgId).ToArray(), referenceDate);
-        //    foreach (BC.FundNAV fundNav in navs)
-        //    {
-        //        DataRow row = dt.NewRow();
-        //        row["FMFundId"] = fundNav.FundId;
-        //        row["MarketValue"] = fundNav.MarketValue;
-        //        dt.Rows.Add(row);
-        //    }
-        //    return dt;
-        //}
-
-        #region IEzeReconciliation Members
+        
 
         /// <summary>
-        /// get keeley navs for EZE rec email
+        /// load FM Portfolio via the FMPortfolio_GetForEZENavRec stored proc (have already grabbed FM Portfolio to FMPortfolio table)
+        /// Then load EZE and Keeley NAVS to compare.
+        /// 
+        /// Now much shorter list. Only includes funds that we grabbed the FM Portfolio for 
+        /// (see Odey.ExtractServices.ExtractRunnerService.AllFundsExtractRunner.Run())
         /// </summary>
         /// <param name="referenceDate"></param>
-        /// <param name="ezeIdentifierToOutputMapping"></param>
         /// <returns></returns>
-        //public static Dictionary<string,decimal> GetFMBookNavs(DateTime referenceDate, out Dictionary<string,int> ezeIdentifierToOutputMapping)
-        //{
-        //    //only get active parent funds that exist in FM
-        //    FundClient fundClient = new FundClient();
-        //    List<Fund> funds = fundClient.GetAll().Where(
-        //        a => a.PositionsExist
-        //            && a.IsActive 
-        //            && !a.ParentFundId.HasValue
-        //            && a.FMOrgId.HasValue 
-        //            && a.FMOrgId > 0)
-        //            .ToList();
-
-        //    var fundIds = funds.Select(f => f.LegalEntityID).ToList();
-            
-        //    BookClient bookClient = new BookClient();
-        //    List<Book> books = bookClient.GetAll().Where(
-        //        a => a.FMOrgId.HasValue
-        //        && fundIds.Contains(a.FundID)
-        //        && (!string.IsNullOrWhiteSpace(a.EZEIdentifier) || !string.IsNullOrWhiteSpace(a.Fund.EZEIdentifier)))
-        //        .ToList();
-
-        //    ezeIdentifierToOutputMapping = books.Select(g => new
-        //    {
-        //        Order = g.Fund.FundTypeId == 7 ? 1 : 0, 
-        //        EzeIdentifier = string.IsNullOrWhiteSpace(g.EZEIdentifier) ? g.Fund.EZEIdentifier : g.EZEIdentifier
-        //    })
-        //    .Distinct()
-        //    .ToDictionary(a => a.EzeIdentifier, a => a.Order);
-            
-        //    List<int> fmBookIds = funds.Select(a => a.FMOrgId.Value).ToList();
-            
-        //    var tempQuery = navsByBookId.Join(books,
-        //        NAV => NAV.BookId,
-        //        Book => Book.FMOrgId,
-        //        (NAV, Book) => new
-        //        {
-        //            EZEIdentifier = string.IsNullOrWhiteSpace(Book.EZEIdentifier) ? Book.Fund.EZEIdentifier : Book.EZEIdentifier, 
-        //            NAV.MarketValue
-        //        })
-        //        .ToList();
-
-        //    var ret = tempQuery
-        //        .GroupBy(g => g.EZEIdentifier)
-        //        .ToDictionary(
-        //            a => a.Key,
-        //            a => a.Sum(b => b.MarketValue));
-
-        //    return ret;
-        //}
-
-       
         public List<ThreeWayNavRecOutput> GetThreeWayRecOutput(DateTime referenceDate)
         {
-            Logger.Info(String.Format("Reference Date is {0}", referenceDate));
-            Dictionary<string, ThreeWayNavRecOutput> output = new Dictionary<string, ThreeWayNavRecOutput>();
+            Logger.Info($"GetThreeWayRecOutput: Reference Date is {referenceDate}");
+            Dictionary<string, ThreeWayNavRecOutput> threeWayDict = new Dictionary<string, ThreeWayNavRecOutput>();
+
             DataTable fmNavs = GetFMBookNavs(referenceDate);
-            fmNavs.DefaultView.Sort = "EzeIdentifier";
+            Logger.Info($"Loaded {fmNavs.Rows.Count} FM funds from Stored Proc '{FMStoredProcedureName}' : {NAVTableToString(fmNavs)}");
+
+            //init dictionary by EZE Id of FM Funds
             foreach (DataRow fmNav in fmNavs.Rows)
             {
-                string ezeIdentifier = fmNav[EZEIdentifierColumnName].ToString();
-                decimal marketValue = decimal.Parse(fmNav[MarketValueColumnName].ToString());
-                AddToOutput(ezeIdentifier, null, marketValue, null, output);
-            }
-            DataTable ezeNavs = GetEzeNavs();
-            AddDataTableToOutput(ezeNavs, output, true);
-            DataTable keeleyNavs = GetKeeleyNavs(referenceDate);
-            AddDataTableToOutput(keeleyNavs, output, false);
+                var ezeIdentifier = fmNav[EZEIdentifierColumnName].ToString();
+                var fmMarketValue = decimal.Parse(fmNav[MarketValueColumnName].ToString());
 
-            return output.Values.ToList();
+                var threeWay = new ThreeWayNavRecOutput
+                {
+                    Identifier = ezeIdentifier,
+                    FundManager = fmMarketValue
+                };
+                threeWayDict[ezeIdentifier] = threeWay;
+            }
+
+            //now fill in EZE and Keeley values. Ignore funds not in FM List above
+            DataTable ezeNavs = GetEzeNavs();
+            Logger.Info($"Loaded {ezeNavs.Rows.Count} EZE funds from File '{EZEFileName}' : {NAVTableToString(ezeNavs)}");
+            AddDataTabletoDict(ezeNavs, threeWayDict, true);
+
+            DataTable keeleyNavs = GetKeeleyNavs(referenceDate);
+            Logger.Info($"Loaded {keeleyNavs.Rows.Count} Keeley funds from Stored Proc '{KeeleyStoredProcedureName}' : {NAVTableToString(keeleyNavs)}");
+            AddDataTabletoDict(keeleyNavs, threeWayDict, false);
+
+            var ret = threeWayDict.Values.OrderBy(r => r.Identifier).ToList();
+            Logger.Info($"GetThreeWayRecOutput: Returning {ret.Count} funds");
+            return ret;
         }
 
-        private void AddDataTableToOutput(DataTable dt, Dictionary<string, ThreeWayNavRecOutput> output,bool isEze)
+        private static string NAVTableToString(DataTable navTable)
+        {
+            return string.Join(", ", navTable.AsEnumerable().Select(f=> f[EZEIdentifierColumnName]).OrderBy(f=>f).ToList());
+        }
+
+        private void AddDataTabletoDict(DataTable dt, Dictionary<string, ThreeWayNavRecOutput> threeWayDict, bool isEze)
         {
             foreach (DataRow dr in dt.Rows)
             {
                 string ezeIdentifier = dr[EZEIdentifierColumnName].ToString();
-                if (ezeIdentifier =="DAMI")
-                {
-                    int i = 0;
-                }
                 decimal marketValue = decimal.Parse(dr[MarketValueColumnName].ToString());
-
-                decimal? ezeNav = null;
-                decimal? keeleyNav = null;
+                
+                ThreeWayNavRecOutput output;
+                if (!threeWayDict.TryGetValue(ezeIdentifier, out output))
+                {
+                    continue; //ignore EZE/Keeley funds not in FM list
+                }
+                
                 if (isEze)
                 {
-                    ezeNav = marketValue;
+                    output.EZE = marketValue;
                 }
                 else
                 {
-                    keeleyNav = marketValue;
+                    output.Keeley = marketValue;
                 }
-                AddToOutput(ezeIdentifier, ezeNav, null, keeleyNav, output);
             }
         }
 
-
-
-        public void AddToOutput(string ezeIdentifier, decimal? ezeNav, decimal? fmNav, decimal? keelyNav, Dictionary<string, ThreeWayNavRecOutput> outputs)
-        {
-            ThreeWayNavRecOutput output;
-            if (!outputs.TryGetValue(ezeIdentifier, out output))
-            {
-                output = new ThreeWayNavRecOutput();
-                output.Identifier = ezeIdentifier;
-                outputs.Add(ezeIdentifier, output);
-            }
-            if (ezeNav.HasValue)
-            {
-                output.EZE = ezeNav.Value;
-            }
-
-            if (fmNav.HasValue)
-            {
-                output.FundManager = fmNav.Value;
-            }
-
-            if (keelyNav.HasValue)
-            {
-                output.Keeley = keelyNav.Value;
-            }
-        }
-
-        #endregion
+        
+        
     }
 }
