@@ -11,26 +11,21 @@ using Odey.ReconciliationServices.EzeReconciliationService;
 using Odey.ReconciliationServices.ClientPortfolioReconciliationService;
 using Odey.ReconciliationServices.FMPortfolioCollectionService;
 using Odey.ReconciliationServices.AttributionReconciliationService;
+using System.Data.SqlClient;
 
 namespace Testing
 {
     class Program
     {
-        
-      
-      
+
+           
+
 
         static void Main(string[] args)
         {
-
-            FMPortfolioCollectionService d = new FMPortfolioCollectionService();
-            d.CollectForFMFundId(80459, new DateTime(2016, 10, 7), new DateTime(2016, 10, 7));
-
-            AttributionReconciliationService service = new AttributionReconciliationService();
-            service.Reconcile(5590, new DateTime(2016,09, 29));
-
-
-
+            //AttributionReconciliationService service = new AttributionReconciliationService();
+            AttributionReconciliationClient service = new AttributionReconciliationClient();
+            service.Reconcile(5591, new DateTime(2016,10, 31));
         }
 
         static void AddDataRow(DataTable dt, int secId, int fundId, DateTime refDate, string ccy, decimal pos, DateTime matDate, string plCcy, int uSecId)

@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributionReconciliationClient.cs" />
     <Compile Include="ClientPortfolioReconciliationClient.cs" />
     <Compile Include="EzeReconciliationClient.cs" />
     <Compile Include="FMKeeleyReconcilationClient.cs" />

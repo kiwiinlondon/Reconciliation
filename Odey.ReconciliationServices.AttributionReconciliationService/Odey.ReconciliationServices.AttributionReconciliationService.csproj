@@ -60,6 +60,13 @@
     <Reference Include="Odey.Framework.Infrastructure.Clients">
       <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
     </Reference>
+    <Reference Include="Odey.Framework.Infrastructure.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Framework.Infrastructure.EmailClient">
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.EmailClient.dll</HintPath>
+    </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Enums">
       <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Enums.dll</HintPath>
     </Reference>
@@ -83,6 +90,15 @@
     </Reference>
     <Reference Include="Odey.PortfolioCache.Entities">
       <HintPath>..\..\Binaries\Odey.PortfolioCache\Odey.PortfolioCache.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Reporting.Clients">
+      <HintPath>..\..\Binaries\Odey.Reporting\Odey.Reporting.Clients.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Reporting.Contracts">
+      <HintPath>..\..\Binaries\Odey.Reporting\Odey.Reporting.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Reporting.Entities.Specialised">
+      <HintPath>..\..\Binaries\Odey.Reporting\Odey.Reporting.Entities.Specialised.dll</HintPath>
     </Reference>
     <Reference Include="ServiceModelEx.IdentityCallStack">
       <HintPath>..\..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
@@ -113,21 +129,26 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributionPositionReconciliationItem.cs" />
     <Compile Include="AttributionReconciliationItem.cs" />
+    <Compile Include="AttributionAdminReconciliationItem.cs" />
     <Compile Include="AttributionReconciliationService.svc.cs">
       <DependentUpon>AttributionReconciliationService.svc</DependentUpon>
     </Compile>
     <Compile Include="AttributionValues.cs" />
+    <Compile Include="EmailWriter.cs" />
     <Compile Include="ExcelStyleManager.cs" />
     <Compile Include="FileWriter.cs" />
     <Compile Include="OpenXMLWorksheetWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReturnComparison.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Prod.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

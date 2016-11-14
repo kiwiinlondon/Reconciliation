@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using Odey.PortfolioCache.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -48,6 +50,28 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             {
                 return PriceContribution + FXContribution + CarryContribution + OtherContribution;
             }
+        }
+
+
+        public void AddDTO(AttributionDTO attribution)
+        {
+            PricePNL += attribution.PricePNL ?? 0;
+            CarryPNL += attribution.CarryPNL ?? 0;
+            FXPNL += attribution.FXPNL ?? 0;
+            OtherPNL += attribution.OtherPNL ?? 0;
+            DefaultPNL += attribution.PNL;
+
+            FundAdjustedPricePNL += attribution.PriceFundAdjustedPNL ?? 0;
+            FundAdjustedCarryPNL += attribution.CarryFundAdjustedPNL ?? 0;
+            FundAdjustedFXPNL += attribution.FXFundAdjustedPNL ?? 0;
+            FundAdjustedOtherPNL += attribution.OtherFundAdjustedPNL ?? 0;
+            FundAdjustedDefaultPNL += attribution.PNLFundAdjusted;
+
+            PriceContribution += attribution.PriceContribution ?? 0;
+            CarryContribution += attribution.CarryContribution ?? 0;
+            FXContribution += attribution.FXContribution ?? 0;
+            OtherContribution += attribution.OtherContribution ?? 0;
+            DefaultContribution += attribution.Contribution;
         }
 
     }
