@@ -43,7 +43,9 @@
             <tr>
                 <td class="header noborder" colspan="9">Master vs Actual Return</td>
             </tr>
-            <tr></tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
             <tr>
                 <th></th>
                 <th>Actual</th>
@@ -57,14 +59,14 @@
             </tr>
             <tr>
                 <td>MTD</td>
-                <td class="number">{{masterToActualMTD.CorrectReturn}}%</td>
-                <td class="number">{{masterToActualMTD.ReturnToCompare}}%</td>
-                <td class="number">{{masterToActualMTD.ReturnDifference}}%</td>
+                <td class="number">{{formatPercent masterToActualMTD.CorrectReturn}}</td>
+                <td class="number">{{formatPercent masterToActualMTD.ReturnToCompare}}</td>
+                <td class="number">{{formatPercent masterToActualMTD.ReturnDifference}}</td>
                 <td class="noborder"></td>
                 <td>YTD</td>
-                <td class="number">{{masterToActualYTD.CorrectReturn}}%</td>
-                <td class="number">{{masterToActualYTD.ReturnToCompare}}%</td>
-                <td class="number">{{masterToActualYTD.ReturnDifference}}%</td>
+                <td class="number">{{formatPercent masterToActualYTD.CorrectReturn}}</td>
+                <td class="number">{{formatPercent masterToActualYTD.ReturnToCompare}}</td>
+                <td class="number">{{formatPercent masterToActualYTD.ReturnDifference}}</td>
             </tr>
             <tr>
                 <td class="noborder"></td>
@@ -72,7 +74,9 @@
             <tr>
                 <td class="header noborder" colspan="9">Keeley vs Actual Return</td>
             </tr>
-            <tr></tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
             <tr>
                 <th></th>
                 <th>Actual</th>
@@ -86,14 +90,14 @@
             </tr>
             <tr>
                 <td>MTD</td>
-                <td class="number">{{keeleyToActualMTD.CorrectReturn}}%</td>
-                <td class="number">{{keeleyToActualMTD.ReturnToCompare}}%</td>
-                <td class="number">{{keeleyToActualMTD.ReturnDifference}}%</td>
+                <td class="number">{{formatPercent keeleyToActualMTD.CorrectReturn}}</td>
+                <td class="number">{{formatPercent keeleyToActualMTD.ReturnToCompare}}</td>
+                <td class="number">{{formatPercent keeleyToActualMTD.ReturnDifference}}</td>
                 <td class="noborder"></td>
                 <td>YTD</td>
-                <td class="number">{{keeleyToActualYTD.CorrectReturn}}%</td>
-                <td class="number">{{keeleyToActualYTD.ReturnToCompare}}%</td>
-                <td class="number">{{keeleyToActualYTD.ReturnDifference}}%</td>
+                <td class="number">{{formatPercent keeleyToActualYTD.CorrectReturn}}</td>
+                <td class="number">{{formatPercent keeleyToActualYTD.ReturnToCompare}}</td>
+                <td class="number">{{formatPercent keeleyToActualYTD.ReturnDifference}}</td>
             </tr>
             <tr>
                 <td class="noborder"></td>
@@ -101,7 +105,9 @@
             <tr>
                 <td class="header" colspan="9">Master vs Administrator</td>
             </tr>
-            <tr></tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
             <tr>
                 <th></th>
                 <th>Admin</th>
@@ -115,25 +121,25 @@
             </tr>
             <tr>
                 <td>MTD</td>
-                <td class="number">{{masterToAdminMTD.CorrectReturn}}%</td>
-                <td class="number">{{masterToAdminMTD.ReturnToCompare}}%</td>
-                <td class="number">{{masterToAdminMTD.ReturnDifference}}%</td>
+                <td class="number">{{formatPercent masterToAdminMTD.CorrectReturn}}</td>
+                <td class="number">{{formatPercent masterToAdminMTD.ReturnToCompare}}</td>
+                <td class="number">{{formatPercent masterToAdminMTD.ReturnDifference}}</td>
                 <td class="noborder"></td>
                 <td>YTD</td>
-                <td class="number">{{masterToAdminYTD.CorrectReturn}}%</td>
-                <td class="number">{{masterToAdminYTD.ReturnToCompare}}%</td>
-                <td class="number">{{masterToAdminYTD.ReturnDifference}}%</td>
+                <td class="number">{{formatPercent masterToAdminYTD.CorrectReturn}}</td>
+                <td class="number">{{formatPercent masterToAdminYTD.ReturnToCompare}}</td>
+                <td class="number">{{formatPercent masterToAdminYTD.ReturnDifference}}</td>
             </tr>
             <tr>
                 <td>MTD Value</td>
-                <td class="number">{{masterToAdminMTD.CorrectValue}}</td>
-                <td class="number">{{masterToAdminMTD.ValueToCompare}}</td>
-                <td class="number">{{masterToAdminMTD.ValueDifference}}</td>
+                <td class="number">{{formatValue masterToAdminMTD.CorrectValue}}</td>
+                <td class="number">{{formatValue masterToAdminMTD.ValueToCompare}}</td>
+                <td class="number">{{formatValue masterToAdminMTD.ValueDifference}}</td>
                 <td class="noborder"></td>
                 <td>YTD Value</td>
-                <td class="number">{{masterToAdminYTD.CorrectValue}}</td>
-                <td class="number">{{masterToAdminYTD.ValueToCompare}}</td>
-                <td class="number">{{masterToAdminYTD.ValueDifference}}</td>
+                <td class="number">{{formatValue masterToAdminYTD.CorrectValue}}</td>
+                <td class="number">{{formatValue masterToAdminYTD.ValueToCompare}}</td>
+                <td class="number">{{formatValue masterToAdminYTD.ValueDifference}}</td>
             </tr>
             <tr>
                 <td class="noborder"></td>
@@ -146,14 +152,14 @@
             {{#each masterToAdminMTD.InstrumentDifferences}}
             <tr>
                 <td>{{this.Name}}</td>
-                <td class="number">{{this.Correct}}</td>
-                <td class="number">{{this.ToCompare}}</td>
-                <td class="number">{{this.Difference}}</td>
+                <td class="number">{{formatValue this.Correct}}</td>
+                <td class="number">{{formatValue this.ToCompare}}</td>
+                <td class="number">{{formatValue this.Difference}}</td>
                 <td class="noborder"></td>
-                <td>{{masterToAdminYTD.InstrumentDifferences[@index].Name}}</td>
-                <td class="number">{{masterToAdminYTD.InstrumentDifferences[@index].Correct}}</td>
-                <td class="number">{{masterToAdminYTD.InstrumentDifferences[@index].ToCompare}}</td>
-                <td class="number">{{masterToAdminYTD.InstrumentDifferences[@index].Difference}}</td>
+                <td></td>
+                <td class="number"></td>
+                <td class="number"></td>
+                <td class="number"></td>
             </tr>
             {{/each}}
             <tr>
@@ -167,14 +173,14 @@
             {{#each masterToAdminMTD.CurrencyDifferences}}
             <tr>
                 <td>{{this.Name}}</td>
-                <td class="number">{{this.Correct}}</td>
-                <td class="number">{{this.ToCompare}}</td>
-                <td class="number">{{this.Difference}}</td>
+                <td class="number">{{formatValue this.Correct}}</td>
+                <td class="number">{{formatValue this.ToCompare}}</td>
+                <td class="number">{{formatValue this.Difference}}</td>
                 <td class="noborder"></td>
-                <td>{{masterToAdminYTD.InstrumentDifferences[@index].Name}}</td>
-                <td class="number">{{masterToAdminYTD.InstrumentDifferences[@index].Correct}}</td>
-                <td class="number">{{masterToAdminYTD.InstrumentDifferences[@index].ToCompare}}</td>
-                <td class="number">{{masterToAdminYTD.InstrumentDifferences[@index].Difference}}</td>
+                <td></td>
+                <td class="number"></td>
+                <td class="number"></td>
+                <td class="number"></td>
             </tr>
             {{/each}}
             <tr>
@@ -182,10 +188,10 @@
             </tr>
             <tr>
                 <td>Detail</td>
-                <td colspan="3">{{masterToAdminMTD.Filename}}</td>
+                <td colspan="3"><a href="{{masterToAdminMTD.Filename}}">Click here</a></td>
                 <td class="noborder"></td>
                 <td>Detail</td>
-                <td colspan="3">{{masterToAdminYTD.Filename}}</td>
+                <td colspan="3"><a href="{{masterToAdminYTD.Filename}}">Click here</a></td>
             </tr>
             <tr>
                 <td class="noborder"></td>
@@ -193,7 +199,9 @@
             <tr>
                 <td class="header" colspan="9">Keeley vs Administrator</td>
             </tr>
-            <tr></tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
             <tr>
                 <th></th>
                 <th>Admin</th>
@@ -207,25 +215,25 @@
             </tr>
             <tr>
                 <td>MTD</td>
-                <td class="number">0.70%</td>
-                <td class="number">0.60%</td>
-                <td class="number">0.10%</td>
+                <td class="number">{{formatPercent keeleyToAdminMTD.CorrectReturn}}</td>
+                <td class="number">{{formatPercent keeleyToAdminMTD.ReturnToCompare}}</td>
+                <td class="number">{{formatPercent keeleyToAdminMTD.ReturnDifference}}</td>
                 <td class="noborder"></td>
                 <td>YTD</td>
-                <td class="number">10.00%</td>
-                <td class="number">11.00%</td>
-                <td class="number">-1.00%</td>
+                <td class="number">{{formatPercent keeleyToAdminYTD.CorrectReturn}}</td>
+                <td class="number">{{formatPercent keeleyToAdminYTD.ReturnToCompare}}</td>
+                <td class="number">{{formatPercent keeleyToAdminYTD.ReturnDifference}}</td>
             </tr>
             <tr>
                 <td>MTD Value</td>
-                <td class="number">1,000,000</td>
-                <td class="number">8,000,000</td>
-                <td class="number">-7,000,000</td>
+                <td class="number">{{formatValue keeleyToAdminMTD.CorrectValue}}</td>
+                <td class="number">{{formatValue keeleyToAdminMTD.ValueToCompare}}</td>
+                <td class="number">{{formatValue keeleyToAdminMTD.ValueDifference}}</td>
                 <td class="noborder"></td>
                 <td>YTD Value</td>
-                <td class="number">1,000,000</td>
-                <td class="number">8,000,000</td>
-                <td class="number">-7,000,000</td>
+                <td class="number">{{formatValue keeleyToAdminYTD.CorrectValue}}</td>
+                <td class="number">{{formatValue keeleyToAdminYTD.ValueToCompare}}</td>
+                <td class="number">{{formatValue keeleyToAdminYTD.ValueDifference}}</td>
             </tr>
             <tr>
                 <td class="noborder"></td>
@@ -235,39 +243,19 @@
                 <td class="noborder"></td>
                 <td class="header2" colspan="4">Top 5 Instrument: YTD</td>
             </tr>
+            {{#each keeleyToAdminMTD.InstrumentDifferences}}
             <tr>
-                <td>Vodafone</td>
-                <td class="number">2,000</td>
-                <td class="number">1,900</td>
-                <td class="number">100</td>
+                <td>{{this.Name}}</td>
+                <td class="number">{{formatValue this.Correct}}</td>
+                <td class="number">{{formatValue this.ToCompare}}</td>
+                <td class="number">{{formatValue this.Difference}}</td>
                 <td class="noborder"></td>
-                <td>Vodafone</td>
-                <td class="number">2,000</td>
-                <td class="number">1,900</td>
-                <td class="number">100</td>
+                <td></td>
+                <td class="number"></td>
+                <td class="number"></td>
+                <td class="number"></td>
             </tr>
-            <tr>
-                <td>Sky</td>
-                <td class="number">2,000</td>
-                <td class="number">1,900</td>
-                <td class="number">100</td>
-                <td class="noborder"></td>
-                <td>Sky</td>
-                <td class="number">2,000</td>
-                <td class="number">1,900</td>
-                <td class="number">100</td>
-            </tr>
-            <tr>
-                <td>BTP</td>
-                <td class="number">2,000</td>
-                <td class="number">1,900</td>
-                <td class="number">100</td>
-                <td class="noborder"></td>
-                <td>BTP</td>
-                <td class="number">2,000</td>
-                <td class="number">1,900</td>
-                <td class="number">100</td>
-            </tr>
+            {{/each}}
             <tr>
                 <td class="noborder"></td>
             </tr>
@@ -276,39 +264,19 @@
                 <td class="noborder"></td>
                 <td class="header2" colspan="4">Top 5 Currency: YTD</td>
             </tr>
+            {{#each keeleyToAdminMTD.CurrencyDifferences}}
             <tr>
-                <td>EUR</td>
-                <td class="number">2,000</td>
-                <td class="number">1,900</td>
-                <td class="number">100</td>
+                <td>{{this.Name}}</td>
+                <td class="number">{{formatValue this.Correct}}</td>
+                <td class="number">{{formatValue this.ToCompare}}</td>
+                <td class="number">{{formatValue this.Difference}}</td>
                 <td class="noborder"></td>
-                <td>EUR</td>
-                <td class="number">2,000</td>
-                <td class="number">1,900</td>
-                <td class="number">100</td>
+                <td></td>
+                <td class="number"></td>
+                <td class="number"></td>
+                <td class="number"></td>
             </tr>
-            <tr>
-                <td>GBP</td>
-                <td class="number">2,000</td>
-                <td class="number">1,900</td>
-                <td class="number">100</td>
-                <td class="noborder"></td>
-                <td>GBP</td>
-                <td class="number">2,000</td>
-                <td class="number">1,900</td>
-                <td class="number">100</td>
-            </tr>
-            <tr>
-                <td>USD</td>
-                <td class="number">2,000</td>
-                <td class="number">1,900</td>
-                <td class="number">100</td>
-                <td class="noborder"></td>
-                <td>USD</td>
-                <td class="number">2,000</td>
-                <td class="number">1,900</td>
-                <td class="number">100</td>
-            </tr>
+            {{/each}}
         </tbody>
     </table>
 </body>
