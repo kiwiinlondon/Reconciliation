@@ -12,11 +12,13 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
         public EmailWriter()
         {
-            Handlebars.RegisterHelper("formatPercent", (writer, context, args) => {
-                writer.WriteSafeString($"{args[0]:n2}%");
+            Handlebars.RegisterHelper("percent", (writer, context, args) => {
+                var warning = (args.Length < 2 || (bool)args[1] == true ? null : "warning");
+                writer.WriteSafeString($"<div class=\"numeric {warning}\">{args[0]:n2}%</div>");
             });
-            Handlebars.RegisterHelper("formatValue", (writer, context, args) => {
-                writer.WriteSafeString($"{args[0]:n0}");
+            Handlebars.RegisterHelper("number", (writer, context, args) => {
+                var warning = (args.Length < 2 || (bool)args[1] == true ? null : "warning");
+                writer.WriteSafeString($"<div class=\"numeric {warning}\">{args[0]:n0}</div>");
             });
 
             var templateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ReconciliationEmailTemplate.html");
