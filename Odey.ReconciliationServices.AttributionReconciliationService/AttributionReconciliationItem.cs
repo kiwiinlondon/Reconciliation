@@ -20,6 +20,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
         public abstract List<object> Descriptor { get; }
 
+        public abstract string DisplayName { get;  }
         public abstract List<object> Header { get; }
 
         public bool IsCurrency { get; private set; }

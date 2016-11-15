@@ -50,6 +50,14 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             }
         }
 
+        public override string DisplayName
+        {
+            get
+            {
+                return string.Join(", ", Descriptor);
+            }
+        }
+
         public override int CompareTo(object obj)
         {
             AttributionPositionReconciliationItem objToCompare = (AttributionPositionReconciliationItem)obj;

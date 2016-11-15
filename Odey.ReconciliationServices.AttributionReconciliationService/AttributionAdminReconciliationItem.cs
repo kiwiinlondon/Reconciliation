@@ -63,6 +63,14 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             }
         }
 
+        public override string DisplayName
+        {
+            get
+            {
+                return Name;
+            }
+        }
+
         public void AddAdministrator(Fund fund, AdministratorPortfolio dto,AttributionFund attributionFund, AttributionFund openingAttributionFund, bool addToOther, decimal fxRate)
         {
             if (AdministratorPortfolioDTOs == null)

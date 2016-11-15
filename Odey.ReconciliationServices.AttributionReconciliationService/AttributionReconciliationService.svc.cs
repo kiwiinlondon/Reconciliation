@@ -151,17 +151,19 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             decimal correctValue = GetValue(matchedItems, false);
             decimal valueToCompare = GetValue(matchedItems, true);
 
-
-            Dictionary<List<object>, decimal> currencyDifferences = GetTopDifferences(matchedItems, true, 5);
-            Dictionary<List<object>, decimal> instrumentDifferences = GetTopDifferences(matchedItems, false, 5);
-
+            List<SimpleComparison> currencyDifferences = GetTopDifferences(matchedItems, valueTolerance, true, 5);
+            List<SimpleComparison> instrumentDifferences = GetTopDifferences(matchedItems, valueTolerance, false, 5);
 
             return new ReturnComparison(correctReturn, returnToCompare, returnTolerance, correctValue, valueToCompare, valueTolerance, fileName, currencyDifferences, instrumentDifferences);
         }
 
-        private Dictionary<List<object>, decimal> GetTopDifferences(List<AttributionReconciliationItem> matchedItems, bool isCurrency, int numberOfRecordsToReturn)
+        private List<SimpleComparison> GetTopDifferences(List<AttributionReconciliationItem> matchedItems, decimal valueTolerance, bool isCurrency, int numberOfRecordsToReturn)
         {
-            return matchedItems.Where(a => a.IsCurrency == isCurrency).OrderBy(a => Math.Abs(a.AdministratorValues.Total - a.KeeleyValues.Total)).Take(numberOfRecordsToReturn).ToDictionary(a => a.Descriptor, a => Math.Abs(a.AdministratorValues.Total - a.KeeleyValues.Total));
+            return matchedItems.Where(a => a.IsCurrency == isCurrency)
+                .OrderBy(a => Math.Abs(a.AdministratorValues.Total - a.KeeleyValues.Total))
+                .Take(numberOfRecordsToReturn)
+                .Select(a => new SimpleComparison(a.DisplayName, a.AdministratorValues.Total, a.KeeleyValues.Total, valueTolerance))
+                .ToList();
         }
 
 

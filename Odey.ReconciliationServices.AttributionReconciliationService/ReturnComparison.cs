@@ -3,10 +3,33 @@ using System.Collections.Generic;
 
 namespace Odey.ReconciliationServices.AttributionReconciliationService
 {
+    public class SimpleComparison
+    {
+        public SimpleComparison(string name, decimal correct, decimal toCompare, decimal tolerance)
+        {
+            Name = name;
+            Correct = correct;
+            ToCompare = toCompare;
+            Difference = correct - toCompare;
+            DifferenceWithinTolerance = WithinTolerance(Difference, tolerance);
+        }
+
+        private bool WithinTolerance(decimal difference, decimal tolerance)
+        {
+            return Math.Abs(difference) > tolerance;
+        }
+
+        public string Name { get; private set; }
+        public decimal Correct { get; private set; }
+        public decimal ToCompare { get; private set; }
+        public decimal Difference { get; private set; }
+        public bool DifferenceWithinTolerance { get; private set; }
+    }
+
     public class ReturnComparison
     {
         public ReturnComparison(decimal correctReturn, decimal returnToCompare, decimal returnTolerance, decimal correctValue, decimal valueToCompare, decimal valueTolerance, string fileName,
-            Dictionary<List<object>, decimal> currencyDifferences, Dictionary<List<object>, decimal> instrumentDifferences)
+            IEnumerable<SimpleComparison> currencyDifferences, IEnumerable<SimpleComparison> instrumentDifferences)
             : this(correctReturn, returnToCompare, returnTolerance)
         {
             CorrectValue = correctValue;
@@ -35,9 +58,9 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
         public bool ValuesExist = false;
 
-        private bool WithinTolerance(decimal differance, decimal tolerance)
+        private bool WithinTolerance(decimal difference, decimal tolerance)
         {
-            return Math.Abs(differance) > tolerance;
+            return Math.Abs(difference) > tolerance;
         }
         public decimal CorrectReturn { get; private set; }
         public decimal ReturnToCompare { get; private set; }
@@ -50,12 +73,10 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
         public bool ValueWithinTolerance { get; private set; }
 
-        public Dictionary<List<object>, decimal> CurrencyDifferences { get; private set; }
+        public IEnumerable<SimpleComparison> CurrencyDifferences { get; private set; }
 
-        public Dictionary<List<object>, decimal> InstrumentDifferences { get; private set; }
+        public IEnumerable<SimpleComparison> InstrumentDifferences { get; private set; }
 
         public string FileName { get; private set; }
-      
-        
     }
 }
