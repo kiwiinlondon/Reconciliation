@@ -244,7 +244,7 @@
                 <td>YTD</td>
                 {{#with keeleyToAdminYTD}}
                 <td>{{percent CorrectReturn}}</td>
-                <td>{{percent ReturnToCompare}}</td>
+                <td0>{{percent ReturnToCompare}}</td0>
                 <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
                 {{/with}}
             </tr>
@@ -305,6 +305,17 @@
                 <td>{{number Item2.Difference DifferenceWithinTolerance}}</td>
             </tr>
             {{/each}}
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <td>Detail</td>
+                <td colspan="3"><a href="{{keelyToAdminMTD.Filename}}">Click here</a></td>
+                <td class="noborder"></td>
+                <td>Detail</td>
+                <td colspan="3"><a href="{{keelyToAdminYTD.Filename}}">Click here</a></td>
+            </tr>
+
         </tbody>
     </table>
 </body>
