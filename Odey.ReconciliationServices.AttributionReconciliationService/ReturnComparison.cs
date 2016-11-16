@@ -16,7 +16,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
         private bool WithinTolerance(decimal difference, decimal tolerance)
         {
-            return Math.Abs(difference) > tolerance;
+            return Math.Abs(difference) < tolerance;
         }
 
         public string Name { get; private set; }
@@ -60,7 +60,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
         private bool WithinTolerance(decimal difference, decimal tolerance)
         {
-            return Math.Abs(difference) > tolerance;
+            return Math.Abs(difference) < tolerance;
         }
         public decimal CorrectReturn { get; private set; }
         public decimal ReturnToCompare { get; private set; }
