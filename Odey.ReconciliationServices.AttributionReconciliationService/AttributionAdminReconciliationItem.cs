@@ -136,9 +136,9 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 AdministratorValues.OtherContribution += otherContribution;
             }
 
-            AdministratorValues.DefaultPNL = AdministratorValues.PricePNL + AdministratorValues.CarryPNL + AdministratorValues.FXPNL + AdministratorValues.OtherPNL;
-            AdministratorValues.FundAdjustedDefaultPNL = AdministratorValues.FundAdjustedPricePNL + AdministratorValues.FundAdjustedCarryPNL + AdministratorValues.FundAdjustedFXPNL + AdministratorValues.FundAdjustedOtherPNL;
-            AdministratorValues.DefaultContribution = AdministratorValues.PriceContribution + AdministratorValues.CarryContribution + AdministratorValues.FXContribution + AdministratorValues.OtherContribution;
+            AdministratorValues.DefaultPNL = AdministratorValues.PricePNL + AdministratorValues.CarryPNL + AdministratorValues.OtherPNL;
+            AdministratorValues.FundAdjustedDefaultPNL = AdministratorValues.FundAdjustedPricePNL + AdministratorValues.FundAdjustedCarryPNL + AdministratorValues.FundAdjustedOtherPNL;
+            AdministratorValues.DefaultContribution = AdministratorValues.PriceContribution + AdministratorValues.CarryContribution + AdministratorValues.OtherContribution;
         }
 
         public override int CompareTo(object obj)

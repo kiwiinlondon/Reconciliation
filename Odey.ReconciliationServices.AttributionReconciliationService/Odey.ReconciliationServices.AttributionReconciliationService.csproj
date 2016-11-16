@@ -149,6 +149,7 @@
     <Compile Include="OpenXMLWorksheetWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReturnComparison.cs" />
+    <Compile Include="SimpleComparison.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

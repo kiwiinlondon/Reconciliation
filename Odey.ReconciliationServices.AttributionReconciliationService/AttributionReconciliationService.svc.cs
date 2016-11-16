@@ -64,14 +64,14 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     WriteAdministratorFiles(fund, referenceDate, mtdMasterMatchedItems, ytdMasterMatchedItems, mtdKeeleyMatchedItems, ytdKeeleyMatchedItems, mtdPositions, ytdPositions, 
                         out mtdMasterFilePath, out ytdMasterFilePath, out mtdKeeleyFilePath, out ytdKeeleyFilePath, out mtdPositionFilePath, out ytdPositionFilePath);
 
-                    keeleyToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, mtdReturn, 0.1m, mtdMasterMatchedItems);
-                    keeleyToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, ytdReturn, 0.1m, ytdMasterMatchedItems);
-                    masterToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, mtdReturn, 0.1m, mtdMasterMatchedItems);
-                    masterToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, mtdReturn, 0.1m, ytdMasterMatchedItems);
+                    keeleyToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, mtdReturn, 0.1m, mtdKeeleyMatchedItems);
+                    keeleyToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, ytdReturn, 0.1m, ytdKeeleyMatchedItems);
+                    masterToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsMaster, mtdReturn, 0.1m, mtdMasterMatchedItems);
+                    masterToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsMaster, ytdReturn, 0.1m, ytdMasterMatchedItems);
                     keeleyToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, mtdKeeleyMatchedItems, mtdMasterFilePath);
                     keeleyToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, ytdKeeleyMatchedItems, ytdMasterFilePath);
                     masterToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, mtdMasterMatchedItems, mtdKeeleyFilePath);
-                    masterToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, mtdMasterMatchedItems, ytdKeeleyFilePath);
+                    masterToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, ytdMasterMatchedItems, ytdKeeleyFilePath);
                     positionMTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, mtdPositions, mtdPositionFilePath);
                     positionYTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, ytdPositions, ytdPositionFilePath);
                 }
@@ -101,14 +101,16 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
         private decimal GetReturn(List<AttributionReconciliationItem> matchedItems,bool usePortfolioCache)
         {
+            decimal sum;
             if (usePortfolioCache)
             {
-                return matchedItems.Where(a=> a.KeeleyValues != null).Sum(a => a.KeeleyValues.ContributionTotal);
+                 sum = matchedItems.Where(a=> a.KeeleyValues != null).Sum(a => a.KeeleyValues.ContributionTotal);
             }
             else
             {
-                return matchedItems.Where(a => a.AdministratorValues != null).Sum(a => a.AdministratorValues.ContributionTotal);
+                sum = matchedItems.Where(a => a.AdministratorValues != null).Sum(a => a.AdministratorValues.ContributionTotal);
             }
+            return sum*100m;
         }
 
         private decimal GetValue(List<AttributionReconciliationItem> matchedItems, bool usePortfolioCache)
@@ -160,17 +162,11 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
         private List<SimpleComparison> GetTopDifferences(List<AttributionReconciliationItem> matchedItems, decimal valueTolerance, bool isCurrency, int numberOfRecordsToReturn)
         {
             return matchedItems.Where(a => a.IsCurrency == isCurrency)
-                .OrderBy(a => Math.Abs(a.AdministratorValues.Total - a.KeeleyValues.Total))
+                .OrderByDescending(a => Math.Abs(a.AdministratorValues.Total - a.KeeleyValues.Total))
                 .Take(numberOfRecordsToReturn)
                 .Select(a => new SimpleComparison(a.DisplayName, a.AdministratorValues.Total, a.KeeleyValues.Total, valueTolerance))
                 .ToList();
-        }
-
-
-        
-
-
-        
+       }           
 
         private void GetReturns(Fund fund, DateTime referenceDate, out decimal mtdReturn, out decimal ytdReturn)
         {
@@ -234,23 +230,23 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             string path = $@"\\App02\FileShare\Odey\AttributionRecs\{fund.Name}";
             Directory.CreateDirectory(path);
             FileWriter writer = new FileWriter();
-            mtdMasterFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyymmdd}.MTD.Master.xlsx";
+            mtdMasterFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyyMMdd}.MTD.Master.xlsx";
             writer.Write(mtdMasterFilePath, mtdMasterMatchedItems, null);
 
-            ytdMasterFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyymmdd}.YTD.Master.xlsx";
+            ytdMasterFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyyMMdd}.YTD.Master.xlsx";
             writer.Write(ytdMasterFilePath, ytdMasterMatchedItems, null);
 
-            mtdKeeleyFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyymmdd}.MTD.Keeley.xlsx";
+            mtdKeeleyFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyyMMdd}.MTD.Keeley.xlsx";
             writer.Write(mtdKeeleyFilePath, mtdKeeleyMatchedItems, null);
 
-            ytdKeeleyFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyymmdd}.YTD.Keeley.xlsx";
+            ytdKeeleyFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyyMMdd}.YTD.Keeley.xlsx";
             writer.Write(ytdKeeleyFilePath, ytdKeeleyMatchedItems, null);
 
 
-            mtdPositionFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyymmdd}.MTD.KeeleyVsMaster.xlsx";
+            mtdPositionFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyyMMdd}.MTD.KeeleyVsMaster.xlsx";
             writer.Write(mtdPositionFilePath, mtdPositions, null);
 
-            ytdPositionFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyymmdd}.YTD.KeeleyVsMaster.xlsx";
+            ytdPositionFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyyMMdd}.YTD.KeeleyVsMaster.xlsx";
             writer.Write(ytdPositionFilePath, ytdPositions, null);
         }
 
@@ -366,6 +362,26 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
             foreach (var portfolio in administratorPortfolio)
             {
+                //InstrumentMarket instrumentMarket;
+                //bool addToOther = false;
+                //if (!portfolio.InstrumentMarketId.HasValue)
+                //{
+                //    instrumentMarket = currencyInstrumentMarketByInstrumentId[portfolio.CurrencyId];
+                //    addToOther = true;
+                //}
+                //else
+                //{
+                //    instrumentMarket = portfolio.InstrumentMarket;
+                //}
+
+                //Tuple<int, int> key = new Tuple<int, int>(instrumentMarket.InstrumentMarketID, portfolio.CurrencyId);
+                //AttributionAdminReconciliationItem matchedItem;
+                //if (!matchedItems.TryGetValue(key, out matchedItem))
+                //{
+                //    matchedItem = new AttributionAdminReconciliationItem(instrumentMarket.InstrumentMarketID, portfolio.Currency.IsoCode, instrumentMarket.Instrument.Name, instrumentMarket.InstrumentClassIdAsEnum == InstrumentClassIds.Currency);
+                //    matchedItems.Add(key,matchedItem);
+                //}
+
                 InstrumentMarket instrumentMarket;
                 bool addToOther = false;
                 if (!portfolio.InstrumentMarketId.HasValue)
@@ -378,22 +394,20 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     instrumentMarket = portfolio.InstrumentMarket;
                 }
 
-
-
                 Tuple<int, int> key = new Tuple<int, int>(instrumentMarket.IssuerID, portfolio.CurrencyId);
                 AttributionAdminReconciliationItem matchedItem;
                 if (!matchedItems.TryGetValue(key, out matchedItem))
                 {
-                    matchedItem = new AttributionAdminReconciliationItem(instrumentMarket.IssuerID, portfolio.Currency.IsoCode, instrumentMarket.Instrument.Issuer.Name,instrumentMarket.InstrumentClassIdAsEnum == InstrumentClassIds.Currency);
-                    matchedItems.Add(key,matchedItem);
+                    matchedItem = new AttributionAdminReconciliationItem(instrumentMarket.IssuerID, portfolio.Currency.IsoCode, instrumentMarket.Instrument.Issuer.Name, instrumentMarket.InstrumentClassIdAsEnum == InstrumentClassIds.Currency);
+                    matchedItems.Add(key, matchedItem);
                 }
+
                 OfficialNetAssetValue nav = navs[portfolio.ReferenceDate];
                 decimal fxRate = 1;
                 if (nav.FXRateToBase.HasValue)
                 {
                     fxRate = nav.FXRateToBase.Value;
                 }
-
                 
                 matchedItem.AddAdministrator(fund,portfolio,attributionFunds[portfolio.ReferenceDate],openingAttributionFund, addToOther, fxRate);
             }
@@ -408,7 +422,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 AttributionAdminReconciliationItem matchedItem;
                 if (!matchedItems.TryGetValue(key, out matchedItem))
                 {
-                    matchedItem = new AttributionAdminReconciliationItem(portfolio.IssuerId, portfolio.PositionCurrency, portfolio.Issuer,portfolio.InstrumentClassId == (int)InstrumentClassIds.Currency);
+                    matchedItem = new AttributionAdminReconciliationItem(portfolio.IssuerId, portfolio.PositionCurrency, portfolio.Issuer, portfolio.InstrumentClassId == (int)InstrumentClassIds.Currency);
                     matchedItems.Add(key, matchedItem);
                 }
                 matchedItem.AddPortfolioCache(portfolio, sourceId, periodId);
