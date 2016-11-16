@@ -15,12 +15,14 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
         public EmailWriter()
         {
             Handlebars.RegisterHelper("percent", (writer, context, args) => {
-                var warning = (args.Length < 2 || (bool)args[1] == true ? null : "warning");
-                writer.WriteSafeString($"<div class=\"numeric {warning}\">{args[0]:n2}%</div>");
+                var value = (args.Length > 0 ? (decimal?)args[0] : null);
+                var withinTolerance = (args.Length > 1 ? (bool)args[1] : true);
+                writer.WriteSafeString($"<div class=\"numeric\" {(!withinTolerance ? "style=\"color: red\"" : null)}>{value:n2}%</div>");
             });
             Handlebars.RegisterHelper("number", (writer, context, args) => {
-                var warning = (args.Length < 2 || (bool)args[1] == true ? null : "warning");
-                writer.WriteSafeString($"<div class=\"numeric {warning}\">{args[0]:n0}</div>");
+                var value = (args.Length > 0 ? (decimal?)args[0] : null);
+                var withinTolerance = (args.Length > 1 ? (bool)args[1] : true);
+                writer.WriteSafeString($"<div class=\"numeric\" {(!withinTolerance ? "style=\"color: red\"" : null)}>{value:n0}</div>");
             });
 
             var templateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ReconciliationEmailTemplate.html");

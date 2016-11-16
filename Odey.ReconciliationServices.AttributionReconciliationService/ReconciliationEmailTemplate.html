@@ -16,7 +16,6 @@
         background-color: #193e61;
         color: white;
     }
-
     .noborder {
         border: none;
     }
@@ -31,13 +30,8 @@
         background: #eee;
         font-weight: bold;
     }
-
     .numeric {
         text-align: right;
-    }
-
-    .warning {
-        color: red;
     }
     </style>
 </head>
@@ -174,12 +168,12 @@
                 <td>{{Item1.Name}}</td>
                 <td>{{number Item1.Correct}}</td>
                 <td>{{number Item1.ToCompare}}</td>
-                <td>{{number Item1.Difference}}</td>
+                <td>{{number Item1.Difference Item1.DifferenceWithinTolerance}}</td>
                 <td class="noborder"></td>
                 <td>{{Item2.Name}}</td>
                 <td>{{number Item2.Correct}}</td>
                 <td>{{number Item2.ToCompare}}</td>
-                <td>{{number Item2.Difference}}</td>
+                <td>{{number Item2.Difference Item2.DifferenceWithinTolerance}}</td>
             </tr>
             {{/each}}
             <tr>
@@ -195,12 +189,12 @@
                 <td>{{Item1.Name}}</td>
                 <td>{{number Item1.Correct}}</td>
                 <td>{{number Item1.ToCompare}}</td>
-                <td>{{number Item1.Difference}}</td>
+                <td>{{number Item1.Difference Item1.DifferenceWithinTolerance}}</td>
                 <td class="noborder"></td>
                 <td>{{Item2.Name}}</td>
                 <td>{{number Item2.Correct}}</td>
                 <td>{{number Item2.ToCompare}}</td>
-                <td>{{number Item2.Difference}}</td>
+                <td>{{number Item2.Difference Item2.DifferenceWithinTolerance}}</td>
             </tr>
             {{/each}}
             <tr>
@@ -276,12 +270,12 @@
                 <td>{{Item1.Name}}</td>
                 <td>{{number Item1.Correct}}</td>
                 <td>{{number Item1.ToCompare}}</td>
-                <td>{{number Item1.Difference}}</td>
+                <td>{{number Item1.Difference Item1.DifferenceWithinTolerance}}</td>
                 <td class="noborder"></td>
                 <td>{{Item2.Name}}</td>
                 <td>{{number Item2.Correct}}</td>
                 <td>{{number Item2.ToCompare}}</td>
-                <td>{{number Item2.Difference}}</td>
+                <td>{{number Item2.Difference Item2.DifferenceWithinTolerance}}</td>
             </tr>
             {{/each}}
             <tr>
@@ -297,12 +291,12 @@
                 <td>{{Item1.Name}}</td>
                 <td>{{number Item1.Correct}}</td>
                 <td>{{number Item1.ToCompare}}</td>
-                <td>{{number Item1.Difference}}</td>
+                <td>{{number Item1.Difference Item1.DifferenceWithinTolerance}}</td>
                 <td class="noborder"></td>
                 <td>{{Item2.Name}}</td>
                 <td>{{number Item2.Correct}}</td>
                 <td>{{number Item2.ToCompare}}</td>
-                <td>{{number Item2.Difference}}</td>
+                <td>{{number Item2.Difference Item2.DifferenceWithinTolerance}}</td>
             </tr>
             {{/each}}
         </tbody>
