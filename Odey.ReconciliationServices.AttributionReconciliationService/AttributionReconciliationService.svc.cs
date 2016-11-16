@@ -64,24 +64,24 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     WriteAdministratorFiles(fund, referenceDate, mtdMasterMatchedItems, ytdMasterMatchedItems, mtdKeeleyMatchedItems, ytdKeeleyMatchedItems, mtdPositions, ytdPositions, 
                         out mtdMasterFilePath, out ytdMasterFilePath, out mtdKeeleyFilePath, out ytdKeeleyFilePath, out mtdPositionFilePath, out ytdPositionFilePath);
 
-                    keeleyToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, mtdReturn, 0.1m, mtdMasterMatchedItems);
-                    keeleyToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, ytdReturn, 0.1m, ytdMasterMatchedItems);
-                    masterToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, mtdReturn, 0.1m, mtdMasterMatchedItems);
-                    masterToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, ytdReturn, 0.1m, ytdMasterMatchedItems);
-                    keeleyToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, mtdKeeleyMatchedItems, mtdMasterFilePath);
-                    keeleyToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, ytdKeeleyMatchedItems, ytdMasterFilePath);
-                    masterToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, mtdMasterMatchedItems, mtdKeeleyFilePath);
-                    masterToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, ytdMasterMatchedItems, ytdKeeleyFilePath);
-                    positionMTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, mtdPositions, mtdPositionFilePath);
-                    positionYTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, ytdPositions, ytdPositionFilePath);
+                    keeleyToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, mtdReturn, 0.001m, mtdMasterMatchedItems);
+                    keeleyToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, ytdReturn, 0.001m, ytdMasterMatchedItems);
+                    masterToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, mtdReturn, 0.001m, mtdMasterMatchedItems);
+                    masterToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, ytdReturn, 0.001m, ytdMasterMatchedItems);
+                    keeleyToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.001m, 1000, mtdKeeleyMatchedItems, mtdMasterFilePath);
+                    keeleyToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.001m, 1000, ytdKeeleyMatchedItems, ytdMasterFilePath);
+                    masterToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.001m, 1000, mtdMasterMatchedItems, mtdKeeleyFilePath);
+                    masterToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.001m, 1000, ytdMasterMatchedItems, ytdKeeleyFilePath);
+                    positionMTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.001m, 1000, mtdPositions, mtdPositionFilePath);
+                    positionYTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.001m, 1000, ytdPositions, ytdPositionFilePath);
                 }
                 else
                 {
                     decimal mtdTotalContribution;
                     decimal ytdTotalContribution;
                     GetNonQuintillionContribution(fund, referenceDate, out mtdTotalContribution, out ytdTotalContribution);
-                    keeleyToMTDReturnComparison = new ReturnComparison(mtdReturn, mtdTotalContribution, 0.1m);
-                    keeleyToYTDReturnComparison = new ReturnComparison(ytdReturn, ytdTotalContribution, 0.1m);
+                    keeleyToMTDReturnComparison = new ReturnComparison(mtdReturn, mtdTotalContribution, 0.001m);
+                    keeleyToYTDReturnComparison = new ReturnComparison(ytdReturn, ytdTotalContribution, 0.001m);
                 }
                 EmailWriter writer = new EmailWriter();
                 writer.SendEmail(fund, referenceDate, keeleyToMTDReturnComparison, keeleyToYTDReturnComparison, masterToMTDReturnComparison, masterToYTDReturnComparison, keeleyToAdminMTDComparison, keeleyToAdminYTDComparison, masterToAdminMTDComparison, masterToAdminYTDComparison, positionMTDComparison, positionYTDComparison);

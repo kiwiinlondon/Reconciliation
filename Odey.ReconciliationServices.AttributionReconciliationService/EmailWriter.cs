@@ -17,7 +17,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             Handlebars.RegisterHelper("percent", (writer, context, args) => {
                 var value = (args.Length > 0 ? (decimal?)args[0] : null);
                 var withinTolerance = (args.Length > 1 ? (bool)args[1] : true);
-                writer.WriteSafeString($"<div class=\"numeric\" {(!withinTolerance ? "style=\"color: red\"" : null)}>{value:n2}%</div>");
+                writer.WriteSafeString($"<div class=\"numeric\" {(!withinTolerance ? "style=\"color: red\"" : null)}>{value:p}</div>");
             });
             Handlebars.RegisterHelper("number", (writer, context, args) => {
                 var value = (args.Length > 0 ? (decimal?)args[0] : null);
