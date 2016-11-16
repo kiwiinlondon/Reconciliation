@@ -68,10 +68,10 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     keeleyToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, ytdReturn, 0.1m, ytdKeeleyMatchedItems);
                     masterToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsMaster, mtdReturn, 0.1m, mtdMasterMatchedItems);
                     masterToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsMaster, ytdReturn, 0.1m, ytdMasterMatchedItems);
-                    keeleyToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, mtdKeeleyMatchedItems, mtdMasterFilePath);
-                    keeleyToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, ytdKeeleyMatchedItems, ytdMasterFilePath);
-                    masterToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, mtdMasterMatchedItems, mtdKeeleyFilePath);
-                    masterToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, ytdMasterMatchedItems, ytdKeeleyFilePath);
+                    keeleyToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, mtdKeeleyMatchedItems, mtdKeeleyFilePath);
+                    keeleyToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, ytdKeeleyMatchedItems, ytdKeeleyFilePath);
+                    masterToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, mtdMasterMatchedItems, mtdMasterFilePath);
+                    masterToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, ytdMasterMatchedItems, ytdMasterFilePath);
                     positionMTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, mtdPositions, mtdPositionFilePath);
                     positionYTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, ytdPositions, ytdPositionFilePath);
                 }
@@ -230,23 +230,22 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             string path = $@"\\App02\FileShare\Odey\AttributionRecs\{fund.Name}";
             Directory.CreateDirectory(path);
             FileWriter writer = new FileWriter();
-            mtdMasterFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyyMMdd}.MTD.Master.xlsx";
+            mtdMasterFilePath = $@"{path}\{fund.Name}{referenceDate:yyyyMMdd}.MTD.Master.xlsx";
             writer.Write(mtdMasterFilePath, mtdMasterMatchedItems, null);
 
-            ytdMasterFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyyMMdd}.YTD.Master.xlsx";
+            ytdMasterFilePath = $@"{path}\{fund.Name}{referenceDate:yyyyMMdd}.YTD.Master.xlsx";
             writer.Write(ytdMasterFilePath, ytdMasterMatchedItems, null);
 
-            mtdKeeleyFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyyMMdd}.MTD.Keeley.xlsx";
+            mtdKeeleyFilePath = $@"{path}\{fund.Name}{referenceDate:yyyyMMdd}.MTD.Keeley.xlsx";
             writer.Write(mtdKeeleyFilePath, mtdKeeleyMatchedItems, null);
 
-            ytdKeeleyFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyyMMdd}.YTD.Keeley.xlsx";
+            ytdKeeleyFilePath = $@"{path}\{fund.Name}{referenceDate:yyyyMMdd}.YTD.Keeley.xlsx";
             writer.Write(ytdKeeleyFilePath, ytdKeeleyMatchedItems, null);
 
-
-            mtdPositionFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyyMMdd}.MTD.KeeleyVsMaster.xlsx";
+            mtdPositionFilePath = $@"{path}\{fund.Name}{referenceDate:yyyyMMdd}.MTD.KeeleyVsMaster.xlsx";
             writer.Write(mtdPositionFilePath, mtdPositions, null);
 
-            ytdPositionFilePath = $@"\\{path}\{fund.Name}{referenceDate:yyyyMMdd}.YTD.KeeleyVsMaster.xlsx";
+            ytdPositionFilePath = $@"{path}\{fund.Name}{referenceDate:yyyyMMdd}.YTD.KeeleyVsMaster.xlsx";
             writer.Write(ytdPositionFilePath, ytdPositions, null);
         }
 
