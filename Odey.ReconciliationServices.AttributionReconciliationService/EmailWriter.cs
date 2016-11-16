@@ -25,7 +25,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 writer.WriteSafeString($"<div class=\"numeric\" {(!withinTolerance ? "style=\"color: red\"" : null)}>{value:n0}</div>");
             });
 
-            var templateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ReconciliationEmailTemplate.html");
+            var templateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "EmailTemplate.html");
             var templateText = File.ReadAllText(templateFile);
             GenerateEmail = Handlebars.Compile(templateText);
         }
