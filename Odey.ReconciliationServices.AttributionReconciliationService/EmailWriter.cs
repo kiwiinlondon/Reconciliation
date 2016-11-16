@@ -30,28 +30,9 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             GenerateEmail = Handlebars.Compile(templateText);
         }
 
-        private bool IsWithinTolerace(ReturnComparison returnComparison)
+        private bool IsWithinTolerace(ReturnComparison rc)
         {
-            if (returnComparison != null && (!returnComparison.ReturnWithinTolerance || !returnComparison.ValueWithinTolerance))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        private bool AreAllWithinTolerace(
-            ReturnComparison keeleyToReturnComparison,
-            ReturnComparison masterToReturnComparison,
-            ReturnComparison keeleyToAdminComparison,
-            ReturnComparison masterToAdminComparison,
-            ReturnComparison positionComparison)
-        {
-            if (!IsWithinTolerace(keeleyToReturnComparison)) return false;
-            if (!IsWithinTolerace(masterToReturnComparison)) return false;
-            if (!IsWithinTolerace(keeleyToAdminComparison)) return false;
-            if (!IsWithinTolerace(masterToAdminComparison)) return false;
-            if (!IsWithinTolerace(positionComparison)) return false;
-            return true;
+            return rc == null || (rc.ReturnWithinTolerance && rc.ValueWithinTolerance);
         }
 
         public void SendEmail(Fund fund, DateTime referenceDate,
@@ -67,8 +48,8 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             ReturnComparison positionYTD)
         {
             var client = new EmailClient();
-            var mtdStatus = AreAllWithinTolerace(keeleyToActualMTD, masterToActualMTD, keeleyToAdminMTD, masterToAdminMTD, positionMTD) ? "BROKEN" : "OK";
-            var ytdStatus = AreAllWithinTolerace(keeleyToActualYTD, masterToActualYTD, keeleyToAdminYTD, masterToAdminYTD, positionMTD) ? "BROKEN" : "OK";
+            var mtdStatus = (new ReturnComparison[] { keeleyToActualMTD, masterToActualMTD, keeleyToAdminMTD, masterToAdminMTD, positionMTD }.All(IsWithinTolerace) ? "OK" : "BROKEN");
+            var ytdStatus = (new ReturnComparison[] { keeleyToActualYTD, masterToActualYTD, keeleyToAdminYTD, masterToAdminYTD, positionMTD }.All(IsWithinTolerace) ? "OK" : "BROKEN");
             var subject = $"{fund.Name} Attribution Rec {referenceDate:dd-MMM-yyyy}: MTD {mtdStatus} YTD {ytdStatus}";
             var message = GenerateEmail(new {
                 keeleyToActualMTD,
