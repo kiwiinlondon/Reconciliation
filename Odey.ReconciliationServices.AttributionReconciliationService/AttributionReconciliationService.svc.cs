@@ -67,11 +67,11 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     keeleyToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, mtdReturn, 0.1m, mtdMasterMatchedItems);
                     keeleyToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, ytdReturn, 0.1m, ytdMasterMatchedItems);
                     masterToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, mtdReturn, 0.1m, mtdMasterMatchedItems);
-                    masterToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, mtdReturn, 0.1m, ytdMasterMatchedItems);
+                    masterToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, ytdReturn, 0.1m, ytdMasterMatchedItems);
                     keeleyToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, mtdKeeleyMatchedItems, mtdMasterFilePath);
                     keeleyToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, ytdKeeleyMatchedItems, ytdMasterFilePath);
                     masterToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, mtdMasterMatchedItems, mtdKeeleyFilePath);
-                    masterToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, mtdMasterMatchedItems, ytdKeeleyFilePath);
+                    masterToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, ytdMasterMatchedItems, ytdKeeleyFilePath);
                     positionMTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, mtdPositions, mtdPositionFilePath);
                     positionYTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, ytdPositions, ytdPositionFilePath);
                 }
@@ -183,13 +183,13 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             {
                 mtd = performaceResults.FirstOrDefault(a => a.ReturnType == PerformanceReturnTypeIds.Inception);
             }
-            mtdReturn = mtd.Value;
+            mtdReturn = mtd.Value / 100m;
             var ytd = performaceResults.FirstOrDefault(a => a.ReturnType == PerformanceReturnTypeIds.YTD);
             if (ytd == null)
             {
                 ytd = performaceResults.FirstOrDefault(a => a.ReturnType == PerformanceReturnTypeIds.Inception);
             }
-            ytdReturn = ytd.Value;
+            ytdReturn = ytd.Value / 100m;
         }
 
 
