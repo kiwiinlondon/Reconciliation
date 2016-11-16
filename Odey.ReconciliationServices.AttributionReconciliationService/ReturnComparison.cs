@@ -29,7 +29,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
     public class ReturnComparison
     {
         public ReturnComparison(decimal correctReturn, decimal returnToCompare, decimal returnTolerance, decimal correctValue, decimal valueToCompare, decimal valueTolerance, string fileName,
-            IEnumerable<SimpleComparison> currencyDifferences, IEnumerable<SimpleComparison> instrumentDifferences)
+            List<SimpleComparison> currencyDifferences, List<SimpleComparison> instrumentDifferences)
             : this(correctReturn, returnToCompare, returnTolerance)
         {
             CorrectValue = correctValue;
@@ -73,9 +73,9 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
         public bool ValueWithinTolerance { get; private set; }
 
-        public IEnumerable<SimpleComparison> CurrencyDifferences { get; private set; }
+        public List<SimpleComparison> CurrencyDifferences { get; private set; }
 
-        public IEnumerable<SimpleComparison> InstrumentDifferences { get; private set; }
+        public List<SimpleComparison> InstrumentDifferences { get; private set; }
 
         public string FileName { get; private set; }
     }

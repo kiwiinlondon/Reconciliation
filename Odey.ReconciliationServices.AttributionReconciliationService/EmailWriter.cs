@@ -2,7 +2,9 @@
 using Odey.Framework.Infrastructure.EmailClient;
 using Odey.Framework.Keeley.Entities;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Odey.ReconciliationServices.AttributionReconciliationService
 {
@@ -66,11 +68,30 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             var mtdStatus = AreAllWithinTolerace(keeleyToActualMTD, masterToActualMTD, keeleyToAdminMTD, masterToAdminMTD, positionMTD) ? "BROKEN" : "OK";
             var ytdStatus = AreAllWithinTolerace(keeleyToActualYTD, masterToActualYTD, keeleyToAdminYTD, masterToAdminYTD, positionMTD) ? "BROKEN" : "OK";
             var subject = $"{fund.Name} Attribution Rec {referenceDate:dd-MMM-yyyy}: MTD {mtdStatus} YTD {ytdStatus}";
-            var message = GenerateEmail(new { keeleyToActualMTD, keeleyToActualYTD, masterToActualMTD, masterToActualYTD, keeleyToAdminMTD, keeleyToAdminYTD, masterToAdminMTD, masterToAdminYTD, positionMTD, positionYTD });
+            var message = GenerateEmail(new {
+                keeleyToActualMTD,
+                keeleyToActualYTD,
+                masterToActualMTD,
+                masterToActualYTD,
+                keeleyToAdminMTD,
+                keeleyToAdminYTD,
+                keeleyToAdminTopInstruments = MergeListsForTemplate(keeleyToAdminMTD.InstrumentDifferences, keeleyToAdminYTD.InstrumentDifferences),
+                keeleyToAdminTopCurrency = MergeListsForTemplate(keeleyToAdminMTD.CurrencyDifferences, keeleyToAdminYTD.CurrencyDifferences),
+                masterToAdminMTD,
+                masterToAdminYTD,
+                masterToAdminTopInstruments = MergeListsForTemplate(masterToAdminMTD.InstrumentDifferences, masterToAdminYTD.InstrumentDifferences),
+                masterToAdminTopCurrency = MergeListsForTemplate(masterToAdminMTD.CurrencyDifferences, masterToAdminYTD.CurrencyDifferences),
+                positionMTD,
+                positionYTD
+            });
             
             var to = "g.poore@odey.com";
-            //var to = "j.meyer@odey.com";
             client.SendAsHtml("AttributionRecs@Odey.com", "Attribution Recs", to, null, null, subject, message, null);
+        }
+
+        private List<Tuple<T, T>> MergeListsForTemplate<T>(List<T> mtd, List<T> ytd)
+        {
+            return ytd.Zip(mtd, (a, b) => Tuple.Create(a, b)).ToList();
         }
     }
 }

@@ -169,17 +169,17 @@
                 <td class="noborder"></td>
                 <td class="header2" colspan="4">Top 5 Instrument: YTD</td>
             </tr>
-            {{#each masterToAdminMTD.InstrumentDifferences}}
+            {{#each masterToAdminTopInstruments}}
             <tr>
-                <td>{{Name}}</td>
-                <td>{{number Correct}}</td>
-                <td>{{number ToCompare}}</td>
-                <td>{{number Difference DifferenceWithinTolerance}}</td>
+                <td>{{Item1.Name}}</td>
+                <td>{{number Item1.Correct}}</td>
+                <td>{{number Item1.ToCompare}}</td>
+                <td>{{number Item1.Difference}}</td>
                 <td class="noborder"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{Item2.Name}}</td>
+                <td>{{number Item2.Correct}}</td>
+                <td>{{number Item2.ToCompare}}</td>
+                <td>{{number Item2.Difference}}</td>
             </tr>
             {{/each}}
             <tr>
@@ -190,17 +190,17 @@
                 <td class="noborder"></td>
                 <td class="header2" colspan="4">Top 5 Currency: YTD</td>
             </tr>
-            {{#each masterToAdminMTD.CurrencyDifferences}}
+            {{#each masterToAdminTopCurrency}}
             <tr>
-                <td>{{Name}}</td>
-                <td>{{number Correct}}</td>
-                <td>{{number ToCompare}}</td>
-                <td>{{number Difference DifferenceWithinTolerance}}</td>
+                <td>{{Item1.Name}}</td>
+                <td>{{number Item1.Correct}}</td>
+                <td>{{number Item1.ToCompare}}</td>
+                <td>{{number Item1.Difference}}</td>
                 <td class="noborder"></td>
-                <td>{{@index}}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{Item2.Name}}</td>
+                <td>{{number Item2.Correct}}</td>
+                <td>{{number Item2.ToCompare}}</td>
+                <td>{{number Item2.Difference}}</td>
             </tr>
             {{/each}}
             <tr>
@@ -271,17 +271,17 @@
                 <td class="noborder"></td>
                 <td class="header2" colspan="4">Top 5 Instrument: YTD</td>
             </tr>
-            {{#each keeleyToAdminMTD.InstrumentDifferences}}
+            {{#each keeleyToAdminTopInstruments}}
             <tr>
-                <td>{{Name}}</td>
-                <td>{{number Correct}}</td>
-                <td>{{number ToCompare}}</td>
-                <td>{{number Difference}}</td>
+                <td>{{Item1.Name}}</td>
+                <td>{{number Item1.Correct}}</td>
+                <td>{{number Item1.ToCompare}}</td>
+                <td>{{number Item1.Difference}}</td>
                 <td class="noborder"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{Item2.Name}}</td>
+                <td>{{number Item2.Correct}}</td>
+                <td>{{number Item2.ToCompare}}</td>
+                <td>{{number Item2.Difference}}</td>
             </tr>
             {{/each}}
             <tr>
@@ -292,17 +292,17 @@
                 <td class="noborder"></td>
                 <td class="header2" colspan="4">Top 5 Currency: YTD</td>
             </tr>
-            {{#each keeleyToAdminMTD.CurrencyDifferences}}
+            {{#each keeleyToAdminTopCurrency}}
             <tr>
-                <td>{{Name}}</td>
-                <td>{{number Correct}}</td>
-                <td>{{number ToCompare}}</td>
-                <td>{{number Difference}}</td>
+                <td>{{Item1.Name}}</td>
+                <td>{{number Item1.Correct}}</td>
+                <td>{{number Item1.ToCompare}}</td>
+                <td>{{number Item1.Difference}}</td>
                 <td class="noborder"></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{Item2.Name}}</td>
+                <td>{{number Item2.Correct}}</td>
+                <td>{{number Item2.ToCompare}}</td>
+                <td>{{number Item2.Difference}}</td>
             </tr>
             {{/each}}
         </tbody>
