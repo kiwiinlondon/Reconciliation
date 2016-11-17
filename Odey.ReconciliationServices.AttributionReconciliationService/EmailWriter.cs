@@ -42,11 +42,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
         private bool IsWithinTolerace(ReturnComparison returnComparison)
         {
-            if (returnComparison != null && (!returnComparison.ReturnWithinTolerance || !returnComparison.ValueWithinTolerance))
-            {
-                return false;
-            }
-            return true;
+            return returnComparison == null || (returnComparison.ReturnWithinTolerance && returnComparison.ValueWithinTolerance);
         }
 
         public void SendEmail(Fund fund, DateTime referenceDate,
