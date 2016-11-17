@@ -1,0 +1,322 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+    table {
+        font-family: sans-serif;
+        font-size: 12px;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 5px;
+        border: 1px solid #AFC1C1;
+    }
+    th {
+        background-color: #193e61;
+        color: white;
+    }
+
+    .noborder {
+        border: none;
+    }
+    .header {
+        border: none;
+        font-family: Segoe UI, sans-serif;
+        font-size: 15px;
+        font-weight: bold;
+        text-align: center;
+    }
+    .header2 {
+        background: #eee;
+        font-weight: bold;
+    }
+
+    .numeric {
+        text-align: right;
+    }
+
+    .warning {
+        color: red;
+    }
+    </style>
+</head>
+<body>
+    <table>
+        <tbody>
+            <tr>
+                <td class="header noborder" colspan="9">Master vs Actual Return</td>
+            </tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Actual</th>
+                <th>Master</th>
+                <th>Difference</th>
+                <td class="noborder"></td>
+                <th></th>
+                <th>Actual</th>
+                <th>Master</th>
+                <th>Difference</th>
+            </tr>
+            <tr>
+                <td>MTD</td>
+                {{#with masterToActualMTD}}
+                <td>{{percent CorrectReturn}}</td>
+                <td>{{percent ReturnToCompare}}</td>
+                <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
+                {{/with}}
+                <td class="noborder"></td>
+                <td>YTD</td>
+                {{#with masterToActualYTD}}
+                <td>{{percent CorrectReturn}}</td>
+                <td>{{percent ReturnToCompare}}</td>
+                <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
+                {{/with}}
+            </tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <td class="header noborder" colspan="9">Keeley vs Actual Return</td>
+            </tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Actual</th>
+                <th>Keeley</th>
+                <th>Difference</th>
+                <td class="noborder"></td>
+                <th></th>
+                <th>Actual</th>
+                <th>Keeley</th>
+                <th>Difference</th>
+            </tr>
+            <tr>
+                <td>MTD</td>
+                {{#with keeleyToActualMTD}}
+                <td>{{percent CorrectReturn}}</td>
+                <td>{{percent ReturnToCompare}}</td>
+                <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
+                {{/with}}
+                <td class="noborder"></td>
+                <td>YTD</td>
+                {{#with keeleyToActualYTD}}
+                <td>{{percent CorrectReturn}}</td>
+                <td>{{percent ReturnToCompare}}</td>
+                <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
+                {{/with}}
+            </tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <td class="header" colspan="9">Master vs Administrator</td>
+            </tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Admin</th>
+                <th>Master</th>
+                <th>Difference</th>
+                <td class="noborder"></td>
+                <th></th>
+                <th>Admin</th>
+                <th>Master</th>
+                <th>Difference</th>
+            </tr>
+            <tr>
+                <td>MTD</td>
+                {{#with masterToAdminMTD}}
+                <td>{{percent CorrectReturn}}</td>
+                <td>{{percent ReturnToCompare}}</td>
+                <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
+                {{/with}}
+                <td class="noborder"></td>
+                <td>YTD</td>
+                {{#with masterToAdminYTD}}
+                <td>{{percent CorrectReturn}}</td>
+                <td>{{percent ReturnToCompare}}</td>
+                <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
+                {{/with}}
+            </tr>
+            <tr>
+                <td>MTD Value</td>
+                {{#with masterToAdminMTD}}
+                <td>{{number CorrectValue}}</td>
+                <td>{{number ValueToCompare}}</td>
+                <td>{{number ValueDifference ValueWithinTolerance}}</td>
+                {{/with}}
+                <td class="noborder"></td>
+                <td>YTD Value</td>
+                {{#with masterToAdminYTD}}
+                <td>{{number CorrectValue}}</td>
+                <td>{{number ValueToCompare}}</td>
+                <td>{{number ValueDifference ValueWithinTolerance}}</td>
+                {{/with}}
+            </tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+        <tr>
+            <td class="header2" colspan="4">Top 5 Instrument: MTD</td>
+            <td class="noborder"></td>
+            <td class="header2" colspan="4">Top 5 Instrument: YTD</td>
+        </tr>
+            {{#each masterToAdminInstrumentDifferences}}
+            <tr>
+                <td>{{Item1.Name}}</td>
+                <td>{{number Item1.Correct}}</td>
+                <td>{{number Item1.ToCompare}}</td>
+                <td>{{number Item1.Difference DifferenceWithinTolerance}}</td>
+                <td class="noborder"></td>
+                <td>{{Item2.Name}}</td>
+                <td>{{number Item2.Correct}}</td>
+                <td>{{number Item2.ToCompare}}</td>
+                <td>{{number Item2.Difference DifferenceWithinTolerance}}</td>
+            </tr>
+            {{/each}}
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+        <tr>
+            <td class="header2" colspan="4">Top 5 Currency: MTD</td>
+            <td class="noborder"></td>
+            <td class="header2" colspan="4">Top 5 Currency: YTD</td>
+        </tr>
+            {{#each masterToAdminCurrencyDifferences}}
+            <tr>
+                <td>{{Item1.Name}}</td>
+                <td>{{number Item1.Correct}}</td>
+                <td>{{number Item1.ToCompare}}</td>
+                <td>{{number Item1.Difference DifferenceWithinTolerance}}</td>
+                <td class="noborder"></td>
+                <td>{{Item2.Name}}</td>
+                <td>{{number Item2.Correct}}</td>
+                <td>{{number Item2.ToCompare}}</td>
+                <td>{{number Item2.Difference DifferenceWithinTolerance}}</td>
+            </tr>
+            {{/each}}
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <td>Detail</td>
+                <td colspan="3"><a href="{{masterToAdminMTD.Filename}}">Click here</a></td>
+                <td class="noborder"></td>
+                <td>Detail</td>
+                <td colspan="3"><a href="{{masterToAdminYTD.Filename}}">Click here</a></td>
+            </tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <td class="header" colspan="9">Keeley vs Administrator</td>
+            </tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Admin</th>
+                <th>Keeley</th>
+                <th>Difference</th>
+                <td class="noborder"></td>
+                <th></th>
+                <th>Admin</th>
+                <th>Keeley</th>
+                <th>Difference</th>
+            </tr>
+            <tr>
+                <td>MTD</td>
+                {{#with keeleyToAdminMTD}}
+                <td>{{percent CorrectReturn}}</td>
+                <td>{{percent ReturnToCompare}}</td>
+                <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
+                {{/with}}
+                <td class="noborder"></td>
+                <td>YTD</td>
+                {{#with keeleyToAdminYTD}}
+                <td>{{percent CorrectReturn}}</td>
+                <td>{{percent ReturnToCompare}}</td>
+                <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
+                {{/with}}
+            </tr>
+            <tr>
+                <td>MTD Value</td>
+                {{#with keeleyToAdminMTD}}
+                <td>{{number CorrectValue}}</td>
+                <td>{{number ValueToCompare}}</td>
+                <td>{{number ValueDifference ValueWithinTolerance}}</td>
+                {{/with}}
+                <td class="noborder"></td>
+                <td>YTD Value</td>
+                {{#with keeleyToAdminYTD}}
+                <td>{{number CorrectValue}}</td>
+                <td>{{number ValueToCompare}}</td>
+                <td>{{number ValueDifference ValueWithinTolerance}}</td>
+                {{/with}}
+            </tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <td class="header2" colspan="4">Top 5 Instrument: MTD</td>
+                <td class="noborder"></td>
+                <td class="header2" colspan="4">Top 5 Instrument: YTD</td>
+            </tr>
+            {{#each keeleyToAdminInstrumentDifferences}}
+            <tr>
+                <td>{{Item1.Name}}</td>
+                <td>{{number Item1.Correct}}</td>
+                <td>{{number Item1.ToCompare}}</td>
+                <td>{{number Item1.Difference DifferenceWithinTolerance}}</td>
+                <td class="noborder"></td>
+                <td>{{Item2.Name}}</td>
+                <td>{{number Item2.Correct}}</td>
+                <td>{{number Item2.ToCompare}}</td>
+                <td>{{number Item2.Difference DifferenceWithinTolerance}}</td>
+            </tr>
+            {{/each}}
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <td class="header2" colspan="4">Top 5 Currency: MTD</td>
+                <td class="noborder"></td>
+                <td class="header2" colspan="4">Top 5 Currency: YTD</td>
+            </tr>
+            {{#each keelyToAdminCurrencyDifferences}}
+            <tr>
+                <td>{{Item1.Name}}</td>
+                <td>{{number Item1.Correct}}</td>
+                <td>{{number Item1.ToCompare}}</td>
+                <td>{{number Item1.Difference DifferenceWithinTolerance}}</td>
+                <td class="noborder"></td>
+                <td>{{Item2.Name}}</td>
+                <td>{{number Item2.Correct}}</td>
+                <td>{{number Item2.ToCompare}}</td>
+                <td>{{number Item2.Difference DifferenceWithinTolerance}}</td>
+            </tr>
+            {{/each}}
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <td>Detail</td>
+                <td colspan="3"><a href="{{keeleyToAdminMTD.Filename}}">Click here</a></td>
+                <td class="noborder"></td>
+                <td>Detail</td>
+                <td colspan="3"><a href="{{keeleyToAdminYTD.Filename}}">Click here</a></td>
+            </tr>
+
+        </tbody>
+    </table>
+</body>
+</html>

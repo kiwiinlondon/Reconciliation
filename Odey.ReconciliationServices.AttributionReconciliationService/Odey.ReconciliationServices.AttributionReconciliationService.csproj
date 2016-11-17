@@ -53,6 +53,10 @@
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Handlebars, Version=1.0.0.0, Culture=neutral, PublicKeyToken=22225d0bf33cd661, processorArchitecture=MSIL">
+      <HintPath>..\packages\Handlebars.Net.1.8.0\lib\portable-net45+sl5+wp8+win8\Handlebars.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Binaries\log4net\log4net.dll</HintPath>
     </Reference>
@@ -126,6 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AttributionReconciliationService.svc" />
+    <Content Include="ReconciliationEmailTemplate.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +149,7 @@
     <Compile Include="OpenXMLWorksheetWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReturnComparison.cs" />
+    <Compile Include="SimpleComparison.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

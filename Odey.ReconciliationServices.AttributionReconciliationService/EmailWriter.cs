@@ -1,14 +1,35 @@
-﻿using Odey.Framework.Infrastructure.EmailClient;
+﻿using HandlebarsDotNet;
+using Odey.Framework.Infrastructure.EmailClient;
 using Odey.Framework.Keeley.Entities;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
+using System.IO;
 using System.Linq;
-using System.Web;
 
 namespace Odey.ReconciliationServices.AttributionReconciliationService
 {
     public class EmailWriter
     {
+        private Func<object, string> GenerateEmail;
+
+        public EmailWriter()
+        {
+            Handlebars.RegisterHelper("percent", (writer, context, args) => {
+                var warning = (args.Length < 2 || (args[1] is bool && (bool)args[1] == true) ? null : "warning");
+                writer.WriteSafeString($"<div class=\"numeric {warning}\">{args[0]:n2}%</div>");
+            });
+
+            Handlebars.RegisterHelper("number", (writer, context, args) => {
+                var warning = (args.Length < 2 || (args[1] is bool && (bool)args[1] == true) ? null : "warning");
+                writer.WriteSafeString($"<div class=\"numeric {warning}\">{args[0]:n0}</div>");
+            });
+
+            var templateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ReconciliationEmailTemplate.html");
+            var templateText = File.ReadAllText(templateFile);
+            GenerateEmail = Handlebars.Compile(templateText);
+        }
+
         private bool IsWithinTolerace(ReturnComparison returnComparison)
         {
             if (returnComparison != null && (!returnComparison.ReturnWithinTolerance || !returnComparison.ValueWithinTolerance))
@@ -25,88 +46,69 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             ReturnComparison masterToAdminComparison,
             ReturnComparison positionComparison)
         {
-            if (!IsWithinTolerace(keeleyToReturnComparison)) return false;
-            if (!IsWithinTolerace(masterToReturnComparison)) return false;
-            if (!IsWithinTolerace(keeleyToAdminComparison)) return false;
-            if (!IsWithinTolerace(masterToAdminComparison)) return false;
-            if (!IsWithinTolerace(positionComparison)) return false;
-            return true;
+            if (IsWithinTolerace(keeleyToReturnComparison)
+                && IsWithinTolerace(masterToReturnComparison)
+                && IsWithinTolerace(keeleyToAdminComparison)
+                && IsWithinTolerace(masterToAdminComparison)
+                && !IsWithinTolerace(positionComparison))
+            {
+                return true;
+            }
+            return false;
         }
 
         public void SendEmail(Fund fund, DateTime referenceDate,
-            ReturnComparison keeleyToMTDReturnComparison,
-            ReturnComparison keeleyToYTDReturnComparison,
-            ReturnComparison masterToMTDReturnComparison,
-            ReturnComparison masterToYTDReturnComparison,
-            ReturnComparison keeleyToAdminMTDComparison,
-            ReturnComparison keeleyToAdminYTDComparison,
-            ReturnComparison masterToAdminMTDComparison,
-            ReturnComparison masterToAdminYTDComparison,
-            ReturnComparison positionMTDComparison,
-            ReturnComparison positionYTDComparison)
+            ReturnComparison keeleyToActualMTD,
+            ReturnComparison keeleyToActualYTD,
+            ReturnComparison masterToActualMTD,
+            ReturnComparison masterToActualYTD,
+            ReturnComparison keeleyToAdminMTD,
+            ReturnComparison keeleyToAdminYTD,
+            ReturnComparison masterToAdminMTD,
+            ReturnComparison masterToAdminYTD,
+            ReturnComparison positionMTD,
+            ReturnComparison positionYTD)
         {
-            EmailClient client = new EmailClient();
+            var client = new EmailClient();
+            var mtdStatus = AreAllWithinTolerace(keeleyToActualMTD, masterToActualMTD, keeleyToAdminMTD, masterToAdminMTD, positionMTD) ? "OK" : "BROKEN";
+            var ytdStatus = AreAllWithinTolerace(keeleyToActualYTD, masterToActualYTD, keeleyToAdminYTD, masterToAdminYTD, positionMTD) ? "OK" : "BROKEN";
+            var subject = $"{fund.Name} Attribution Rec {referenceDate:dd-MMM-yyyy}: MTD {mtdStatus} YTD {ytdStatus}";
 
-           
+            var masterToAdminCurrencyDifferences = GetDifferences(masterToAdminMTD.CurrencyDifferences, masterToAdminYTD.CurrencyDifferences);
+            var keelyToAdminCurrencyDifferences = GetDifferences(keeleyToAdminMTD.CurrencyDifferences, keeleyToAdminYTD.CurrencyDifferences);
+            var masterToAdminInstrumentDifferences = GetDifferences(masterToAdminMTD.InstrumentDifferences, masterToAdminYTD.InstrumentDifferences);
+            var keeleyToAdminInstrumentDifferences = GetDifferences(keeleyToAdminMTD.InstrumentDifferences, keeleyToAdminYTD.InstrumentDifferences);
 
-            //decimal keeleyMTDDiff = mtdReturn - mtdKeeleyTotalContribution;
-            //decimal keeleyYTDDiff = ytdReturn - ytdKeeleyTotalContribution;
-
-
-            //decimal? keeleyMasterMTDDiff = 0;
-            //decimal? masterMTDDiff = 0;
-
-            //bool mtdBreak = Math.Abs(keeleyMTDDiff) > mtdTolerance;
-
-            //if (mtdMasterTotalContribution.HasValue)
-            //{
-            //    keeleyMasterMTDDiff = mtdKeeleyTotalContribution - mtdMasterTotalContribution.Value;
-            //    masterMTDDiff = mtdMasterTotalContribution - mtdReturn;
-
-            //    mtdBreak = mtdBreak || Math.Abs(keeleyMasterMTDDiff.Value) > mtdTolerance || Math.Abs(masterMTDDiff.Value) > mtdTolerance;
-            //}
-
-            //bool ytdBreak = Math.Abs(keeleyYTDDiff) > ytdTolerance;
-            //decimal? keeleyMasterYTDDiff = 0;
-            //decimal? masterYTDDiff = 0;
-            //if (ytdMasterTotalContribution.HasValue)
-            //{
-            //    keeleyMasterYTDDiff = ytdKeeleyTotalContribution - ytdMasterTotalContribution.Value;
-            //    masterYTDDiff = ytdMasterTotalContribution - ytdReturn;
-
-            //    ytdBreak = ytdBreak || Math.Abs(keeleyMasterYTDDiff.Value) > ytdTolerance || Math.Abs(masterYTDDiff.Value) > ytdTolerance;
-
-            //}
-
-
-            string mtdStatus = AreAllWithinTolerace(keeleyToMTDReturnComparison, masterToMTDReturnComparison, keeleyToAdminMTDComparison, masterToAdminMTDComparison, positionMTDComparison) ? "BROKEN" : "OK";
-            string ytdStatus = AreAllWithinTolerace(keeleyToYTDReturnComparison, masterToYTDReturnComparison, keeleyToAdminYTDComparison, masterToAdminYTDComparison, positionMTDComparison) ? "BROKEN" : "OK";
-
-            string subject = $"{fund.Name} Attribution Rec {referenceDate:dd-MMM-yyyy}: MTD {mtdStatus} YTD {ytdStatus}";
-
-            client.SendAsHtml("AttributionRecs@Odey.com", "Attribution Recs", "g.poore@odey.com", null, null, subject, null, null);
-
-            //StringBuilder bodyBuilder = new StringBuilder();
-
-            //bodyBuilder.AppendLine("MTD");
-            //bodyBuilder.AppendLine("===");
-            //bodyBuilder.AppendLine();
-            //bodyBuilder.AppendLine("Actual Return vs Keeley Contribution ");
-            //bodyBuilder.AppendLine($"{Math.Round(mtdReturn,2)} - {Math.Round(mtdKeeleyTotalContribution,2)} = {Math.Round(keeleyMTDDiff, 2)}" );
-            //bodyBuilder.AppendLine();
-            //if (keeleyMasterMTDDiff.HasValue)
-            //{
-            //    bodyBuilder.AppendLine("Master Contribution vs Keeley Contribution");
-            //}
-
-            //if (masterMTDDiff.HasValue)
-            //{
-            //    bodyBuilder.AppendLine("Master Contribution vs Actual Return");
-            //}
-
-            ////string body = 
+            var message = GenerateEmail(new
+            {
+                keeleyToActualMTD, keeleyToActualYTD, masterToActualMTD, masterToActualYTD, keeleyToAdminMTD, keeleyToAdminYTD, masterToAdminMTD, masterToAdminYTD, positionMTD, positionYTD,
+                masterToAdminCurrencyDifferences, keelyToAdminCurrencyDifferences, masterToAdminInstrumentDifferences, keeleyToAdminInstrumentDifferences
+            });
+            
+            var to = "b.parker@odey.com";
+            client.SendAsHtml("AttributionRecs@Odey.com", "Attribution Recs", to, null, null, subject, message, null);
         }
 
+        private IEnumerable<Tuple<SimpleComparison, SimpleComparison>> GetDifferences(IEnumerable<SimpleComparison> mtd, IEnumerable<SimpleComparison> ytd)
+        {
+            var output = new List<Tuple<SimpleComparison, SimpleComparison>>();
+            for (int i = 0; i < Math.Max(mtd.Count(), ytd.Count()); i++)
+            {
+                SimpleComparison mtdComparison = null;
+                if (i < mtd.Count())
+                {
+                    mtdComparison = mtd.ElementAt(i);
+                }
 
+                SimpleComparison ytdComparison = null;
+                if (i < ytd.Count())
+                {
+                    ytdComparison = ytd.ElementAt(i);
+                }
+
+                output.Add(new Tuple<SimpleComparison, SimpleComparison>(mtdComparison, ytdComparison));
+            }
+            return output.ToArray();
+        }        
     }
 }
