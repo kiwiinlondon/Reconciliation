@@ -23,9 +23,11 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            //AttributionReconciliationService service = new AttributionReconciliationService();
-            AttributionReconciliationClient service = new AttributionReconciliationClient();
-            service.Reconcile(5591, new DateTime(2016,10, 31));
+
+
+            AttributionReconciliationService service = new AttributionReconciliationService();
+            //AttributionReconciliationClient service = new AttributionReconciliationClient();
+            service.Reconcile(7504, new DateTime(2016,10, 25));
         }
 
         static void AddDataRow(DataTable dt, int secId, int fundId, DateTime refDate, string ccy, decimal pos, DateTime matDate, string plCcy, int uSecId)
