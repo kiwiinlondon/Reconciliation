@@ -315,6 +315,108 @@
                 <td>Detail</td>
                 <td colspan="3"><a href="{{keeleyToAdminYTD.Filename}}">Click here</a></td>
             </tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <td class="header" colspan="9">Keeley vs Master</td>
+            </tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Master</th>
+                <th>Keeley</th>
+                <th>Difference</th>
+                <td class="noborder"></td>
+                <th></th>
+                <th>Master</th>
+                <th>Keeley</th>
+                <th>Difference</th>
+            </tr>
+            <tr>
+                <td>MTD</td>
+                {{#with keeleyToMasterMTD}}
+                <td>{{percent CorrectReturn}}</td>
+                <td>{{percent ReturnToCompare}}</td>
+                <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
+                {{/with}}
+                <td class="noborder"></td>
+                <td>YTD</td>
+                {{#with keeleyToMasterYTD}}
+                <td>{{percent CorrectReturn}}</td>
+                <td>{{percent ReturnToCompare}}</td>
+                <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
+                {{/with}}
+            </tr>
+            <tr>
+                <td>MTD Value</td>
+                {{#with keeleyToMasterMTD}}
+                <td>{{number CorrectValue}}</td>
+                <td>{{number ValueToCompare}}</td>
+                <td>{{number ValueDifference ValueWithinTolerance}}</td>
+                {{/with}}
+                <td class="noborder"></td>
+                <td>YTD Value</td>
+                {{#with keeleyToMasterYTD}}
+                <td>{{number CorrectValue}}</td>
+                <td>{{number ValueToCompare}}</td>
+                <td>{{number ValueDifference ValueWithinTolerance}}</td>
+                {{/with}}
+            </tr>
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <td class="header2" colspan="4">Top 5 Instrument: MTD</td>
+                <td class="noborder"></td>
+                <td class="header2" colspan="4">Top 5 Instrument: YTD</td>
+            </tr>
+            {{#each keeleyToMasterInstrumentDifferences}}
+            <tr>
+                <td>{{Item1.Name}}</td>
+                <td>{{number Item1.Correct}}</td>
+                <td>{{number Item1.ToCompare}}</td>
+                <td>{{number Item1.Difference DifferenceWithinTolerance}}</td>
+                <td class="noborder"></td>
+                <td>{{Item2.Name}}</td>
+                <td>{{number Item2.Correct}}</td>
+                <td>{{number Item2.ToCompare}}</td>
+                <td>{{number Item2.Difference DifferenceWithinTolerance}}</td>
+            </tr>
+            {{/each}}
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <td class="header2" colspan="4">Top 5 Currency: MTD</td>
+                <td class="noborder"></td>
+                <td class="header2" colspan="4">Top 5 Currency: YTD</td>
+            </tr>
+            {{#each keelyToMasterCurrencyDifferences}}
+            <tr>
+                <td>{{Item1.Name}}</td>
+                <td>{{number Item1.Correct}}</td>
+                <td>{{number Item1.ToCompare}}</td>
+                <td>{{number Item1.Difference DifferenceWithinTolerance}}</td>
+                <td class="noborder"></td>
+                <td>{{Item2.Name}}</td>
+                <td>{{number Item2.Correct}}</td>
+                <td>{{number Item2.ToCompare}}</td>
+                <td>{{number Item2.Difference DifferenceWithinTolerance}}</td>
+            </tr>
+            {{/each}}
+            <tr>
+                <td class="noborder"></td>
+            </tr>
+            <tr>
+                <td>Detail</td>
+                <td colspan="3"><a href="{{keeleyToMasterMTD.Filename}}">Click here</a></td>
+                <td class="noborder"></td>
+                <td>Detail</td>
+                <td colspan="3"><a href="{{keeleyToMasterYTD.Filename}}">Click here</a></td>
+            </tr>
 
         </tbody>
     </table>

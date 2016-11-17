@@ -52,10 +52,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 
         public override string DisplayName
         {
-            get
-            {
-                return string.Join(", ", Descriptor);
-            }
+            get { return $"{PositionId} : {InstrumentMarket}"; }
         }
 
         public override int CompareTo(object obj)

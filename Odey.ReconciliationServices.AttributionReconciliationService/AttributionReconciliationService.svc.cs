@@ -38,8 +38,8 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 ReturnComparison keeleyToAdminYTDComparison = null;
                 ReturnComparison masterToAdminMTDComparison = null;
                 ReturnComparison masterToAdminYTDComparison = null;
-                ReturnComparison positionMTDComparison = null;
-                ReturnComparison positionYTDComparison = null;
+                ReturnComparison keeleyToMasterMTDComparison = null;
+                ReturnComparison keeleyToMasterYTDComparison = null;
 
 
                 decimal mtdReturn;
@@ -72,8 +72,8 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     keeleyToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, ytdKeeleyMatchedItems, ytdKeeleyFilePath);
                     masterToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, mtdMasterMatchedItems, mtdMasterFilePath);
                     masterToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, ytdMasterMatchedItems, ytdMasterFilePath);
-                    positionMTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, mtdPositions, mtdPositionFilePath);
-                    positionYTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, ytdPositions, ytdPositionFilePath);
+                    keeleyToMasterMTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, mtdPositions, mtdPositionFilePath);
+                    keeleyToMasterYTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, ytdPositions, ytdPositionFilePath);
                 }
                 else
                 {
@@ -84,7 +84,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     keeleyToYTDReturnComparison = new ReturnComparison(ytdReturn, ytdTotalContribution, 0.1m);
                 }
                 EmailWriter writer = new EmailWriter();
-                writer.SendEmail(fund, referenceDate, keeleyToMTDReturnComparison, keeleyToYTDReturnComparison, masterToMTDReturnComparison, masterToYTDReturnComparison, keeleyToAdminMTDComparison, keeleyToAdminYTDComparison, masterToAdminMTDComparison, masterToAdminYTDComparison, positionMTDComparison, positionYTDComparison);
+                writer.SendEmail(fund, referenceDate, keeleyToMTDReturnComparison, keeleyToYTDReturnComparison, masterToMTDReturnComparison, masterToYTDReturnComparison, keeleyToAdminMTDComparison, keeleyToAdminYTDComparison, masterToAdminMTDComparison, masterToAdminYTDComparison, keeleyToMasterMTDComparison, keeleyToMasterYTDComparison);
             }
         }
 

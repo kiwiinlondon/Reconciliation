@@ -50,7 +50,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 && IsWithinTolerace(masterToReturnComparison)
                 && IsWithinTolerace(keeleyToAdminComparison)
                 && IsWithinTolerace(masterToAdminComparison)
-                && !IsWithinTolerace(positionComparison))
+                && IsWithinTolerace(positionComparison))
             {
                 return true;
             }
@@ -66,23 +66,26 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             ReturnComparison keeleyToAdminYTD,
             ReturnComparison masterToAdminMTD,
             ReturnComparison masterToAdminYTD,
-            ReturnComparison positionMTD,
-            ReturnComparison positionYTD)
+            ReturnComparison keeleyToMasterMTD,
+            ReturnComparison keeleyToMasterYTD)
         {
             var client = new EmailClient();
-            var mtdStatus = AreAllWithinTolerace(keeleyToActualMTD, masterToActualMTD, keeleyToAdminMTD, masterToAdminMTD, positionMTD) ? "OK" : "BROKEN";
-            var ytdStatus = AreAllWithinTolerace(keeleyToActualYTD, masterToActualYTD, keeleyToAdminYTD, masterToAdminYTD, positionMTD) ? "OK" : "BROKEN";
+            var mtdStatus = AreAllWithinTolerace(keeleyToActualMTD, masterToActualMTD, keeleyToAdminMTD, masterToAdminMTD, keeleyToMasterMTD) ? "OK" : "BROKEN";
+            var ytdStatus = AreAllWithinTolerace(keeleyToActualYTD, masterToActualYTD, keeleyToAdminYTD, masterToAdminYTD, keeleyToMasterMTD) ? "OK" : "BROKEN";
             var subject = $"{fund.Name} Attribution Rec {referenceDate:dd-MMM-yyyy}: MTD {mtdStatus} YTD {ytdStatus}";
 
             var masterToAdminCurrencyDifferences = GetDifferences(masterToAdminMTD.CurrencyDifferences, masterToAdminYTD.CurrencyDifferences);
             var keelyToAdminCurrencyDifferences = GetDifferences(keeleyToAdminMTD.CurrencyDifferences, keeleyToAdminYTD.CurrencyDifferences);
+            var keelyToMasterCurrencyDifferences = GetDifferences(keeleyToMasterMTD.CurrencyDifferences, keeleyToMasterYTD.CurrencyDifferences);
             var masterToAdminInstrumentDifferences = GetDifferences(masterToAdminMTD.InstrumentDifferences, masterToAdminYTD.InstrumentDifferences);
             var keeleyToAdminInstrumentDifferences = GetDifferences(keeleyToAdminMTD.InstrumentDifferences, keeleyToAdminYTD.InstrumentDifferences);
+            var keeleyToMasterInstrumentDifferences = GetDifferences(keeleyToMasterMTD.InstrumentDifferences, keeleyToMasterYTD.InstrumentDifferences);
 
             var message = GenerateEmail(new
             {
-                keeleyToActualMTD, keeleyToActualYTD, masterToActualMTD, masterToActualYTD, keeleyToAdminMTD, keeleyToAdminYTD, masterToAdminMTD, masterToAdminYTD, positionMTD, positionYTD,
-                masterToAdminCurrencyDifferences, keelyToAdminCurrencyDifferences, masterToAdminInstrumentDifferences, keeleyToAdminInstrumentDifferences
+                keeleyToActualMTD, keeleyToActualYTD, masterToActualMTD, masterToActualYTD, keeleyToAdminMTD, keeleyToAdminYTD, masterToAdminMTD, masterToAdminYTD, keeleyToMasterMTD, keeleyToMasterYTD,
+                masterToAdminCurrencyDifferences, keelyToAdminCurrencyDifferences, masterToAdminInstrumentDifferences, keeleyToAdminInstrumentDifferences,
+                keelyToMasterCurrencyDifferences, keeleyToMasterInstrumentDifferences
             });
             
             var to = "b.parker@odey.com";
