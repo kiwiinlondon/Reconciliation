@@ -178,13 +178,13 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             {
                 mtd = performaceResults.FirstOrDefault(a => a.ReturnType == PerformanceReturnTypeIds.Inception);
             }
-            mtdReturn = mtd.Value / 100m;
+            mtdReturn = mtd.Value;
             var ytd = performaceResults.FirstOrDefault(a => a.ReturnType == PerformanceReturnTypeIds.YTD);
             if (ytd == null)
             {
                 ytd = performaceResults.FirstOrDefault(a => a.ReturnType == PerformanceReturnTypeIds.Inception);
             }
-            ytdReturn = ytd.Value / 100m;
+            ytdReturn = ytd.Value;
         }
 
 
