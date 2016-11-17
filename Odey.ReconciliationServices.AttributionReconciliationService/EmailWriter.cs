@@ -122,7 +122,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 });
             }
 
-            var to = "b.parker@odey.com";
+            var to = "programmers@odey.com";
             client.SendAsHtml("AttributionRecs@Odey.com", "Attribution Recs", to, null, null, subject, message, null);
         }
 

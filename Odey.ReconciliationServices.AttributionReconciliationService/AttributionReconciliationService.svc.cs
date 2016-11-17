@@ -98,8 +98,6 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             MasterVsKeeley,   //position level         
         }
 
-
-
         private decimal GetReturn(List<AttributionReconciliationItem> matchedItems,bool usePortfolioCache)
         {
             decimal sum;
