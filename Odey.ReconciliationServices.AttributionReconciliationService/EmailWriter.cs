@@ -49,24 +49,6 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             return true;
         }
 
-        private bool AreAllWithinTolerace(
-            ReturnComparison keeleyToReturnComparison,
-            ReturnComparison masterToReturnComparison,
-            ReturnComparison keeleyToAdminComparison,
-            ReturnComparison masterToAdminComparison,
-            ReturnComparison positionComparison)
-        {
-            if (IsWithinTolerace(keeleyToReturnComparison)
-                && IsWithinTolerace(masterToReturnComparison)
-                && IsWithinTolerace(keeleyToAdminComparison)
-                && IsWithinTolerace(masterToAdminComparison)
-                && IsWithinTolerace(positionComparison))
-            {
-                return true;
-            }
-            return false;
-        }
-
         public void SendEmail(Fund fund, DateTime referenceDate,
             ReturnComparison keeleyToActualMTD,
             ReturnComparison keeleyToActualYTD,
@@ -80,8 +62,8 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             ReturnComparison keeleyToMasterYTD)
         {
             var client = new EmailClient();
-            var mtdStatus = AreAllWithinTolerace(keeleyToActualMTD, masterToActualMTD, keeleyToAdminMTD, masterToAdminMTD, keeleyToMasterMTD) ? "OK" : "BROKEN";
-            var ytdStatus = AreAllWithinTolerace(keeleyToActualYTD, masterToActualYTD, keeleyToAdminYTD, masterToAdminYTD, keeleyToMasterMTD) ? "OK" : "BROKEN";
+            var mtdStatus = (new ReturnComparison[] { keeleyToActualMTD, masterToActualMTD, keeleyToAdminMTD, masterToAdminMTD, keeleyToMasterMTD }.All(IsWithinTolerace)) ? "OK" : "BROKEN";
+            var ytdStatus = (new ReturnComparison[] { keeleyToActualYTD, masterToActualYTD, keeleyToAdminYTD, masterToAdminYTD, keeleyToMasterMTD }.All(IsWithinTolerace)) ? "OK" : "BROKEN";
             var subject = $"{fund.Name} Attribution Rec {referenceDate:dd-MMM-yyyy}: MTD {mtdStatus} YTD {ytdStatus}";
 
             var masterToAdminCurrencyDifferences = GetDifferences(masterToAdminMTD?.CurrencyDifferences, masterToAdminYTD?.CurrencyDifferences);
