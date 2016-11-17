@@ -11,7 +11,8 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
 {
     public class EmailWriter
     {
-        private Func<object, string> GenerateEmail;
+        private Func<object, string> _generateEmail;
+        private Func<object, string> _generateSummaryEmail;
 
         public EmailWriter()
         {
@@ -25,9 +26,16 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 writer.WriteSafeString($"<div class=\"numeric {warning}\">{args[0]:n0}</div>");
             });
 
-            var templateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ReconciliationEmailTemplate.html");
+            _generateEmail = CompileTemplate("ReconciliationEmailTemplate.html");
+            _generateSummaryEmail = CompileTemplate("ReconciliationEmailSummaryTemplate.html");
+
+        }
+
+        private Func<object, string> CompileTemplate(string templateFileName)
+        {
+            var templateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, templateFileName);
             var templateText = File.ReadAllText(templateFile);
-            GenerateEmail = Handlebars.Compile(templateText);
+            return Handlebars.Compile(templateText);
         }
 
         private bool IsWithinTolerace(ReturnComparison returnComparison)
@@ -74,20 +82,46 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             var ytdStatus = AreAllWithinTolerace(keeleyToActualYTD, masterToActualYTD, keeleyToAdminYTD, masterToAdminYTD, keeleyToMasterMTD) ? "OK" : "BROKEN";
             var subject = $"{fund.Name} Attribution Rec {referenceDate:dd-MMM-yyyy}: MTD {mtdStatus} YTD {ytdStatus}";
 
-            var masterToAdminCurrencyDifferences = GetDifferences(masterToAdminMTD.CurrencyDifferences, masterToAdminYTD.CurrencyDifferences);
-            var keelyToAdminCurrencyDifferences = GetDifferences(keeleyToAdminMTD.CurrencyDifferences, keeleyToAdminYTD.CurrencyDifferences);
-            var keelyToMasterCurrencyDifferences = GetDifferences(keeleyToMasterMTD.CurrencyDifferences, keeleyToMasterYTD.CurrencyDifferences);
-            var masterToAdminInstrumentDifferences = GetDifferences(masterToAdminMTD.InstrumentDifferences, masterToAdminYTD.InstrumentDifferences);
-            var keeleyToAdminInstrumentDifferences = GetDifferences(keeleyToAdminMTD.InstrumentDifferences, keeleyToAdminYTD.InstrumentDifferences);
-            var keeleyToMasterInstrumentDifferences = GetDifferences(keeleyToMasterMTD.InstrumentDifferences, keeleyToMasterYTD.InstrumentDifferences);
+            var masterToAdminCurrencyDifferences = GetDifferences(masterToAdminMTD?.CurrencyDifferences, masterToAdminYTD?.CurrencyDifferences);
+            var keelyToAdminCurrencyDifferences = GetDifferences(keeleyToAdminMTD?.CurrencyDifferences, keeleyToAdminYTD?.CurrencyDifferences);
+            var keelyToMasterCurrencyDifferences = GetDifferences(keeleyToMasterMTD?.CurrencyDifferences, keeleyToMasterYTD?.CurrencyDifferences);
+            var masterToAdminInstrumentDifferences = GetDifferences(masterToAdminMTD?.InstrumentDifferences, masterToAdminYTD?.InstrumentDifferences);
+            var keeleyToAdminInstrumentDifferences = GetDifferences(keeleyToAdminMTD?.InstrumentDifferences, keeleyToAdminYTD?.InstrumentDifferences);
+            var keeleyToMasterInstrumentDifferences = GetDifferences(keeleyToMasterMTD?.InstrumentDifferences, keeleyToMasterYTD?.InstrumentDifferences);
 
-            var message = GenerateEmail(new
+            string message;
+            if (masterToAdminMTD == null && keeleyToAdminMTD == null && keeleyToMasterMTD == null &&
+                masterToAdminYTD == null && keeleyToAdminYTD == null && keeleyToMasterYTD == null)
             {
-                keeleyToActualMTD, keeleyToActualYTD, masterToActualMTD, masterToActualYTD, keeleyToAdminMTD, keeleyToAdminYTD, masterToAdminMTD, masterToAdminYTD, keeleyToMasterMTD, keeleyToMasterYTD,
-                masterToAdminCurrencyDifferences, keelyToAdminCurrencyDifferences, masterToAdminInstrumentDifferences, keeleyToAdminInstrumentDifferences,
-                keelyToMasterCurrencyDifferences, keeleyToMasterInstrumentDifferences
-            });
-            
+                message = _generateSummaryEmail(new
+                {
+                    keeleyToActualMTD,
+                    keeleyToActualYTD
+                });
+            }
+            else
+            {
+                message = _generateEmail(new
+                {
+                    keeleyToActualMTD,
+                    keeleyToActualYTD,
+                    masterToActualMTD,
+                    masterToActualYTD,
+                    keeleyToAdminMTD,
+                    keeleyToAdminYTD,
+                    masterToAdminMTD,
+                    masterToAdminYTD,
+                    keeleyToMasterMTD,
+                    keeleyToMasterYTD,
+                    masterToAdminCurrencyDifferences,
+                    keelyToAdminCurrencyDifferences,
+                    masterToAdminInstrumentDifferences,
+                    keeleyToAdminInstrumentDifferences,
+                    keelyToMasterCurrencyDifferences,
+                    keeleyToMasterInstrumentDifferences
+                });
+            }
+
             var to = "b.parker@odey.com";
             client.SendAsHtml("AttributionRecs@Odey.com", "Attribution Recs", to, null, null, subject, message, null);
         }
@@ -95,16 +129,19 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
         private IEnumerable<Tuple<SimpleComparison, SimpleComparison>> GetDifferences(IEnumerable<SimpleComparison> mtd, IEnumerable<SimpleComparison> ytd)
         {
             var output = new List<Tuple<SimpleComparison, SimpleComparison>>();
-            for (int i = 0; i < Math.Max(mtd.Count(), ytd.Count()); i++)
+            var mtdCount = mtd?.Count() ?? 0;
+            var ytdCount = ytd?.Count() ?? 0;
+           
+            for (int i = 0; i < Math.Max(mtdCount, ytdCount); i++)
             {
                 SimpleComparison mtdComparison = null;
-                if (i < mtd.Count())
+                if (i < mtdCount)
                 {
                     mtdComparison = mtd.ElementAt(i);
                 }
 
                 SimpleComparison ytdComparison = null;
-                if (i < ytd.Count())
+                if (i < ytdCount)
                 {
                     ytdComparison = ytd.ElementAt(i);
                 }

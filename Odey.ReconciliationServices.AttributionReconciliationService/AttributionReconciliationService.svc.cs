@@ -83,6 +83,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     keeleyToMTDReturnComparison = new ReturnComparison(mtdReturn, mtdTotalContribution, 0.1m);
                     keeleyToYTDReturnComparison = new ReturnComparison(ytdReturn, ytdTotalContribution, 0.1m);
                 }
+
                 EmailWriter writer = new EmailWriter();
                 writer.SendEmail(fund, referenceDate, keeleyToMTDReturnComparison, keeleyToYTDReturnComparison, masterToMTDReturnComparison, masterToYTDReturnComparison, keeleyToAdminMTDComparison, keeleyToAdminYTDComparison, masterToAdminMTDComparison, masterToAdminYTDComparison, keeleyToMasterMTDComparison, keeleyToMasterYTDComparison);
             }
