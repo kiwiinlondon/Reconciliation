@@ -208,8 +208,8 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     }
                 }
             }
-            keeleyMTDTotalContribution = mtdResults.Sum(a => a.TotalPNL ?? 0);
-            keeleyYTDTotalContribution = ytdResults.Sum(a => a.TotalPNL ?? 0);
+            keeleyMTDTotalContribution = mtdResults.Sum(a => a.TotalContribution ?? 0) * 100m;
+            keeleyYTDTotalContribution = ytdResults.Sum(a => a.TotalContribution ?? 0) * 100m;
         }
 
         private void WriteAdministratorFiles(Fund fund, DateTime referenceDate,
