@@ -171,7 +171,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
         {
             PerformanceClient client = new PerformanceClient();
             int daysPriorToToday = DateTime.Today.Subtract(referenceDate).Days;
-            var performaceResults = client.GetPerformanceTable(fund.LegalEntityID.ToString(), null, null, daysPriorToToday.ToString(), null, "", "false");
+            var performaceResults = client.GetPerformanceTable(fund.LegalEntityID.ToString(), "-1", null, daysPriorToToday.ToString(), null, "", "false");
 
             var mtd = performaceResults.FirstOrDefault(a => a.ReturnType == PerformanceReturnTypeIds.MTD);
             if (mtd == null)

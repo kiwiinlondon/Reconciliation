@@ -25,8 +25,8 @@ namespace Testing
         {
             AttributionReconciliationService service = new AttributionReconciliationService();
             //;AttributionReconciliationClient service = new AttributionReconciliationClient();
-            //service.Reconcile(5591, new DateTime(2016,10, 31));
-            service.Reconcile(6184, new DateTime(2016, 10, 31));
+            service.Reconcile(5591, new DateTime(2016,10, 3));
+          //  service.Reconcile(6184, new DateTime(2016, 10, 31));
         }
 
         static void AddDataRow(DataTable dt, int secId, int fundId, DateTime refDate, string ccy, decimal pos, DateTime matDate, string plCcy, int uSecId)

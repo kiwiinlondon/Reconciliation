@@ -82,7 +82,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             decimal percentageOfFund = dto.IsShareClassSpecific ? 1 : attributionFund.PercentageOfFund ;
 
             decimal pricePNL = (dto.RealisedPricePNL + dto.UnRealisedPricePNL)/fxRate;
-            decimal carryPNL = dto.CarryPNL / fxRate;
+            decimal carryPNL = (dto.CarryPNL + (dto.TodayAmortisationBook ??0))/ fxRate;
             decimal fxPNL = (dto.RealisedFXPNL + dto.UnRealisedFXPNL) / fxRate;
             decimal otherPNL = dto.ManagementPerformanceFee / fxRate;
 
