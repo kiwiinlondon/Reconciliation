@@ -25,7 +25,7 @@ namespace Testing
         {
             AttributionReconciliationService service = new AttributionReconciliationService();
             //;AttributionReconciliationClient service = new AttributionReconciliationClient();
-            service.Reconcile(5591, new DateTime(2016,10, 3));
+            service.Reconcile(5591, new DateTime(2016,11, 18));
           //  service.Reconcile(6184, new DateTime(2016, 10, 31));
         }
 

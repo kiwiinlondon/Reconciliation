@@ -269,13 +269,18 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             out List<AttributionReconciliationItem> mtdKeeley,
 
             out List<AttributionReconciliationItem> ytdKeeley,
-            
+
             out List<AttributionReconciliationItem> mtdPositions,
-            
+
             out List<AttributionReconciliationItem> ytdPositions)
         {
 
             DateTime ytdStartDate = new DateTime(referenceDate.Year, 01, 01);
+            if (fund.InceptionDate > ytdStartDate)
+            {
+                ytdStartDate = fund.InceptionDate.AddDays(1);
+            }
+
             //   DateTime ytdStartDate = new DateTime(2015, 11, 30);
             DateTime mtdStartDate = new DateTime(referenceDate.Year, referenceDate.Month, 1);
 
@@ -302,18 +307,16 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             {
                 mtdOpeningAttributionFund = ytdOpeningAttributionFund;
             }
-
-            mtdMaster = Build(fund, monthlyData, attributionFunds, mtdOpeningAttributionFund, context, portfolioCacheResults, AttributionPeriodIds.MTD, officialNavs, AttributionSourceIds.Master);
-
-            ytdMaster = Build(fund, administratorPortfolio, attributionFunds, ytdOpeningAttributionFund, context, portfolioCacheResults, AttributionPeriodIds.YTD, officialNavs, AttributionSourceIds.Master);
-
-            mtdKeeley = Build(fund, monthlyData, attributionFunds, mtdOpeningAttributionFund, context, portfolioCacheResults, AttributionPeriodIds.MTD, officialNavs, AttributionSourceIds.Keeley);
-
-            ytdKeeley = Build(fund, administratorPortfolio, attributionFunds, ytdOpeningAttributionFund, context, portfolioCacheResults, AttributionPeriodIds.YTD, officialNavs, AttributionSourceIds.Keeley);
-
-
+            var currencyInstrumentMarketByInstrumentId = context.InstrumentMarkets.Include(a => a.Instrument.Issuer.LegalEntity).Where(a => a.Instrument.InstrumentClassID == (int)InstrumentClassIds.Currency)
+                    .ToDictionary(a => a.InstrumentID, a => a);
+            mtdMaster = Build(fund, currencyInstrumentMarketByInstrumentId, monthlyData, attributionFunds, mtdOpeningAttributionFund, context, portfolioCacheResults, AttributionPeriodIds.MTD, officialNavs, AttributionSourceIds.Master);
+            mtdKeeley = Build(fund, currencyInstrumentMarketByInstrumentId, monthlyData, attributionFunds, mtdOpeningAttributionFund, context, portfolioCacheResults, AttributionPeriodIds.MTD, officialNavs, AttributionSourceIds.Keeley);
             mtdPositions = BuildPositionMatches(portfolioCacheResults, AttributionPeriodIds.MTD);
-            ytdPositions = BuildPositionMatches(portfolioCacheResults, AttributionPeriodIds.YTD);           
+
+            ytdMaster = Build(fund, currencyInstrumentMarketByInstrumentId, administratorPortfolio, attributionFunds, ytdOpeningAttributionFund, context, portfolioCacheResults, AttributionPeriodIds.YTD, officialNavs, AttributionSourceIds.Master);
+            ytdKeeley = Build(fund, currencyInstrumentMarketByInstrumentId, administratorPortfolio, attributionFunds, ytdOpeningAttributionFund, context, portfolioCacheResults, AttributionPeriodIds.YTD, officialNavs, AttributionSourceIds.Keeley);
+            ytdPositions = BuildPositionMatches(portfolioCacheResults, AttributionPeriodIds.YTD);
+
         }
 
         private List<AttributionReconciliationItem> BuildPositionMatches(List<PortfolioDTO> portfolioCacheResults, AttributionPeriodIds periodId)
@@ -352,10 +355,9 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             return matchedItems.Values.ToList<AttributionReconciliationItem>();
         }
 
-        private List<AttributionReconciliationItem> Build(Fund fund, List<AdministratorPortfolio> administratorPortfolio, Dictionary<DateTime,AttributionFund> attributionFunds, AttributionFund openingAttributionFund, KeeleyModel context,List<PortfolioDTO> portfolioCacheResults,AttributionPeriodIds periodId, Dictionary<DateTime, OfficialNetAssetValue> navs,AttributionSourceIds sourceId)
+        private List<AttributionReconciliationItem> Build(Fund fund, Dictionary<int, InstrumentMarket> currencyInstrumentMarketByInstrumentId, List<AdministratorPortfolio> administratorPortfolio, Dictionary<DateTime,AttributionFund> attributionFunds, AttributionFund openingAttributionFund, KeeleyModel context,List<PortfolioDTO> portfolioCacheResults,AttributionPeriodIds periodId, Dictionary<DateTime, OfficialNetAssetValue> navs,AttributionSourceIds sourceId)
         {
-            Dictionary<int, InstrumentMarket> currencyInstrumentMarketByInstrumentId = context.InstrumentMarkets.Include(a => a.Instrument).Where(a => a.Instrument.InstrumentClassID == (int)InstrumentClassIds.Currency)
-                    .ToDictionary(a => a.InstrumentID, a => a);
+            
             Dictionary<Tuple<int, int>, AttributionAdminReconciliationItem> matchedItems = new Dictionary<Tuple<int, int>, AttributionAdminReconciliationItem>();
 
             foreach (var portfolio in administratorPortfolio)
