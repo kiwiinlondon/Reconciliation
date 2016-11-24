@@ -64,16 +64,16 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                     WriteAdministratorFiles(fund, referenceDate, mtdMasterMatchedItems, ytdMasterMatchedItems, mtdKeeleyMatchedItems, ytdKeeleyMatchedItems, mtdPositions, ytdPositions, 
                         out mtdMasterFilePath, out ytdMasterFilePath, out mtdKeeleyFilePath, out ytdKeeleyFilePath, out mtdPositionFilePath, out ytdPositionFilePath);
 
-                    keeleyToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, mtdReturn, 0.1m, mtdKeeleyMatchedItems);
-                    keeleyToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsKeeley, ytdReturn, 0.1m, ytdKeeleyMatchedItems);
-                    masterToMTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsMaster, mtdReturn, 0.1m, mtdMasterMatchedItems);
-                    masterToYTDReturnComparison = BuildReturnComparison(ReturnType.ActualVsMaster, ytdReturn, 0.1m, ytdMasterMatchedItems);
-                    keeleyToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, mtdKeeleyMatchedItems, mtdKeeleyFilePath);
-                    keeleyToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsKeeley, 0.1m, 1000, ytdKeeleyMatchedItems, ytdKeeleyFilePath);
-                    masterToAdminMTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, mtdMasterMatchedItems, mtdMasterFilePath);
-                    masterToAdminYTDComparison = BuildReturnComparison(ReturnType.AdminVsMaster, 0.1m, 1000, ytdMasterMatchedItems, ytdMasterFilePath);
-                    keeleyToMasterMTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, mtdPositions, mtdPositionFilePath);
-                    keeleyToMasterYTDComparison = BuildReturnComparison(ReturnType.MasterVsKeeley, 0.1m, 1000, ytdPositions, ytdPositionFilePath);
+                    keeleyToMTDReturnComparison = BuildReturnComparison(mtdReturn, 0.1m, mtdKeeleyMatchedItems);
+                    keeleyToYTDReturnComparison = BuildReturnComparison(ytdReturn, 0.1m, ytdKeeleyMatchedItems);
+                    masterToMTDReturnComparison = BuildReturnComparison(mtdReturn, 0.1m, mtdMasterMatchedItems);
+                    masterToYTDReturnComparison = BuildReturnComparison(ytdReturn, 0.1m, ytdMasterMatchedItems);
+                    keeleyToAdminMTDComparison = BuildReturnComparison(0.1m, 1000, mtdKeeleyMatchedItems, mtdKeeleyFilePath);
+                    keeleyToAdminYTDComparison = BuildReturnComparison(0.1m, 1000, ytdKeeleyMatchedItems, ytdKeeleyFilePath);
+                    masterToAdminMTDComparison = BuildReturnComparison(0.1m, 1000, mtdMasterMatchedItems, mtdMasterFilePath);
+                    masterToAdminYTDComparison = BuildReturnComparison(0.1m, 1000, ytdMasterMatchedItems, ytdMasterFilePath);
+                    keeleyToMasterMTDComparison = BuildReturnComparison(0.1m, 1000, mtdPositions, mtdPositionFilePath);
+                    keeleyToMasterYTDComparison = BuildReturnComparison(0.1m, 1000, ytdPositions, ytdPositionFilePath);
                 }
                 else
                 {
@@ -89,14 +89,14 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             }
         }
 
-        private enum ReturnType
-        {
-            ActualVsKeeley,
-            ActualVsMaster,
-            AdminVsKeeley,
-            AdminVsMaster,
-            MasterVsKeeley,   //position level         
-        }
+        //private enum ReturnType
+        //{
+        //    ActualVsKeeley,
+        //    ActualVsMaster,
+        //    AdminVsKeeley,
+        //    AdminVsMaster,
+        //    MasterVsKeeley,   //position level         
+        //}
 
         private decimal GetReturn(List<AttributionReconciliationItem> matchedItems,bool usePortfolioCache)
         {
@@ -124,28 +124,15 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             }
         }
 
-        private ReturnComparison BuildReturnComparison(ReturnType returnType, decimal actualReturn, decimal returnTolerance, List<AttributionReconciliationItem> matchedItems)
-        {                       
-            decimal correctReturn;
-            decimal returnToCompare;
-            switch (returnType)
-            {
-                case ReturnType.ActualVsKeeley:
-                    correctReturn = actualReturn;
-                    returnToCompare = GetReturn(matchedItems, true);
-                    return new ReturnComparison(correctReturn, returnToCompare, returnTolerance);
-                case ReturnType.ActualVsMaster:
-                    correctReturn = actualReturn;
-                    returnToCompare = GetReturn(matchedItems, false);
-                    return new ReturnComparison(correctReturn, returnToCompare, returnTolerance);
-                default:
-                    throw new ApplicationException("Unknown Return Type");
+        private ReturnComparison BuildReturnComparison(decimal actualReturn, decimal returnTolerance, List<AttributionReconciliationItem> matchedItems)
+        {
+            decimal returnToCompare = matchedItems.Where(a => a.KeeleyValues != null).Sum(a => a.KeeleyValues.ContributionTotal)*100;
+            return new ReturnComparison(actualReturn, returnToCompare, returnTolerance);
 
-            }
         }
 
 
-        private ReturnComparison BuildReturnComparison(ReturnType returnType,  decimal returnTolerance, decimal valueTolerance, List<AttributionReconciliationItem> matchedItems, string fileName)
+        private ReturnComparison BuildReturnComparison(decimal returnTolerance, decimal valueTolerance, List<AttributionReconciliationItem> matchedItems, string fileName)
         {
             decimal correctReturn = GetReturn(matchedItems, false);
             decimal returnToCompare = GetReturn(matchedItems, true);
