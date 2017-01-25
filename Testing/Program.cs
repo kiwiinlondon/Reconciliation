@@ -25,11 +25,16 @@ namespace Testing
         {
             AttributionReconciliationService service = new AttributionReconciliationService();
             //;AttributionReconciliationClient service = new AttributionReconciliationClient();
-            service.Reconcile(5591, new DateTime(2016,11, 23));
-           // service.Reconcile(7504, new DateTime(2016, 3, 31));
-           // service.Reconcile(7504, new DateTime(2016, 2, 29));
-            service.Reconcile(7504, new DateTime(2016, 1, 29));
-
+            //service.Reconcile(5591, new DateTime(2016,01, 5));
+            service.Reconcile(6184, new DateTime(2016, 10, 28));
+            //service.Reconcile(5591, new DateTime(2016, 3, 31));
+            //service.Reconcile(5591, new DateTime(2016, 4, 29));
+            //service.Reconcile(5591, new DateTime(2016, 5, 31));
+            //service.Reconcile(5591, new DateTime(2016, 6, 30));
+            //service.Reconcile(5591, new DateTime(2016, 7, 29));
+            //service.Reconcile(5591, new DateTime(2016, 8, 31));
+            //service.Reconcile(5591, new DateTime(2016, 9, 30));
+            //service.Reconcile(5591, new DateTime(2016, 10, 28));
         }
 
         static void AddDataRow(DataTable dt, int secId, int fundId, DateTime refDate, string ccy, decimal pos, DateTime matDate, string plCcy, int uSecId)
