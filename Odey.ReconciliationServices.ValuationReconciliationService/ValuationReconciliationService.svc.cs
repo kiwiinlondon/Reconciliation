@@ -34,7 +34,7 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
                 dr["InstrumentClassID"] = reconciliationItem.InstrumentClassId;
                 dr["MaturityDate"] = reconciliationItem.MaturityDate.HasValue ? reconciliationItem.MaturityDate.Value : new DateTime(1976, 5, 20); //Geoff's birthday is null
                 dr["FundId"] = reconciliationItem.FundId;
-
+                dr["CurrencyId"] = reconciliationItem.CurrencyId;
                 dr["NetPosition"] = reconciliationItem.Holding;
                 dr["Price"] = reconciliationItem.Price;
                 dr["FXRate"] = reconciliationItem.FXRate;
@@ -53,13 +53,14 @@ namespace Odey.ReconciliationServices.ValuationReconciliationService
             DataColumn instClassId = dt.Columns.Add("InstrumentClassID", typeof(int));
             DataColumn maturityDate = dt.Columns.Add("MaturityDate", typeof(DateTime));
             DataColumn fundId = dt.Columns.Add("FundId", typeof(int));
+            DataColumn currencyId = dt.Columns.Add("CurrencyId", typeof(int));
 
             dt.Columns.Add("NetPosition", typeof(decimal));         
             dt.Columns.Add("Price", typeof(decimal));
             dt.Columns.Add("FXRate", typeof(decimal));
             dt.Columns.Add("MarketValue", typeof(decimal));
 
-            dt.PrimaryKey = new DataColumn[] { instrumentMarketId, isAccrual, instClassId, maturityDate, fundId };
+            dt.PrimaryKey = new DataColumn[] { instrumentMarketId, isAccrual, instClassId, maturityDate, fundId, currencyId };
             return dt;
 
         }

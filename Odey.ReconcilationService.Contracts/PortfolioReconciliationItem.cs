@@ -20,6 +20,9 @@ namespace Odey.ReconciliationServices.Contracts
         public bool IsAccrual { get; set; }
 
         [DataMember]
+        public int CurrencyId { get; set; }
+
+        [DataMember]
         public int InstrumentClassId { get; set; }
 
         [DataMember]
