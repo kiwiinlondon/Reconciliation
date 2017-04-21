@@ -357,7 +357,8 @@ namespace Odey.ReconciliationServices
                         AddToOutput(matchingEngineOutput, item, returnOnlyMismatches);
                     }
                 }
-            }                
+            }
+            var r = matchingEngineOutput.Outputs.Where(a => (string)a.KeyValues["Fund"] == "O07");
             return matchingEngineOutput;
         }
         #endregion

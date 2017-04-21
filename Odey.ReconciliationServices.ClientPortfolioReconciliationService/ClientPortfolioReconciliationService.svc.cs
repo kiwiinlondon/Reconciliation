@@ -58,7 +58,7 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
         {
             FileReader fileReader = FileReaderFactory.Get(fileName, Funds[fundId], AdministratorShareClassIdsByFund[fundId]);
             DataTable values = fileReader.GetData();
-
+            var t = values.Rows.Cast<DataRow>().Where(a => (string)a[1] == "O07");
             return Reconcile(values, fundId, referenceDate);
         }
         

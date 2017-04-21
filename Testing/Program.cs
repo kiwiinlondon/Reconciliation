@@ -12,6 +12,7 @@ using Odey.ReconciliationServices.ClientPortfolioReconciliationService;
 using Odey.ReconciliationServices.FMPortfolioCollectionService;
 using Odey.ReconciliationServices.AttributionReconciliationService;
 using System.Data.SqlClient;
+using Odey.Framework.Keeley.Entities.Enums;
 
 namespace Testing
 {
@@ -23,6 +24,10 @@ namespace Testing
 
         static void Main(string[] args)
         {
+
+            ClientPortfolioReconciliationService s = new ClientPortfolioReconciliationService();
+            s.Reconcile(@"\\App02\FileShare\RBC\Odey register 06042017.xls", (int)FundIds.KELT, new DateTime(2017, 3, 31));
+
             AttributionReconciliationService service = new AttributionReconciliationService();
             //;AttributionReconciliationClient service = new AttributionReconciliationClient();
             //service.Reconcile(5591, new DateTime(2016,01, 5));
