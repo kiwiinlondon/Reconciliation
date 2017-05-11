@@ -101,6 +101,17 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                 //BK-ARFF -> BK-ARFF-AC
                 return -9999;
             }
+
+            if (portfolio.BookId == 70380 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
+            {
+                //BK-DEVM -> BK-DEVM-AC
+                return -8888;
+            }
+            if (portfolio.BookId == 78506 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
+            {
+                //BK-FDXH -> BK-FDXH-AC
+                return -7777;
+            }
             return portfolio.BookId;
         }
         
