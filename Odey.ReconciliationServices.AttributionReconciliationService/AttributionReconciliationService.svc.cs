@@ -11,7 +11,7 @@ using System.Data.Entity;
 using Odey.PortfolioCache.Clients;
 using Odey.PortfolioCache.Entities;
 using Odey.PortfolioCache.Entities.Enums;
-using Odey.Framework.Keeley.Entities.Enums;
+using KE=Odey.Framework.Keeley.Entities.Enums;
 using System.IO;
 using Odey.Reporting.Clients;
 using Odey.Reporting.Entities;
@@ -45,7 +45,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 decimal mtdReturn;
                 decimal ytdReturn;
                 GetReturns(fund, referenceDate, out mtdReturn, out ytdReturn);
-                if (fund.AdministratorId == (int)AdministratorIds.Quintillion)
+                if (fund.AdministratorId == (int)KE.AdministratorIds.Quintillion)
                 {
                     List<AttributionReconciliationItem> mtdMasterMatchedItems;
                     List<AttributionReconciliationItem> ytdMasterMatchedItems;
@@ -294,7 +294,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
             {
                 mtdOpeningAttributionFund = ytdOpeningAttributionFund;
             }
-            var currencyInstrumentMarketByInstrumentId = context.InstrumentMarkets.Include(a => a.Instrument.Issuer.LegalEntity).Where(a => a.Instrument.InstrumentClassID == (int)InstrumentClassIds.Currency)
+            var currencyInstrumentMarketByInstrumentId = context.InstrumentMarkets.Include(a => a.Instrument.Issuer.LegalEntity).Where(a => a.Instrument.InstrumentClassID == (int)KE.InstrumentClassIds.Currency)
                     .ToDictionary(a => a.InstrumentID, a => a);
             mtdMaster = Build(fund, currencyInstrumentMarketByInstrumentId, monthlyData, attributionFunds, mtdOpeningAttributionFund, context, portfolioCacheResults, AttributionPeriodIds.MTD, officialNavs, AttributionSourceIds.Master);
             mtdKeeley = Build(fund, currencyInstrumentMarketByInstrumentId, monthlyData, attributionFunds, mtdOpeningAttributionFund, context, portfolioCacheResults, AttributionPeriodIds.MTD, officialNavs, AttributionSourceIds.Keeley);
@@ -323,7 +323,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                         portfolio.PositionCurrency,
                         portfolio.AccrualType,
                         portfolio.AccountId,
-                        portfolio.InstrumentClassId == (int)InstrumentClassIds.Currency
+                        portfolio.InstrumentClassId == (int)KE.InstrumentClassIds.Currency
                         );
                     matchedItems.Add(portfolio.PositionId,item);
                 }
@@ -385,7 +385,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 AttributionAdminReconciliationItem matchedItem;
                 if (!matchedItems.TryGetValue(key, out matchedItem))
                 {
-                    matchedItem = new AttributionAdminReconciliationItem(instrumentMarket.IssuerID, portfolio.Currency.IsoCode, instrumentMarket.Instrument.Issuer.Name, instrumentMarket.InstrumentClassIdAsEnum == InstrumentClassIds.Currency);
+                    matchedItem = new AttributionAdminReconciliationItem(instrumentMarket.IssuerID, portfolio.Currency.IsoCode, instrumentMarket.Instrument.Issuer.Name, instrumentMarket.InstrumentClassIdAsEnum == KE.InstrumentClassIds.Currency);
                     matchedItems.Add(key, matchedItem);
                 }
 
@@ -409,7 +409,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 AttributionAdminReconciliationItem matchedItem;
                 if (!matchedItems.TryGetValue(key, out matchedItem))
                 {
-                    matchedItem = new AttributionAdminReconciliationItem(portfolio.IssuerId, portfolio.PositionCurrency, portfolio.Issuer, portfolio.InstrumentClassId == (int)InstrumentClassIds.Currency);
+                    matchedItem = new AttributionAdminReconciliationItem(portfolio.IssuerId, portfolio.PositionCurrency, portfolio.Issuer, portfolio.InstrumentClassId == (int)KE.InstrumentClassIds.Currency);
                     matchedItems.Add(key, matchedItem);
                 }
                 matchedItem.AddPortfolioCache(portfolio, sourceId, periodId);

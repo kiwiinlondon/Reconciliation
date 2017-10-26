@@ -20,6 +20,8 @@ namespace Odey.ReconciliationServices.Contracts
 
         [DataMember]
         public decimal Keeley { get; set; }
+        [DataMember]
+        public decimal DifferencePercentage { get; set; }
 
         public override string ToString()
         {

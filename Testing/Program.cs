@@ -25,6 +25,9 @@ namespace Testing
         static void Main(string[] args)
         {
 
+            EzeReconciliationService eze = new EzeReconciliationService();
+            eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
+
             ClientPortfolioReconciliationService s = new ClientPortfolioReconciliationService();
             s.Reconcile(@"\\App02\FileShare\RBC\Odey register 06042017.xls", (int)FundIds.KELT, new DateTime(2017, 3, 31));
 

@@ -33,6 +33,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
 
         private const string EZEIdentifierColumnName = "EZEIdentifier";
         private const string MarketValueColumnName = "MarketValue";
+        private const string PercentageDiffColumnName = "PercentageDiff";
         private const string DataTableName = "Navs";
         private static DataTable GetNewNavDataTable()
         {
@@ -40,6 +41,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             DataTable dt = new DataTable(DataTableName);
             DataColumn fundId = dt.Columns.Add(EZEIdentifierColumnName);
             dt.Columns.Add(MarketValueColumnName, typeof(decimal));
+            dt.Columns.Add(PercentageDiffColumnName, typeof(decimal));
             dt.PrimaryKey = new DataColumn[] { fundId };
             return dt;
         }
@@ -111,11 +113,12 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             {
                 var ezeIdentifier = fmNav[EZEIdentifierColumnName].ToString();
                 var fmMarketValue = decimal.Parse(fmNav[MarketValueColumnName].ToString());
-
+                var percentageDiff = decimal.Parse(fmNav[PercentageDiffColumnName].ToString());
                 var threeWay = new ThreeWayNavRecOutput
                 {
                     Identifier = ezeIdentifier,
-                    FundManager = fmMarketValue
+                    FundManager = fmMarketValue,
+                    DifferencePercentage = Math.Round(percentageDiff*100,2)
                 };
                 threeWayDict[ezeIdentifier] = threeWay;
             }
