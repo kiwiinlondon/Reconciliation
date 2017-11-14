@@ -24,12 +24,13 @@ namespace Testing
 
         static void Main(string[] args)
         {
-
+            FMPortfolioCollectionService s = new FMPortfolioCollectionService();
+            s.CollectForFMFundId(69659, DateTime.Today, DateTime.Today);
             EzeReconciliationService eze = new EzeReconciliationService();
             eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
 
-            ClientPortfolioReconciliationService s = new ClientPortfolioReconciliationService();
-            s.Reconcile(@"\\App02\FileShare\RBC\Odey register 06042017.xls", (int)FundIds.KELT, new DateTime(2017, 3, 31));
+            //ClientPortfolioReconciliationService s = new ClientPortfolioReconciliationService();
+            //s.Reconcile(@"\\App02\FileShare\RBC\Odey register 06042017.xls", (int)FundIds.KELT, new DateTime(2017, 3, 31));
 
             AttributionReconciliationService service = new AttributionReconciliationService();
             //;AttributionReconciliationClient service = new AttributionReconciliationClient();
