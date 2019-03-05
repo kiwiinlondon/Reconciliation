@@ -112,6 +112,12 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                 //BK-FDXH -> BK-FDXH-AC
                 return -7777;
             }
+            if (portfolio.BookId == 84340 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
+            {
+                //BK-IAR -> BK-IAR-AC
+                return -6666;
+            }
+
             return portfolio.BookId;
         }
         
