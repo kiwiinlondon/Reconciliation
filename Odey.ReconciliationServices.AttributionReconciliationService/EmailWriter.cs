@@ -28,7 +28,6 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 writer.WriteSafeString($"<div class=\"numeric\" {(!withinTolerance ? "style=\"color: red\"" : null)}>{value:n0}</div>");
             });
 
-            //_generateEmail = CompileTemplate("ReconciliationEmailTemplate.html");
             _generateSummaryEmail = CompileTemplate("ReconciliationEmailSummaryTemplate.html");
 
         }
@@ -63,8 +62,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 keeleyToActualDay
             });
 
-            //var to = "programmers@odey.com";
-            var to = "brad.parker@odey.com";
+            var to = "programmers@odey.com";
             client.SendAsHtml("AttributionRecs@Odey.com", "Attribution Recs", to, null, null, subject, message, null);
         }
 

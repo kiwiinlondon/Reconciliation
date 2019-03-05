@@ -146,16 +146,10 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttributionPositionReconciliationItem.cs" />
-    <Compile Include="AttributionReconciliationItem.cs" />
     <Compile Include="AttributionReconciliationService.svc.cs">
       <DependentUpon>AttributionReconciliationService.svc</DependentUpon>
     </Compile>
-    <Compile Include="AttributionValues.cs" />
     <Compile Include="EmailWriter.cs" />
-    <Compile Include="ExcelStyleManager.cs" />
-    <Compile Include="FileWriter.cs" />
-    <Compile Include="OpenXMLWorksheetWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReturnComparison.cs" />
     <Compile Include="SimpleComparison.cs" />

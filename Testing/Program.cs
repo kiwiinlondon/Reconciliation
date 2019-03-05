@@ -34,7 +34,7 @@ namespace Testing
          //   var t = s.Reconcile(@"\\App02\FileShare\Quintillion\Client\share_register_by_lot ARFF 04-01-2018.xls", (int)FundIds.ARFF, new DateTime(2017, 12, 29));
 
             AttributionReconciliationService service = new AttributionReconciliationService();
-            //;AttributionReconciliationClient service = new AttributionReconciliationClient();
+            //AttributionReconciliationClient service = new AttributionReconciliationClient();
             //service.Reconcile(5591, new DateTime(2016,01, 5));
             //            service.Reconcile(6184, new DateTime(2016, 10, 28));
             service.Reconcile(3609, new DateTime(2019, 2, 28));
