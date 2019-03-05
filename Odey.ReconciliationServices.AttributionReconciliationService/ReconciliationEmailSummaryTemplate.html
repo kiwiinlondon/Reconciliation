@@ -39,22 +39,34 @@
                 <th></th>
                 <th>Actual</th>
                 <th>Keeley</th>
-                <th>Difference</th>
+                <th>Diff</th>
                 <td style="border: none"></td>
                 <th></th>
                 <th>Actual</th>
                 <th>Keeley</th>
-                <th>Difference</th>
+                <th>Diff</th>
+                <td style="border: none"></td>
+                <th></th>
+                <th>Actual</th>
+                <th>Keeley</th>
+                <th>Diff</th>
             </tr>
             <tr>
-                <td>MTD</td>
+                <td><b>Last</b></td>
+                {{#with keeleyToActualDay}}
+                <td>{{percent CorrectReturn}}</td>
+                <td>{{percent ReturnToCompare}}</td>
+                <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
+                {{/with}}
+                <td style="border: none"></td>
+                <td><b>MTD</b></td>
                 {{#with keeleyToActualMTD}}
                 <td>{{percent CorrectReturn}}</td>
                 <td>{{percent ReturnToCompare}}</td>
                 <td>{{percent ReturnDifference ReturnWithinTolerance}}</td>
                 {{/with}}
                 <td style="border: none"></td>
-                <td>YTD</td>
+                <td><b>YTD</b></td>
                 {{#with keeleyToActualYTD}}
                 <td>{{percent CorrectReturn}}</td>
                 <td>{{percent ReturnToCompare}}</td>

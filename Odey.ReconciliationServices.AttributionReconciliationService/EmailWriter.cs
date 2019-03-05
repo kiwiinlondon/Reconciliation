@@ -28,7 +28,7 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
                 writer.WriteSafeString($"<div class=\"numeric\" {(!withinTolerance ? "style=\"color: red\"" : null)}>{value:n0}</div>");
             });
 
-            _generateEmail = CompileTemplate("ReconciliationEmailTemplate.html");
+            //_generateEmail = CompileTemplate("ReconciliationEmailTemplate.html");
             _generateSummaryEmail = CompileTemplate("ReconciliationEmailSummaryTemplate.html");
 
         }
@@ -48,61 +48,23 @@ namespace Odey.ReconciliationServices.AttributionReconciliationService
         public void SendEmail(Fund fund, DateTime referenceDate,
             ReturnComparison keeleyToActualMTD,
             ReturnComparison keeleyToActualYTD,
-            ReturnComparison masterToActualMTD,
-            ReturnComparison masterToActualYTD,
-            ReturnComparison keeleyToAdminMTD,
-            ReturnComparison keeleyToAdminYTD,
-            ReturnComparison masterToAdminMTD,
-            ReturnComparison masterToAdminYTD,
-            ReturnComparison keeleyToMasterMTD,
-            ReturnComparison keeleyToMasterYTD)
+            ReturnComparison keeleyToActualDay)
         {
             var client = new EmailClient();
-            var mtdStatus = (new ReturnComparison[] { keeleyToActualMTD, masterToActualMTD, keeleyToAdminMTD, masterToAdminMTD, keeleyToMasterMTD }.All(IsWithinTolerace)) ? "OK" : "BROKEN";
-            var ytdStatus = (new ReturnComparison[] { keeleyToActualYTD, masterToActualYTD, keeleyToAdminYTD, masterToAdminYTD, keeleyToMasterMTD }.All(IsWithinTolerace)) ? "OK" : "BROKEN";
-            var subject = $"{fund.Name} Attribution Rec {referenceDate:dd-MMM-yyyy}: MTD {mtdStatus} YTD {ytdStatus}";
+            var dayStatus = (new ReturnComparison[] {keeleyToActualDay }.All(IsWithinTolerace)) ? "OK" : "BROKEN";
+            var mtdStatus = (new ReturnComparison[] {keeleyToActualMTD}.All(IsWithinTolerace)) ? "OK" : "BROKEN";
+            var ytdStatus = (new ReturnComparison[] {keeleyToActualYTD}.All(IsWithinTolerace)) ? "OK" : "BROKEN";
+            var subject = $"{fund.Name} Attribution Rec {referenceDate:dd-MMM-yyyy}: Day {dayStatus} MTD {mtdStatus} YTD {ytdStatus}";
 
-            var masterToAdminCurrencyDifferences = GetDifferences(masterToAdminMTD?.CurrencyDifferences, masterToAdminYTD?.CurrencyDifferences);
-            var keelyToAdminCurrencyDifferences = GetDifferences(keeleyToAdminMTD?.CurrencyDifferences, keeleyToAdminYTD?.CurrencyDifferences);
-            var keelyToMasterCurrencyDifferences = GetDifferences(keeleyToMasterMTD?.CurrencyDifferences, keeleyToMasterYTD?.CurrencyDifferences);
-            var masterToAdminInstrumentDifferences = GetDifferences(masterToAdminMTD?.InstrumentDifferences, masterToAdminYTD?.InstrumentDifferences);
-            var keeleyToAdminInstrumentDifferences = GetDifferences(keeleyToAdminMTD?.InstrumentDifferences, keeleyToAdminYTD?.InstrumentDifferences);
-            var keeleyToMasterInstrumentDifferences = GetDifferences(keeleyToMasterMTD?.InstrumentDifferences, keeleyToMasterYTD?.InstrumentDifferences);
-
-            string message;
-            if (masterToAdminMTD == null && keeleyToAdminMTD == null && keeleyToMasterMTD == null &&
-                masterToAdminYTD == null && keeleyToAdminYTD == null && keeleyToMasterYTD == null)
+            var message = _generateSummaryEmail(new
             {
-                message = _generateSummaryEmail(new
-                {
-                    keeleyToActualMTD,
-                    keeleyToActualYTD
-                });
-            }
-            else
-            {
-                message = _generateEmail(new
-                {
-                    keeleyToActualMTD,
-                    keeleyToActualYTD,
-                    masterToActualMTD,
-                    masterToActualYTD,
-                    keeleyToAdminMTD,
-                    keeleyToAdminYTD,
-                    masterToAdminMTD,
-                    masterToAdminYTD,
-                    keeleyToMasterMTD,
-                    keeleyToMasterYTD,
-                    masterToAdminCurrencyDifferences,
-                    keelyToAdminCurrencyDifferences,
-                    masterToAdminInstrumentDifferences,
-                    keeleyToAdminInstrumentDifferences,
-                    keelyToMasterCurrencyDifferences,
-                    keeleyToMasterInstrumentDifferences
-                });
-            }
+                keeleyToActualMTD,
+                keeleyToActualYTD,
+                keeleyToActualDay
+            });
 
-            var to = "programmers@odey.com";
+            //var to = "programmers@odey.com";
+            var to = "brad.parker@odey.com";
             client.SendAsHtml("AttributionRecs@Odey.com", "Attribution Recs", to, null, null, subject, message, null);
         }
 

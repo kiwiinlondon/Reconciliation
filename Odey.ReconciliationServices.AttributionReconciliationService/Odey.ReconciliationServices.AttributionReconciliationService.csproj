@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Odey.ReconciliationServices.AttributionReconciliationService</RootNamespace>
     <AssemblyName>Odey.ReconciliationServices.AttributionReconciliationService</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <UseIISExpress>true</UseIISExpress>
@@ -23,6 +23,7 @@
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -86,14 +87,20 @@
     <Reference Include="Odey.Framework.Keeley.Entities.KeeleyModel">
       <HintPath>..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel.dll</HintPath>
     </Reference>
-    <Reference Include="Odey.PortfolioCache.Clients">
-      <HintPath>..\..\Binaries\Odey.PortfolioCache\Odey.PortfolioCache.Clients.dll</HintPath>
+    <Reference Include="Odey.Intranet.Entities">
+      <HintPath>..\..\Binaries\Odey.Query\Odey.Intranet.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Odey.PortfolioCache.Contracts">
-      <HintPath>..\..\Binaries\Odey.PortfolioCache\Odey.PortfolioCache.Contracts.dll</HintPath>
+    <Reference Include="Odey.Query">
+      <HintPath>..\..\Binaries\Odey.Query\Odey.Query.dll</HintPath>
     </Reference>
-    <Reference Include="Odey.PortfolioCache.Entities">
-      <HintPath>..\..\Binaries\Odey.PortfolioCache\Odey.PortfolioCache.Entities.dll</HintPath>
+    <Reference Include="Odey.Query.Client">
+      <HintPath>..\..\Binaries\Odey.Query\Odey.Query.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Query.Contracts">
+      <HintPath>..\..\Binaries\Odey.Query\Odey.Query.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.Query.Reporting.Contracts">
+      <HintPath>..\..\Binaries\Odey.Query\Odey.Query.Reporting.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Reporting.Clients">
       <HintPath>..\..\Binaries\Odey.Reporting\Odey.Reporting.Clients.dll</HintPath>
@@ -103,6 +110,9 @@
     </Reference>
     <Reference Include="Odey.Reporting.Entities.Specialised">
       <HintPath>..\..\Binaries\Odey.Reporting\Odey.Reporting.Entities.Specialised.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net, Version=2.3.13.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\packages\protobuf-net.2.3.13\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="ServiceModelEx.IdentityCallStack">
       <HintPath>..\..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
@@ -133,15 +143,11 @@
     <Content Include="ReconciliationEmailSummaryTemplate.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ReconciliationEmailTemplate.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributionPositionReconciliationItem.cs" />
     <Compile Include="AttributionReconciliationItem.cs" />
-    <Compile Include="AttributionAdminReconciliationItem.cs" />
     <Compile Include="AttributionReconciliationService.svc.cs">
       <DependentUpon>AttributionReconciliationService.svc</DependentUpon>
     </Compile>
