@@ -38,9 +38,13 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                     .Where(a => books.Contains(a.BookId) && fromDate <= a.ReferenceDate && a.ReferenceDate <= toDate)
                     .ToDictionary(k => new Tuple<int,int,DateTime, DateTime?,string, string>(k.BookId,k.ISecID,k.ReferenceDate,k.MaturityDate,k.Currency, k.StrategyFMCode),
                                   v=>v);
-
-                foreach(BC.Portfolio portfolio in portfolioItems)
+                
+                foreach (BC.Portfolio portfolio in portfolioItems)
                 {
+                    if (portfolio.Strategy!="NONE")
+                    {
+                        int a = 1;
+                    }
                     int bookId = GetBookId(portfolio);
                     var key = new Tuple<int, int, DateTime, DateTime?, string, string>(bookId, portfolio.IsecId, portfolio.LadderDate, portfolio.MaturityDate, portfolio.Currency, portfolio.Strategy);
 
