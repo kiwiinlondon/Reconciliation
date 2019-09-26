@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Odey.ReconciliationServices</RootNamespace>
     <AssemblyName>Odey.ReconciliationServices</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -53,10 +53,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GenericParsing">
-      <HintPath>..\..\Binaries\GenericFileParser\GenericParsing.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\GenericFileParser\GenericParsing.dll')">..\..\Binaries\GenericFileParser\GenericParsing.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\GenericFileParser\GenericParsing.dll')">..\Binaries\GenericFileParser\GenericParsing.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\Binaries\log4net\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -77,6 +79,9 @@
       <Project>{D87B7FD6-CCFF-4DFA-9F00-04F686016E90}</Project>
       <Name>Odey.ReconciliationServices.Contracts</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

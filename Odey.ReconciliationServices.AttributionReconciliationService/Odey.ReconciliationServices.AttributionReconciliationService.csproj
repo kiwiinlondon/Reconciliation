@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Odey.ReconciliationServices.AttributionReconciliationService</RootNamespace>
     <AssemblyName>Odey.ReconciliationServices.AttributionReconciliationService</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <UseIISExpress>true</UseIISExpress>
@@ -58,64 +58,82 @@
       <HintPath>..\packages\Handlebars.Net.1.8.0\lib\portable-net45+sl5+wp8+win8\Handlebars.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\Binaries\log4net\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Odey.Framework.Infrastructure.Clients">
-      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll')">..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll')">..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Contracts.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Contracts.dll')">..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Contracts.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Contracts.dll')">..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Infrastructure.EmailClient">
-      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.EmailClient.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.EmailClient.dll')">..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.EmailClient.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.EmailClient.dll')">..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.EmailClient.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Enums">
-      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Enums.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Enums.dll')">..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Enums.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Enums.dll')">..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Enums.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Services">
-      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll')">..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll')">..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Keeley.Entities">
-      <HintPath>..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll')">..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll')">..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Keeley.Entities.Enums">
-      <HintPath>..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.Enums.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.Enums.dll')">..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.Enums.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.Enums.dll')">..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.Enums.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Framework.Keeley.Entities.KeeleyModel">
-      <HintPath>..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel.dll')">..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel.dll')">..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Intranet.Entities">
-      <HintPath>..\..\Binaries\Odey.Query\Odey.Intranet.Entities.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Intranet\Odey.Intranet.Entities.dll')">..\..\Binaries\Odey.Intranet\Odey.Intranet.Entities.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Intranet\Odey.Intranet.Entities.dll')">..\Binaries\Odey.Intranet\Odey.Intranet.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Query">
-      <HintPath>..\..\Binaries\Odey.Query\Odey.Query.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Query\Odey.Query.dll')">..\..\Binaries\Odey.Query\Odey.Query.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Query\Odey.Query.dll')">..\Binaries\Odey.Query\Odey.Query.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Query.Client">
-      <HintPath>..\..\Binaries\Odey.Query\Odey.Query.Client.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Query\Odey.Query.Client.dll')">..\..\Binaries\Odey.Query\Odey.Query.Client.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Query\Odey.Query.Client.dll')">..\Binaries\Odey.Query\Odey.Query.Client.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Query.Contracts">
-      <HintPath>..\..\Binaries\Odey.Query\Odey.Query.Contracts.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Query\Odey.Query.Contracts.dll')">..\..\Binaries\Odey.Query\Odey.Query.Contracts.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Query\Odey.Query.Contracts.dll')">..\Binaries\Odey.Query\Odey.Query.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Query.Reporting.Contracts">
-      <HintPath>..\..\Binaries\Odey.Query\Odey.Query.Reporting.Contracts.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Query\Odey.Query.Reporting.Contracts.dll')">..\..\Binaries\Odey.Query\Odey.Query.Reporting.Contracts.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Query\Odey.Query.Reporting.Contracts.dll')">..\Binaries\Odey.Query\Odey.Query.Reporting.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Reporting.Clients">
-      <HintPath>..\..\Binaries\Odey.Reporting\Odey.Reporting.Clients.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Reporting\Odey.Reporting.Clients.dll')">..\..\Binaries\Odey.Reporting\Odey.Reporting.Clients.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Reporting\Odey.Reporting.Clients.dll')">..\Binaries\Odey.Reporting\Odey.Reporting.Clients.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Reporting.Contracts">
-      <HintPath>..\..\Binaries\Odey.Reporting\Odey.Reporting.Contracts.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Reporting\Odey.Reporting.Contracts.dll')">..\..\Binaries\Odey.Reporting\Odey.Reporting.Contracts.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Reporting\Odey.Reporting.Contracts.dll')">..\Binaries\Odey.Reporting\Odey.Reporting.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="Odey.Reporting.Entities.Specialised">
-      <HintPath>..\..\Binaries\Odey.Reporting\Odey.Reporting.Entities.Specialised.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\Odey.Reporting\Odey.Reporting.Entities.Specialised.dll')">..\..\Binaries\Odey.Reporting\Odey.Reporting.Entities.Specialised.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\Odey.Reporting\Odey.Reporting.Entities.Specialised.dll')">..\Binaries\Odey.Reporting\Odey.Reporting.Entities.Specialised.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net, Version=2.3.13.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <HintPath>..\packages\protobuf-net.2.3.13\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
     <Reference Include="ServiceModelEx.IdentityCallStack">
-      <HintPath>..\..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll')">..\..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
+      <HintPath Condition="Exists('..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll')">..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.DataSetExtensions" />
