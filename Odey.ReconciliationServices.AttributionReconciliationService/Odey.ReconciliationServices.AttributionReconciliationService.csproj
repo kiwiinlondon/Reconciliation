@@ -96,10 +96,6 @@
       <HintPath Condition="Exists('..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel.dll')">..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel.dll</HintPath>
       <HintPath Condition="Exists('..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel.dll')">..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel.dll</HintPath>
     </Reference>
-    <Reference Include="Odey.Intranet.Entities">
-      <HintPath Condition="Exists('..\..\Binaries\Odey.Intranet\Odey.Intranet.Entities.dll')">..\..\Binaries\Odey.Intranet\Odey.Intranet.Entities.dll</HintPath>
-      <HintPath Condition="Exists('..\Binaries\Odey.Intranet\Odey.Intranet.Entities.dll')">..\Binaries\Odey.Intranet\Odey.Intranet.Entities.dll</HintPath>
-    </Reference>
     <Reference Include="Odey.Query">
       <HintPath Condition="Exists('..\..\Binaries\Odey.Query\Odey.Query.dll')">..\..\Binaries\Odey.Query\Odey.Query.dll</HintPath>
       <HintPath Condition="Exists('..\Binaries\Odey.Query\Odey.Query.dll')">..\Binaries\Odey.Query\Odey.Query.dll</HintPath>
