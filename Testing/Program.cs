@@ -26,14 +26,14 @@ namespace Testing
         {
            // FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
           //  servicee.GetUnmatchedCVLPositions(9838, new DateTime(2019, 3, 22), new DateTime(2019, 3, 22), true);
-                FMPortfolioCollectionService s = new FMPortfolioCollectionService();
-                s.CollectForFMFundId(84339, new DateTime(2019, 3, 22), new DateTime(2019, 3, 22));
+         //       FMPortfolioCollectionService s = new FMPortfolioCollectionService();
+           //     s.CollectForFMFundId(84339, new DateTime(2019, 3, 22), new DateTime(2019, 3, 22));
             //    EzeReconciliationService eze = new EzeReconciliationService();
             //    eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
 
-            //ClientPortfolioReconciliationService s = new ClientPortfolioReconciliationService();
+            ClientPortfolioReconciliationService s = new ClientPortfolioReconciliationService();
            // ClientPortfolioReconciliationClient s = new ClientPortfolioReconciliationClient();
-         //   var t = s.Reconcile(@"\\App02\FileShare\Quintillion\Client\share_register_by_lot ARFF 04-01-2018.xls", (int)FundIds.ARFF, new DateTime(2017, 12, 29));
+            var t = s.Reconcile(@"\\App02\FileShare\RBC\Odey register 04102019.xls", 6970, new DateTime(2019, 09, 30));
 
             AttributionReconciliationService service = new AttributionReconciliationService();
             //AttributionReconciliationClient service = new AttributionReconciliationClient();

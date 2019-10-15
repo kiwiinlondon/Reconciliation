@@ -16,6 +16,10 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
             switch ((AdministratorIds)fund.AdministratorId)
             {
                 case AdministratorIds.Quintillion:
+                    if (fileName.Contains("RBC"))
+                    {
+                        return new RBCFileReader(fileName, fund.LegalEntityID, shareClassIdentifiers);
+                    }
                     return new QuintillionFileReader(fileName, fund.LegalEntityID, shareClassIdentifiers);
                 case AdministratorIds.CapitaIRE:
                     return new CapitaIrelandFileReader(fileName, fund.LegalEntityID, shareClassIdentifiers);
