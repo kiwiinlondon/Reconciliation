@@ -51,6 +51,12 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TeamCityReconcilationServicesClient|AnyCPU'">
+    <OutputPath>bin\TeamCityReconcilationServicesClient\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TeamCityReconcilationServicesService|AnyCPU'">
+    <OutputPath>bin\TeamCityReconcilationServicesService\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ServiceModelEx.IdentityCallStack">
       <HintPath Condition="Exists('..\..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll')">..\..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
