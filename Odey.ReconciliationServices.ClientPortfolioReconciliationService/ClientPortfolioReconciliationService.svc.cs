@@ -56,7 +56,11 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
 
         public MatchingEngineOutput Reconcile(string fileName, int fundId, DateTime referenceDate)
         {
-            FileReader fileReader = FileReaderFactory.Get(fileName, Funds[fundId], AdministratorShareClassIdsByFund[fundId]);
+            if (!AdministratorShareClassIdsByFund.TryGetValue(fundId,out var identifiers))
+            {
+                identifiers = Funds.Values.Where(a => a.LegalEntityID == fundId).Select(a => a.AdministratorIdentifier).ToArray();
+            }
+            FileReader fileReader = FileReaderFactory.Get(fileName, Funds[fundId], identifiers);
             DataTable values = fileReader.GetData();
             var t = values.Rows.Cast<DataRow>().Where(a => (string)a[1] == "O07");
             return Reconcile(values, fundId, referenceDate);
