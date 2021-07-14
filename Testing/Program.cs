@@ -24,8 +24,9 @@ namespace Testing
 
         static void Main(string[] args)
         {
-           // FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
-          //  servicee.GetUnmatchedCVLPositions(9838, new DateTime(2019, 3, 22), new DateTime(2019, 3, 22), true);
+            FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
+
+            servicee.GetUnmatchedCVLPositions(10657, new DateTime(2021,07, 13), new DateTime(2021, 07, 13), true);
          //       FMPortfolioCollectionService s = new FMPortfolioCollectionService();
            //     s.CollectForFMFundId(84339, new DateTime(2019, 3, 22), new DateTime(2019, 3, 22));
             //    EzeReconciliationService eze = new EzeReconciliationService();
