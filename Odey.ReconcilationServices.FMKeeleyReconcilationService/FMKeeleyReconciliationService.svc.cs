@@ -16,7 +16,8 @@ using Odey.Framework.Keeley.Entities;
 using Odey.StaticServices.Clients;
 using Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngines;
 using Odey.ReconciliationServices.Clients;
-
+using Odey.ExtractServices.Clients;
+using Odey.ExtractServices.Contracts;
 
 namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
 {
@@ -256,6 +257,18 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             DataTable dt = GetNewNavDataTable();
             DataSetUtilities.FillKeeleyDataTable(dt, "Portfolio_GetForFMNavRec", CreateNavDataSet1Parameters(referenceDate),null);
             return dt;
+        }
+
+        public void SendFMAdministratorDifferences()
+        {
+            Logger.Info("Collecting Positions from FM");
+            FMPortfolioCollectionClient client = new FMPortfolioCollectionClient();
+            client.CollectForLatestValuation();
+            Logger.Info("Finished Collecting Positions from FM");
+            SSRSReportRunnerClient reportRunnerClient = new SSRSReportRunnerClient();
+            Logger.Info("Sending Differences between FM and Admin");
+            reportRunnerClient.Email(new SSRSReport[] { new SSRSReport() { Folder = "Portfolio", Report = "FMNavCheck", OutputTypeId = SSRSOutputTypeIds.MHTML } },"programmers@odey.com;fundadmin@odey.com","FM vs Admin Report");
+            Logger.Info("Finished Sending Differences between FM and Admin");
         }
 
         //public static DataTable GetFMNavs(DateTime referenceDate, List<Fund> funds)

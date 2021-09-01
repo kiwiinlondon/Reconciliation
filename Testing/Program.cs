@@ -24,8 +24,12 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
-            FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
+//            FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
+            FMKeeleyReconcilationClient servicee = new FMKeeleyReconcilationClient();
+            servicee.SendFMAdministratorDifferences();
+            //FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
+            FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
+            fMPortfolioCollectionService.CollectForLatestValuation();
             fMPortfolioCollectionService.CollectForFMFundId(2200, new DateTime(2021, 7, 23), new DateTime(2021, 7, 23));
             servicee.GetUnmatchedCVLPositions(10657, new DateTime(2021,07, 13), new DateTime(2021, 07, 13), true);
          //       FMPortfolioCollectionService s = new FMPortfolioCollectionService();

@@ -28,6 +28,21 @@ namespace Odey.ReconciliationServices.Clients
             }
         }
 
+        public void SendFMAdministratorDifferences()
+        {
+            IFMKeeleyReconciliation proxy = factory.CreateChannel();
+            try
+            {
+                proxy.SendFMAdministratorDifferences();
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
         #endregion
 
         #region IFMKeeleyReconciliation Members

@@ -25,5 +25,20 @@ namespace Odey.ReconciliationServices.Clients
                 throw;
             }
         }
+
+        public void CollectForLatestValuation()
+        {
+            IFMPortfolioCollection proxy = factory.CreateChannel();
+            try
+            {
+                proxy.CollectForLatestValuation();
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
     }
 }

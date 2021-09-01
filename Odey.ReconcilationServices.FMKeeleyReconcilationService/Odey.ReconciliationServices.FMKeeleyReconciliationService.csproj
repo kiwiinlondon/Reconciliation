@@ -53,6 +53,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Odey.ExtractServices.Clients">
+      <HintPath>..\..\Binaries\Odey.ExtractServices\Odey.ExtractServices.Clients.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.ExtractServices.Contracts">
+      <HintPath>..\..\Binaries\Odey.ExtractServices\Odey.ExtractServices.Contracts.dll</HintPath>
+    </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Caches">
       <HintPath Condition="Exists('..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Caches.dll')">..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Caches.dll</HintPath>
       <HintPath Condition="Exists('..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Caches.dll')">..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Caches.dll</HintPath>
