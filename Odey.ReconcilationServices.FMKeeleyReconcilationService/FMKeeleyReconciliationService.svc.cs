@@ -267,7 +267,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             Logger.Info("Finished Collecting Positions from FM");
             SSRSReportRunnerClient reportRunnerClient = new SSRSReportRunnerClient();
             Logger.Info("Sending Differences between FM and Admin");
-            reportRunnerClient.Email(new SSRSReport[] { new SSRSReport() { Folder = "Portfolio", Report = "FMNavCheck", OutputTypeId = SSRSOutputTypeIds.MHTML } },"programmers@odey.com;fundadmin@odey.com","FM vs Admin Report");
+            reportRunnerClient.Email(new SSRSReport[] { new SSRSReport() { Folder = "Portfolio", Report = "FMNavCheck", OutputTypeId = SSRSOutputTypeIds.MHTML } }, "FMAdminRec@odey.com", "FM vs Admin Report");
             Logger.Info("Finished Sending Differences between FM and Admin");
         }
 
