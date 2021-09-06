@@ -24,9 +24,11 @@ namespace Testing
 
         static void Main(string[] args)
         {
+            EzeReconciliationService eze = new EzeReconciliationService();
+            eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
 //            FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
             FMKeeleyReconcilationClient servicee = new FMKeeleyReconcilationClient();
-            servicee.SendFMAdministratorDifferences();
+          //  servicee.SendFMAdministratorDifferences();
             //FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
             FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
             fMPortfolioCollectionService.CollectForLatestValuation();
@@ -34,8 +36,7 @@ namespace Testing
             servicee.GetUnmatchedCVLPositions(10657, new DateTime(2021,07, 13), new DateTime(2021, 07, 13), true);
          //       FMPortfolioCollectionService s = new FMPortfolioCollectionService();
            //     s.CollectForFMFundId(84339, new DateTime(2019, 3, 22), new DateTime(2019, 3, 22));
-            //    EzeReconciliationService eze = new EzeReconciliationService();
-            //    eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
+            //    
 
             ClientPortfolioReconciliationService s = new ClientPortfolioReconciliationService();
            // ClientPortfolioReconciliationClient s = new ClientPortfolioReconciliationClient();

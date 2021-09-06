@@ -211,8 +211,18 @@ namespace Odey.ReconciliationServices
                 {
                     DataRow dr = dt.NewRow();
                     foreach(KeyValuePair<int,string> columnMapping in columnMappings)
-                    {                        
-                        dr[columnMapping.Value] = parser[columnMapping.Key];
+                    {
+                        var value = parser[columnMapping.Key];
+                        if (string.IsNullOrWhiteSpace(value))
+                        {
+                            var column = dr.Table.Columns[columnMapping.Value];
+                            if (column.DataType == typeof(decimal))
+                            {
+                                value = "0";
+                            }
+                        }
+
+                        dr[columnMapping.Value] = value;
                     }
                     dt.Rows.Add(dr);
                 }      

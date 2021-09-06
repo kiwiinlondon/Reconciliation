@@ -41,6 +41,7 @@ namespace Odey.ReconciliationServices.EzeReconciliationService
             DataTable dt = new DataTable(DataTableName);
             DataColumn fundId = dt.Columns.Add(EZEIdentifierColumnName);
             dt.Columns.Add(MarketValueColumnName, typeof(decimal));
+            dt.Columns[MarketValueColumnName].DefaultValue = 0;
             dt.Columns.Add(PercentageDiffColumnName, typeof(decimal));
             dt.PrimaryKey = new DataColumn[] { fundId };
             return dt;
