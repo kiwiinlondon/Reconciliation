@@ -25,7 +25,7 @@ namespace Testing
         static void Main(string[] args)
         {
             EzeReconciliationService eze = new EzeReconciliationService();
-            eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
+           // eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
 //            FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
             FMKeeleyReconcilationClient servicee = new FMKeeleyReconcilationClient();
           //  servicee.SendFMAdministratorDifferences();
