@@ -30,7 +30,7 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
             {
 
                 var funds = context.OfficialNetAssetValues.Include(a => a.Fund.LegalEntity)
-                    .Where(a => a.Fund.IsActive && a.Fund.AdministratorId == (int)AdministratorIds.Quintillion && a.Fund.DealingDateDefinition.PeriodicityId == (int)PeriodicityIds.Daily && a.Fund.LegalEntity.FMOrgId.HasValue && a.ValueIsForReferenceDate && !a.Fund.ParentFundId.HasValue)
+                    .Where(a => a.Fund.IsActive && a.Fund.AdministratorId == (int)AdministratorIds.Quintillion && a.Fund.DealingDateDefinition.PeriodicityId == (int)PeriodicityIds.Daily && a.Fund.LegalEntity.FMOrgId.HasValue && a.ValueIsForReferenceDate && !a.Fund.ParentFundId.HasValue && a.FundId != (int)FundIds.DYSS)
                     .GroupBy(a => a.Fund.LegalEntity.FMOrgId.Value)
                     .Select(a => new { FMFundId = a.Key, ReferenceDate = a.Max(m => m.ReferenceDate)}).ToList();
 
