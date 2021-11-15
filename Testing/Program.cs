@@ -31,8 +31,8 @@ namespace Testing
           //  servicee.SendFMAdministratorDifferences();
             //FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
             FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
-            fMPortfolioCollectionService.CollectForLatestValuation();
-            fMPortfolioCollectionService.CollectForFMFundId(2200, new DateTime(2021, 7, 23), new DateTime(2021, 7, 23));
+            //fMPortfolioCollectionService.CollectForLatestValuation();
+            fMPortfolioCollectionService.CollectForFMFundId(40573, new DateTime(2021, 11, 8), new DateTime(2021, 11, 10));
             servicee.GetUnmatchedCVLPositions(10657, new DateTime(2021,07, 13), new DateTime(2021, 07, 13), true);
          //       FMPortfolioCollectionService s = new FMPortfolioCollectionService();
            //     s.CollectForFMFundId(84339, new DateTime(2019, 3, 22), new DateTime(2019, 3, 22));
