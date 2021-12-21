@@ -26,12 +26,12 @@ namespace Testing
         {
             EzeReconciliationService eze = new EzeReconciliationService();
            // eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
-//            FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
+//           FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
             FMKeeleyReconcilationClient servicee = new FMKeeleyReconcilationClient();
-          //  servicee.SendFMAdministratorDifferences();
+            servicee.SendFMAdministratorDifferences();
             //FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
             FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
-            //fMPortfolioCollectionService.CollectForLatestValuation();
+            fMPortfolioCollectionService.CollectForLatestValuation();
             fMPortfolioCollectionService.CollectForFMFundId(40573, new DateTime(2021, 11, 8), new DateTime(2021, 11, 10));
             servicee.GetUnmatchedCVLPositions(10657, new DateTime(2021,07, 13), new DateTime(2021, 07, 13), true);
          //       FMPortfolioCollectionService s = new FMPortfolioCollectionService();
