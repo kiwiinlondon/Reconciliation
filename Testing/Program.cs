@@ -24,15 +24,18 @@ namespace Testing
 
         static void Main(string[] args)
         {
+            
+            //FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
+             FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
+            fMPortfolioCollectionService.CollectForFMFundId2(3586, new DateTime(2021, 9, 30), new DateTime(2021, 9, 30),true);
             EzeReconciliationService eze = new EzeReconciliationService();
            // eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
 //           FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
             FMKeeleyReconcilationClient servicee = new FMKeeleyReconcilationClient();
             servicee.SendFMAdministratorDifferences();
-            //FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
-            FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
+            
             fMPortfolioCollectionService.CollectForLatestValuation();
-            fMPortfolioCollectionService.CollectForFMFundId(40573, new DateTime(2021, 11, 8), new DateTime(2021, 11, 10));
+            
             servicee.GetUnmatchedCVLPositions(10657, new DateTime(2021,07, 13), new DateTime(2021, 07, 13), true);
          //       FMPortfolioCollectionService s = new FMPortfolioCollectionService();
            //     s.CollectForFMFundId(84339, new DateTime(2019, 3, 22), new DateTime(2019, 3, 22));

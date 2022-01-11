@@ -15,6 +15,9 @@ namespace Odey.ReconciliationServices.Contracts
         void CollectForFMFundId(int orgId, DateTime fromDate, DateTime toDate);
 
         [OperationContract]
+        void CollectForFMFundId2(int orgId, DateTime fromDate, DateTime toDate, bool useNew);
+
+        [OperationContract]
         void CollectForLatestValuation();
     }
 }

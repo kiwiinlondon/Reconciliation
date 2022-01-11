@@ -186,7 +186,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
                 try
                 {
                     FMPortfolioCollectionClient client = new FMPortfolioCollectionClient();
-                    client.CollectForFMFundId(bftFundId, fromDate, toDate);
+                    client.CollectForFMFundId(bftFundId, fromDate, toDate,false);
                     return GetCVLPositions(bftFundId, fromDate, toDate);
                 }
                 catch (Exception e)

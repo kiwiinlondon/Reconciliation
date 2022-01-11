@@ -11,6 +11,26 @@ namespace Odey.ReconciliationServices.Clients
 {
     public class FMPortfolioCollectionClient : OdeyClientBase<IFMPortfolioCollection>, IFMPortfolioCollection
     {
+        public void CollectForFMFundId(int orgId, DateTime fromDate, DateTime toDate, bool useNew)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CollectForFMFundId2(int fmOrgId, DateTime fromDate, DateTime toDate, bool useNew)
+        {
+            IFMPortfolioCollection proxy = factory.CreateChannel();
+            try
+            {
+                proxy.CollectForFMFundId2(fmOrgId, fromDate, toDate, useNew);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
         public void CollectForFMFundId(int fmOrgId, DateTime fromDate, DateTime toDate)
         {
             IFMPortfolioCollection proxy = factory.CreateChannel();

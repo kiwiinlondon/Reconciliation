@@ -13,6 +13,7 @@ using System.ServiceModel.Web;
 using System.Text;
 using System.Data.Entity;
 using Odey.Framework.Keeley.Entities.Enums;
+using System.Configuration;
 
 namespace Odey.ReconciliationServices.FMPortfolioCollectionService
 {
@@ -23,6 +24,29 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
         /// FM Strategy name
         /// </summary>
         private static readonly string STRATEGY_NONE = "NONE";
+
+        private static bool? _useNew;
+
+        private bool UseNew
+        {
+            get
+            {
+                if (_useNew == null)
+                {
+                    var useNewInstance = ConfigurationManager.AppSettings["UseNewFMInstance"];
+                    if (useNewInstance == null)
+                    {
+                        _useNew = false;
+                    }
+                    else
+                    {
+                        _useNew = bool.Parse(useNewInstance);
+                    }
+                }
+                return _useNew.Value;
+            }
+        }
+
 
         public void CollectForLatestValuation()
         {
@@ -41,18 +65,32 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
             }
         
         }
-
         public void CollectForFMFundId(int fmFundId, DateTime fromDate, DateTime toDate)
         {
-            PortfolioClient client = new PortfolioClient();
+            CollectForFMFundId2(fmFundId, fromDate, toDate, UseNew);
+        }
+
+        public void CollectForFMFundId2(int fmFundId, DateTime fromDate, DateTime toDate,bool useNew)
+        {
+            BC.IPortfolio client = new PortfolioClient(useNew);
             
             List<BC.Portfolio> portfolioItems = client.Get(fmFundId, fromDate, toDate);
             using (KeeleyModel context = new KeeleyModel(SecurityCallStackContext.Current))
             {
-                List<int> books = context.Books
-                    .Where(a => a.Fund.LegalEntity.FMOrgId == fmFundId && a.FMOrgId.HasValue).Select(a=>a.FMOrgId.Value)
+                List<int> books;
+                if (useNew)
+                {
+                    books = context.Books
+                    .Where(a => a.Fund.LegalEntity.NewFMOrgId == fmFundId && a.NewFMOrgId.HasValue).Select(a => a.NewFMOrgId.Value)
                     .ToList();
-
+                }
+                else
+                {
+                    books = context.Books
+                    .Where(a => a.Fund.LegalEntity.FMOrgId == fmFundId && a.FMOrgId.HasValue).Select(a => a.FMOrgId.Value)
+                    .ToList();
+                }
+          
                 var existingPortfolio =
                     context.FMPortfolios
                     .Where(a => books.Contains(a.BookId) && fromDate <= a.ReferenceDate && a.ReferenceDate <= toDate)
