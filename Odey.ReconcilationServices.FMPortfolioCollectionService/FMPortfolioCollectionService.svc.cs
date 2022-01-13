@@ -147,38 +147,39 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
         /// <returns></returns>
         private int GetBookId(BC.Portfolio portfolio)
         {
-            if (portfolio.BookId == 56778 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
-            {
-                //BK-OUAR -> BK-OUAR-AC
-                return 79419;
-            }
-            if (portfolio.BookId == 78663 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
-            {
-                //BK-ARFF -> BK-ARFF-AC
-                return 79420;
-            }
 
-            if (portfolio.BookId == 80460 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
-            {
-                //BK-ARFF -> BK-ARFF-AC
-                return -9999;
-            }
+            //if (portfolio.BookId == 56778 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
+            //{
+            //    //BK-OUAR -> BK-OUAR-AC
+            //    return 79419;
+            //}
+            //if (portfolio.BookId == 78663 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
+            //{
+            //    //BK-ARFF -> BK-ARFF-AC
+            //    return 79420;
+            //}
 
-            if (portfolio.BookId == 70380 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
-            {
-                //BK-DEVM -> BK-DEVM-AC
-                return -8888;
-            }
-            if (portfolio.BookId == 78506 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
-            {
-                //BK-FDXH -> BK-FDXH-AC
-                return -7777;
-            }
-            if (portfolio.BookId == 84340 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
-            {
-                //BK-IAR -> BK-IAR-AC
-                return -6666;
-            }
+            //if (portfolio.BookId == 80460 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
+            //{
+            //    //BK-ARFF -> BK-ARFF-AC
+            //    return -9999;
+            //}
+
+            //if (portfolio.BookId == 70380 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
+            //{
+            //    //BK-DEVM -> BK-DEVM-AC
+            //    return -8888;
+            //}
+            //if (portfolio.BookId == 78506 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
+            //{
+            //    //BK-FDXH -> BK-FDXH-AC
+            //    return -7777;
+            //}
+            //if (portfolio.BookId == 84340 && portfolio.Strategy != STRATEGY_NONE && !string.IsNullOrWhiteSpace(portfolio.Strategy))
+            //{
+            //    //BK-IAR -> BK-IAR-AC
+            //    return -6666;
+            //}
 
             return portfolio.BookId;
         }

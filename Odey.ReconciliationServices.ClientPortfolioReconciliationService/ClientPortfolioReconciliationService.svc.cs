@@ -39,7 +39,7 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
             return dt;
         }
 
-        public MatchingEngineOutput Reconcile(DataTable administratorValues, int fundId, DateTime referenceDate)
+        public MatchingEngineOutput Reconcile(DataTable administratorValues, int fundId, int? fundFeederTypeId, DateTime referenceDate)
         {
             DataTable keeleyValues = GetKeeleyValues(fundId, referenceDate);
             
@@ -54,37 +54,37 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
 
         private static readonly Dictionary<int, string[]> AdministratorShareClassIdsByFund = Funds.Values.Where(a => a.AdministratorIdentifier != null).GroupBy(g => g.ParentFundId.HasValue ? g.ParentFundId.Value : g.LegalEntityID).ToDictionary(a => a.Key, a => a.Select(s => s.AdministratorIdentifier).ToArray());
 
-        public MatchingEngineOutput Reconcile(string fileName, int fundId, DateTime referenceDate)
+        public MatchingEngineOutput Reconcile(string fileName, int fundId,int? fundFeederTypeId, DateTime referenceDate)
         {
             if (!AdministratorShareClassIdsByFund.TryGetValue(fundId,out var identifiers))
             {
-                identifiers = Funds.Values.Where(a => a.LegalEntityID == fundId).Select(a => a.AdministratorIdentifier).ToArray();
+                identifiers = Funds.Values.Where(a => a.LegalEntityID == fundId && (!fundFeederTypeId.HasValue || (fundFeederTypeId.Value == a.FundFeederTypeId.Value)) ).Select(a => a.AdministratorIdentifier).ToArray();
             }
             FileReader fileReader = FileReaderFactory.Get(fileName, Funds[fundId], identifiers);
             DataTable values = fileReader.GetData();
             var t = values.Rows.Cast<DataRow>().Where(a => (string)a[1] == "O07");
-            return Reconcile(values, fundId, referenceDate);
+            return Reconcile(values, fundId, fundFeederTypeId, referenceDate);
         }
         
 
     
 
         #region Keeley
-        private static Dictionary<string, object> CreateKeeleyParameters(int fundId, DateTime referenceDate)
+        private static Dictionary<string, object> CreateKeeleyParameters(int fundId,int? fundFeederTypeId, DateTime referenceDate)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
 
             parameters.Add("@referenceDate", referenceDate);
 
             parameters.Add("@fundIds", fundId.ToString());
-
+            parameters.Add("@fundFeederTypeId", fundId.ToString());
             return parameters;
         }
 
-        public static DataTable GetKeeleyValues(int fundId, DateTime referenceDate)
+        public static DataTable GetKeeleyValues(int fundId, int? fundFeederTypeId, DateTime referenceDate)
         {
             DataTable dt = GetPortfolioDataTable();
-            DataSetUtilities.FillKeeleyDataTable(dt, KeeleyStoredProcedureName, CreateKeeleyParameters(fundId, referenceDate), null);
+            DataSetUtilities.FillKeeleyDataTable(dt, KeeleyStoredProcedureName, CreateKeeleyParameters(fundId, fundFeederTypeId, referenceDate), null);
             dt.DataSet.EnforceConstraints = true;
             return dt;
         }

@@ -11,6 +11,6 @@ namespace Odey.ReconciliationServices.Contracts
     public interface IClientPortfolioReconciliation
     {
         [OperationContract]
-        MatchingEngineOutput Reconcile(string fileName, int fundId, DateTime referenceDate);
+        MatchingEngineOutput Reconcile(string fileName, int fundId,int? fundFeederTypeId, DateTime referenceDate);
     }
 }

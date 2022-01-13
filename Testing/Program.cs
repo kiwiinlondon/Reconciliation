@@ -25,11 +25,11 @@ namespace Testing
         static void Main(string[] args)
         {
             FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
-            fMPortfolioCollectionService.CollectForFMFundId2(2101, new DateTime(2021, 9, 30), new DateTime(2021, 9, 30), false);
+            fMPortfolioCollectionService.CollectForFMFundId2(56777, new DateTime(2021, 9, 30), new DateTime(2021, 9, 30), false);
 
             //FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
             
-            fMPortfolioCollectionService.CollectForFMFundId2(3586, new DateTime(2021, 9, 30), new DateTime(2021, 9, 30),true);
+            fMPortfolioCollectionService.CollectForFMFundId2(3755 , new DateTime(2021, 9, 30), new DateTime(2021, 9, 30),true);
             EzeReconciliationService eze = new EzeReconciliationService();
            // eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
 //           FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
