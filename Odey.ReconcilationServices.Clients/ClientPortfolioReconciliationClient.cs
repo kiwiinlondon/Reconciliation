@@ -11,12 +11,12 @@ namespace Odey.ReconciliationServices.Clients
 {
     public class ClientPortfolioReconciliationClient : OdeyClientBase<IClientPortfolioReconciliation>, IClientPortfolioReconciliation
     {
-        public MatchingEngineOutput Reconcile(string fileName, int fundId, DateTime referenceDate)
+        public MatchingEngineOutput Reconcile(string fileName, int fundId, int? fundFeederTypeId, DateTime referenceDate)
         {
             IClientPortfolioReconciliation proxy = factory.CreateChannel();
             try
             {
-                MatchingEngineOutput e = proxy.Reconcile(fileName, fundId, referenceDate);
+                MatchingEngineOutput e = proxy.Reconcile(fileName, fundId, fundFeederTypeId, referenceDate);
                 ((ICommunicationObject)proxy).Close();
                 return e;
             }

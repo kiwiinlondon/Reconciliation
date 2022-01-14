@@ -45,7 +45,7 @@ namespace Testing
 
             ClientPortfolioReconciliationService s = new ClientPortfolioReconciliationService();
            // ClientPortfolioReconciliationClient s = new ClientPortfolioReconciliationClient();
-            var t = s.Reconcile(@"\\App02\FileShare\Quintillion\Client\share_register_by_lot NAT LP 11-06-2020.xls", 10171, new DateTime(2019, 05, 29));
+            var t = s.Reconcile(@"\\App02\FileShare\Quintillion\Client\share_register_by_lot NAT LP 11-06-2020.xls", 10171,null, new DateTime(2019, 05, 29));
 
             AttributionReconciliationService service = new AttributionReconciliationService();
             //AttributionReconciliationClient service = new AttributionReconciliationClient();

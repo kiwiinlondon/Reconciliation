@@ -41,7 +41,7 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
 
         public MatchingEngineOutput Reconcile(DataTable administratorValues, int fundId, int? fundFeederTypeId, DateTime referenceDate)
         {
-            DataTable keeleyValues = GetKeeleyValues(fundId, referenceDate);
+            DataTable keeleyValues = GetKeeleyValues(fundId, fundFeederTypeId, referenceDate);
             
             ClientPortfolioMatchingEngine engine = new ClientPortfolioMatchingEngine(Logger);
             MatchingEngineOutput output = engine.Match(administratorValues, keeleyValues, MatchTypeIds.Full, true, DataSourceIds.AdministratorClientFile, DataSourceIds.KeeleyClientPortfolio);            
