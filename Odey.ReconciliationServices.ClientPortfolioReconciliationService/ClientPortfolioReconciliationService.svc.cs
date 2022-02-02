@@ -41,6 +41,7 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
 
         public MatchingEngineOutput Reconcile(DataTable administratorValues, int fundId, int? fundFeederTypeId, DateTime referenceDate)
         {
+            Logger.Info($"Reconciling FUnd {fundId} and feeder tpye {fundFeederTypeId} on date {referenceDate}");
             DataTable keeleyValues = GetKeeleyValues(fundId, fundFeederTypeId, referenceDate);
             
             ClientPortfolioMatchingEngine engine = new ClientPortfolioMatchingEngine(Logger);
@@ -77,7 +78,14 @@ namespace Odey.ReconciliationServices.ClientPortfolioReconciliationService
             parameters.Add("@referenceDate", referenceDate);
 
             parameters.Add("@fundIds", fundId.ToString());
-            parameters.Add("@fundFeederTypeId", fundId.ToString());
+            if (fundFeederTypeId.HasValue)
+            {
+                parameters.Add("@fundFeederTypeId", fundFeederTypeId.ToString());
+            }
+            else
+            {
+                parameters.Add("@fundFeederTypeId", DBNull.Value);
+            }
             return parameters;
         }
 

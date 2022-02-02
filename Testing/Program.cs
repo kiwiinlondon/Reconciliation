@@ -24,6 +24,8 @@ namespace Testing
 
         static void Main(string[] args)
         {
+            ClientPortfolioReconciliationService clientPortfolioReconciliationService = new ClientPortfolioReconciliationService();
+            clientPortfolioReconciliationService.Reconcile(@"\\app02\FileShare\Quintillion\Client\share_register_by_lot OEI 24-01-2022.xls", 741, null, DateTime.Parse("14-jan-2022"));
             FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
             fMPortfolioCollectionService.CollectForFMFundId2(56777, new DateTime(2021, 9, 30), new DateTime(2021, 9, 30), false);
 
