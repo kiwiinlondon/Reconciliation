@@ -70,6 +70,71 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
             CollectForFMFundId2(fmFundId, fromDate, toDate, UseNew);
         }
 
+
+        public void CollectCustodianAccountPositions(int fmFundId, DateTime referenceDate, bool useNew)
+        {
+            BC.IPortfolio client = new PortfolioClient(useNew);
+
+            var portfolioItems = client.GetCustodianPortfolio(fmFundId, referenceDate);
+            using (KeeleyModel context = new KeeleyModel(SecurityCallStackContext.Current))
+            {
+                List<int> books;
+                if (useNew)
+                {
+                    books = context.Books
+                    .Where(a => a.Fund.LegalEntity.NewFMOrgId == fmFundId && a.NewFMOrgId.HasValue).Select(a => a.NewFMOrgId.Value)
+                    .ToList();
+                    if (fmFundId == 3638)
+                    {
+                        books.Add(4344);
+                    }
+                }
+                else
+                {
+                    books = context.Books
+                    .Where(a => a.Fund.LegalEntity.FMOrgId == fmFundId && a.FMOrgId.HasValue).Select(a => a.FMOrgId.Value)
+                    .ToList();
+                }
+
+                var existingPortfolio =
+                    context.FMCustodianPortfolios
+                    .Where(a => books.Contains(a.BookId) && a.ReferenceDate == referenceDate)
+                    .ToDictionary(k => (k.BookId, k.IsecId, k.ReferenceDate, k.Currency, k.Strategy,k.AccountId,k.CustodianId),
+                                  v => v);
+
+                foreach (var portfolio in portfolioItems)
+                {
+                    var key = (portfolio.BookId, portfolio.IsecId, portfolio.LadderDate, portfolio.Currency, portfolio.Strategy, portfolio.AccountId, portfolio.CustodianId);
+
+
+                    if (!existingPortfolio.TryGetValue(key, out var existingPortfolioItem))
+                    {
+                        existingPortfolioItem = new FMCustodianPortfolio
+                        {
+                            BookId = portfolio.BookId,
+                            IsecId = portfolio.IsecId,
+                            ReferenceDate = portfolio.LadderDate,
+                            Currency = portfolio.Currency,
+                            Strategy = portfolio.Strategy,
+                            AccountId = portfolio.AccountId,
+                            CustodianId = portfolio.CustodianId
+                        };
+                        context.FMCustodianPortfolios.Add(existingPortfolioItem);
+                    }
+                    else
+                    {
+                        existingPortfolio.Remove(key);
+                    }
+                    existingPortfolioItem.NetPosition = Math.Round(portfolio.NetPosition, 8);
+                }
+                foreach (var existingPortfolioItem in existingPortfolio.Values)
+                {
+                    context.FMCustodianPortfolios.Remove(existingPortfolioItem);
+                }
+                context.SaveChanges();
+            }
+        }
+
         public void CollectForFMFundId2(int fmFundId, DateTime fromDate, DateTime toDate,bool useNew)
         {
             BC.IPortfolio client = new PortfolioClient(useNew);
@@ -83,6 +148,10 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                     books = context.Books
                     .Where(a => a.Fund.LegalEntity.NewFMOrgId == fmFundId && a.NewFMOrgId.HasValue).Select(a => a.NewFMOrgId.Value)
                     .ToList();
+                    if (fmFundId == 3638)
+                    {
+                        books.Add(4344);
+                    }
                 }
                 else
                 {
@@ -130,6 +199,9 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                     existingPortfolioItem.NetPosition = Math.Round(portfolio.NetPosition,8);
                     existingPortfolioItem.Price = Math.Round(portfolio.Price,8);
                     existingPortfolioItem.TotalAccrual = Math.Round(portfolio.TotalAccrual, 8);
+                    existingPortfolioItem.Isin = portfolio.Isin;
+                    existingPortfolioItem.Sedol = portfolio.Sedol;
+                    existingPortfolioItem.BloombergTicker = portfolio.BloombergTicker;
                 }
                 foreach (FMPortfolio existingPortfolioItem in existingPortfolio.Values)
                 {

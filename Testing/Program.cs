@@ -12,26 +12,78 @@ using Odey.ReconciliationServices.ClientPortfolioReconciliationService;
 using Odey.ReconciliationServices.FMPortfolioCollectionService;
 using Odey.ReconciliationServices.AttributionReconciliationService;
 using System.Data.SqlClient;
+using System.Data.Entity;
 using Odey.Framework.Keeley.Entities.Enums;
+using Odey.Framework.Keeley.Entities;
 
 namespace Testing
 {
     class Program
     {
 
-           
+        private static void PullDataForFund(Fund fund, DateTime referenceDate)
+        {
+
+                FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
+                fMPortfolioCollectionService.CollectForFMFundId2(fund.LegalEntity.FMOrgId.Value, referenceDate, referenceDate, false);
+                fMPortfolioCollectionService.CollectForFMFundId2(fund.LegalEntity.NewFMOrgId.Value, referenceDate, referenceDate, true);
+            
+        }
+
+        private static void PullCustodianDataForFund(Fund fund, DateTime referenceDate)
+        {
+
+            FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
+            //  FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
+            fMPortfolioCollectionService.CollectCustodianAccountPositions(fund.LegalEntity.FMOrgId.Value, referenceDate, false);
+            fMPortfolioCollectionService.CollectCustodianAccountPositions(fund.LegalEntity.NewFMOrgId.Value, referenceDate, true);
+
+        }
+
+        private static void PullDataForFundId(int fundId, DateTime referenceDate)
+        {
+            using (KeeleyModel context = new KeeleyModel())
+            {
+                var fund = context.Funds.Include(a => a.LegalEntity).Single(a => a.LegalEntityID == fundId);
+                PullDataForFund(fund, referenceDate);
+            }
+        }
+
+        private static void PullCustodianDataForFundId(int fundId, DateTime referenceDate)
+        {
+            using (KeeleyModel context = new KeeleyModel())
+            {
+                var fund = context.Funds.Include(a => a.LegalEntity).Single(a => a.LegalEntityID == fundId);
+                PullCustodianDataForFund(fund, referenceDate);
+            }
+        }
+
+        private static void PullDataForFunds(DateTime referenceDate)
+        {
+            using (KeeleyModel context = new KeeleyModel())
+            {
+                var funds = context.Funds.Include(a => a.LegalEntity).Where(a=>a.IsActive && a.LegalEntity.NewFMOrgId.HasValue && a.LegalEntityID != 4930 && a.LegalEntityID != 5591 && a.LegalEntityID != 5592).ToList();
+                foreach (var fund in funds.OrderBy(a=>a.ParentFundId.HasValue).ThenBy(a=>a.LegalEntityID))
+                {
+                    PullDataForFund(fund, referenceDate);
+                    PullCustodianDataForFund(fund, referenceDate);
+                }
+            }
+        }
 
 
         static void Main(string[] args)
         {
-            ClientPortfolioReconciliationService clientPortfolioReconciliationService = new ClientPortfolioReconciliationService();
-            clientPortfolioReconciliationService.Reconcile(@"\\app02\FileShare\Quintillion\Client\share_register_by_lot OEI 24-01-2022.xls", 741, null, DateTime.Parse("14-jan-2022"));
+     
+            PullDataForFunds(new DateTime(2021, 12, 31));
+         //   ClientPortfolioReconciliationService clientPortfolioReconciliationService = new ClientPortfolioReconciliationService();
+         //  clientPortfolioReconciliationService.Reconcile(@"\\app02\FileShare\Quintillion\Client\share_register_by_lot OEI 24-01-2022.xls", 741, null, DateTime.Parse("14-jan-2022"));
             FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
-            fMPortfolioCollectionService.CollectForFMFundId2(56777, new DateTime(2021, 9, 30), new DateTime(2021, 9, 30), false);
+            fMPortfolioCollectionService.CollectForFMFundId2(56777, new DateTime(2021, 12, 31), new DateTime(2021, 12, 31), false);
 
             //FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
             
-            fMPortfolioCollectionService.CollectForFMFundId2(3755 , new DateTime(2021, 9, 30), new DateTime(2021, 9, 30),true);
+            fMPortfolioCollectionService.CollectForFMFundId2(3601, new DateTime(2021, 12, 31), new DateTime(2021, 12, 31),true);
             EzeReconciliationService eze = new EzeReconciliationService();
            // eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
 //           FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();

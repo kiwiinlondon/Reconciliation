@@ -19,5 +19,8 @@ namespace Odey.ReconciliationServices.Contracts
 
         [OperationContract]
         void CollectForLatestValuation();
+
+        [OperationContract]
+        void CollectCustodianAccountPositions(int fmFundId, DateTime referenceDate, bool useNew);
     }
 }

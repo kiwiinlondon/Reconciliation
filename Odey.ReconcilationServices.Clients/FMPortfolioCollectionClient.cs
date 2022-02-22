@@ -60,5 +60,20 @@ namespace Odey.ReconciliationServices.Clients
                 throw;
             }
         }
+
+        public void CollectCustodianAccountPositions(int fmFundId, DateTime referenceDate, bool useNew)
+        {
+            IFMPortfolioCollection proxy = factory.CreateChannel();
+            try
+            {
+                proxy.CollectCustodianAccountPositions(fmFundId, referenceDate, useNew);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
     }
 }
