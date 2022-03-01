@@ -27,18 +27,11 @@ namespace Testing
                 FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
                 fMPortfolioCollectionService.CollectForFMFundId2(fund.LegalEntity.FMOrgId.Value, referenceDate, referenceDate, false);
                 fMPortfolioCollectionService.CollectForFMFundId2(fund.LegalEntity.NewFMOrgId.Value, referenceDate, referenceDate, true);
-            
-        }
-
-        private static void PullCustodianDataForFund(Fund fund, DateTime referenceDate)
-        {
-
-            FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
-            //  FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
-            fMPortfolioCollectionService.CollectCustodianAccountPositions(fund.LegalEntity.FMOrgId.Value, referenceDate, false);
-            fMPortfolioCollectionService.CollectCustodianAccountPositions(fund.LegalEntity.NewFMOrgId.Value, referenceDate, true);
+                fMPortfolioCollectionService.CollectCustodianAccountPositions(fund.LegalEntity.FMOrgId.Value, referenceDate, false);
+                fMPortfolioCollectionService.CollectCustodianAccountPositions(fund.LegalEntity.NewFMOrgId.Value, referenceDate, true);
 
         }
+
 
         private static void PullDataForFundId(int fundId, DateTime referenceDate)
         {
@@ -49,14 +42,7 @@ namespace Testing
             }
         }
 
-        private static void PullCustodianDataForFundId(int fundId, DateTime referenceDate)
-        {
-            using (KeeleyModel context = new KeeleyModel())
-            {
-                var fund = context.Funds.Include(a => a.LegalEntity).Single(a => a.LegalEntityID == fundId);
-                PullCustodianDataForFund(fund, referenceDate);
-            }
-        }
+
 
         private static void PullDataForFunds(DateTime referenceDate)
         {
@@ -66,7 +52,6 @@ namespace Testing
                 foreach (var fund in funds.OrderBy(a=>a.ParentFundId.HasValue).ThenBy(a=>a.LegalEntityID))
                 {
                     PullDataForFund(fund, referenceDate);
-                    PullCustodianDataForFund(fund, referenceDate);
                 }
             }
         }
@@ -74,8 +59,8 @@ namespace Testing
 
         static void Main(string[] args)
         {
-     
-            PullDataForFunds(new DateTime(2021, 12, 31));
+            //PullDataForFundId(741, new DateTime(2021, 12, 31));
+            PullDataForFunds(new DateTime(2022, 1, 31));
          //   ClientPortfolioReconciliationService clientPortfolioReconciliationService = new ClientPortfolioReconciliationService();
          //  clientPortfolioReconciliationService.Reconcile(@"\\app02\FileShare\Quintillion\Client\share_register_by_lot OEI 24-01-2022.xls", 741, null, DateTime.Parse("14-jan-2022"));
             FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
