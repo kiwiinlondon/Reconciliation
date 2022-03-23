@@ -59,20 +59,23 @@ namespace Testing
 
         static void Main(string[] args)
         {
+          //  FMKeeleyReconciliationService ssss = new FMKeeleyReconciliationService();
+          //  ssss.GetUnmatchedCVLPositions(10973, DateTime.Today, DateTime.Today, true);
+
             //PullDataForFundId(741, new DateTime(2021, 12, 31));
-            PullDataForFunds(new DateTime(2022, 1, 31));
+            PullDataForFunds(new DateTime(2022, 3, 11));
          //   ClientPortfolioReconciliationService clientPortfolioReconciliationService = new ClientPortfolioReconciliationService();
          //  clientPortfolioReconciliationService.Reconcile(@"\\app02\FileShare\Quintillion\Client\share_register_by_lot OEI 24-01-2022.xls", 741, null, DateTime.Parse("14-jan-2022"));
-            FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
-            fMPortfolioCollectionService.CollectForFMFundId2(56777, new DateTime(2021, 12, 31), new DateTime(2021, 12, 31), false);
-
-            //FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
+            //FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
             
+
+            FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
+            fMPortfolioCollectionService.CollectForFMFundId2(56777, new DateTime(2021, 12, 31), new DateTime(2021, 12, 31), false);
             fMPortfolioCollectionService.CollectForFMFundId2(3601, new DateTime(2021, 12, 31), new DateTime(2021, 12, 31),true);
             EzeReconciliationService eze = new EzeReconciliationService();
            // eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
-//           FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
-            FMKeeleyReconcilationClient servicee = new FMKeeleyReconcilationClient();
+           FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
+//            FMKeeleyReconcilationClient servicee = new FMKeeleyReconcilationClient();
             servicee.SendFMAdministratorDifferences();
             
             fMPortfolioCollectionService.CollectForLatestValuation();

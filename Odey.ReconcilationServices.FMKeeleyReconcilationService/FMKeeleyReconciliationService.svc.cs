@@ -18,12 +18,36 @@ using Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngines;
 using Odey.ReconciliationServices.Clients;
 using Odey.ExtractServices.Clients;
 using Odey.ExtractServices.Contracts;
+using System.Configuration;
 
 namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
     public class FMKeeleyReconciliationService : OdeyServiceBase, IFMKeeleyReconciliation
     {
+
+        private static bool? _useNew;
+
+        private bool UseNew
+        {
+            get
+            {
+                if (_useNew == null)
+                {
+                    var useNewInstance = ConfigurationManager.AppSettings["UseNewFMInstance"];
+                    if (useNewInstance == null)
+                    {
+                        _useNew = false;
+                    }
+                    else
+                    {
+                        _useNew = bool.Parse(useNewInstance);
+                    }
+                }
+                return _useNew.Value;
+            }
+        }
+
         #region Reconcile CVL Positions 
 
         public MatchingEngineOutput GetUnmatchedCVLPositions(int fundId, DateTime fromDate, DateTime toDate, bool returnOnlyMismatches)
@@ -31,7 +55,14 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
             
             FundClient client = new FundClient();
             Fund fund = client.Get(fundId);
-            DataTable dt2 = GetFMPositions(fund.FMOrgId.Value, fromDate, toDate);
+
+            var fmOrgId = fund.FMOrgId.Value;
+            if (UseNew)
+            {
+                fmOrgId = fund.LegalEntity.NewFMOrgId.Value;
+            }
+
+            DataTable dt2 = GetFMPositions(fmOrgId, fromDate, toDate);
             Logger.Info(String.Format("CVL {0}", dt2.Rows.Count));
 
             Logger.Info(String.Format("Fund {0}", fundId));
@@ -186,7 +217,7 @@ namespace Odey.ReconciliationServices.FMKeeleyReconciliationService
                 try
                 {
                     FMPortfolioCollectionClient client = new FMPortfolioCollectionClient();
-                    client.CollectForFMFundId(bftFundId, fromDate, toDate,false);
+                    client.CollectForFMFundId(bftFundId, fromDate, toDate);
                     return GetCVLPositions(bftFundId, fromDate, toDate);
                 }
                 catch (Exception e)

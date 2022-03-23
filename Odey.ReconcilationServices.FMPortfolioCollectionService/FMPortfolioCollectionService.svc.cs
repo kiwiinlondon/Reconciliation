@@ -88,6 +88,22 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                     {
                         books.Add(4344);
                     }
+                    if (fmFundId == 3586)
+                    {
+                        books.Add(4364);
+                    }
+                    if (fmFundId == 3582)
+                    {
+                        books.Add(4365);
+                    }
+                    if (fmFundId == 3379)
+                    {
+                        books.Add(4352);
+                    }
+                    if (fmFundId == 3629)
+                    {
+                        books.Add(4313);
+                    }
                 }
                 else
                 {
@@ -152,6 +168,22 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                     {
                         books.Add(4344);
                     }
+                    if (fmFundId == 3586)
+                    {
+                        books.Add(4364);
+                    }
+                    if (fmFundId == 3582)
+                    {
+                        books.Add(4365);
+                    }
+                    if (fmFundId == 3379)
+                    {
+                        books.Add(4352);
+                    }
+                    if (fmFundId == 3629)
+                    {
+                        books.Add(4313);
+                    }
                 }
                 else
                 {
@@ -199,8 +231,8 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                     existingPortfolioItem.NetPosition = Math.Round(portfolio.NetPosition,8);
                     existingPortfolioItem.Price = Math.Round(portfolio.Price,8);
                     existingPortfolioItem.TotalAccrual = Math.Round(portfolio.TotalAccrual, 8);
-                    existingPortfolioItem.Isin = portfolio.Isin;
-                    existingPortfolioItem.Sedol = portfolio.Sedol;
+                    existingPortfolioItem.Isin = CleanIdentifier(portfolio.Isin);
+                    existingPortfolioItem.Sedol = CleanIdentifier(portfolio.Sedol);
                     existingPortfolioItem.BloombergTicker = portfolio.BloombergTicker;
                 }
                 foreach (FMPortfolio existingPortfolioItem in existingPortfolio.Values)
@@ -211,6 +243,18 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
             }
         }
 
+        private string CleanIdentifier(string identifier)
+        {
+            if (!string.IsNullOrWhiteSpace(identifier))
+            {
+                var space = identifier.IndexOf(" ");
+                if (space>0)
+                {
+                    identifier = identifier.Substring(0, space);
+                }   
+            }
+            return identifier;
+        }
 
         /// <summary>
         /// map OAR portfolio items with a strategy to BK-OUAR-AC for keeley rec

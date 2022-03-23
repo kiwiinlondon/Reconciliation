@@ -11,10 +11,7 @@ namespace Odey.ReconciliationServices.Clients
 {
     public class FMPortfolioCollectionClient : OdeyClientBase<IFMPortfolioCollection>, IFMPortfolioCollection
     {
-        public void CollectForFMFundId(int orgId, DateTime fromDate, DateTime toDate, bool useNew)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public void CollectForFMFundId2(int fmOrgId, DateTime fromDate, DateTime toDate, bool useNew)
         {
