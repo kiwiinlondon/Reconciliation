@@ -59,11 +59,11 @@ namespace Testing
 
         static void Main(string[] args)
         {
-          //  FMKeeleyReconciliationService ssss = new FMKeeleyReconciliationService();
-          //  ssss.GetUnmatchedCVLPositions(10973, DateTime.Today, DateTime.Today, true);
+            FMKeeleyReconciliationService ssss = new FMKeeleyReconciliationService();
+            ssss.GetUnmatchedCVLPositions(10657, DateTime.Today.AddDays(-1), DateTime.Today.AddDays(-1), true);
 
-            //PullDataForFundId(741, new DateTime(2021, 12, 31));
-            PullDataForFunds(new DateTime(2022, 3, 11));
+           // PullDataForFundId(4927, new DateTime(2022, 03, 24));
+            PullDataForFunds(new DateTime(2022, 3, 28));
          //   ClientPortfolioReconciliationService clientPortfolioReconciliationService = new ClientPortfolioReconciliationService();
          //  clientPortfolioReconciliationService.Reconcile(@"\\app02\FileShare\Quintillion\Client\share_register_by_lot OEI 24-01-2022.xls", 741, null, DateTime.Parse("14-jan-2022"));
             //FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
