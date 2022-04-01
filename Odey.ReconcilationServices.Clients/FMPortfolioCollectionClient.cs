@@ -13,20 +13,6 @@ namespace Odey.ReconciliationServices.Clients
     {
 
 
-        public void CollectForFMFundId2(int fmOrgId, DateTime fromDate, DateTime toDate, bool useNew)
-        {
-            IFMPortfolioCollection proxy = factory.CreateChannel();
-            try
-            {
-                proxy.CollectForFMFundId2(fmOrgId, fromDate, toDate, useNew);
-                ((ICommunicationObject)proxy).Close();
-            }
-            catch
-            {
-                ((ICommunicationObject)proxy).Abort();
-                throw;
-            }
-        }
 
         public void CollectForFMFundId(int fmOrgId, DateTime fromDate, DateTime toDate)
         {
@@ -58,12 +44,12 @@ namespace Odey.ReconciliationServices.Clients
             }
         }
 
-        public void CollectCustodianAccountPositions(int fmFundId, DateTime referenceDate, bool useNew)
+        public void CollectCustodianAccountPositions(int fmFundId, DateTime referenceDate)
         {
             IFMPortfolioCollection proxy = factory.CreateChannel();
             try
             {
-                proxy.CollectCustodianAccountPositions(fmFundId, referenceDate, useNew);
+                proxy.CollectCustodianAccountPositions(fmFundId, referenceDate);
                 ((ICommunicationObject)proxy).Close();
             }
             catch

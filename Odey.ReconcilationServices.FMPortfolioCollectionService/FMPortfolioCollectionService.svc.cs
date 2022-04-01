@@ -25,48 +25,18 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
         /// </summary>
         private static readonly string STRATEGY_NONE = "NONE";
 
-        private static bool? _useNew;
-
-        private bool UseNew
-        {
-            get
-            {
-                if (_useNew == null)
-                {
-                    var useNewInstance = ConfigurationManager.AppSettings["UseNewFMInstance"];
-                    if (useNewInstance == null)
-                    {
-                        _useNew = false;
-                    }
-                    else
-                    {
-                        _useNew = bool.Parse(useNewInstance);
-                    }
-                }
-                return _useNew.Value;
-            }
-        }
+        
 
 
         public void CollectForLatestValuation()
         {
             using (KeeleyModel context = new KeeleyModel(SecurityCallStackContext.Current))
             {                
-                List<(int FMFundId, DateTime ReferenceDate)> funds;
-                if (UseNew)
-                {
-                    funds = context.OfficialNetAssetValues.Include(a => a.Fund.LegalEntity)
+                List<(int FMFundId, DateTime ReferenceDate)> funds = context.OfficialNetAssetValues.Include(a => a.Fund.LegalEntity)
                         .Where(a => a.Fund.IsActive && a.Fund.AdministratorId == (int)AdministratorIds.Quintillion && a.Fund.DealingDateDefinition.PeriodicityId == (int)PeriodicityIds.Daily && a.Fund.LegalEntity.NewFMOrgId.HasValue && a.ValueIsForReferenceDate && !a.Fund.ParentFundId.HasValue && a.FundId != (int)FundIds.DYSS).ToList()
                         .GroupBy(a => a.Fund.LegalEntity.NewFMOrgId.Value)
                         .Select(a => (a.Key, a.Max(m => m.ReferenceDate))).ToList();
-                }
-                else
-                {
-                    funds = context.OfficialNetAssetValues.Include(a => a.Fund.LegalEntity)
-                        .Where(a => a.Fund.IsActive && a.Fund.AdministratorId == (int)AdministratorIds.Quintillion && a.Fund.DealingDateDefinition.PeriodicityId == (int)PeriodicityIds.Daily && a.Fund.LegalEntity.FMOrgId.HasValue && a.ValueIsForReferenceDate && !a.Fund.ParentFundId.HasValue && a.FundId != (int)FundIds.DYSS).ToList()
-                        .GroupBy(a => a.Fund.LegalEntity.FMOrgId.Value)
-                        .Select(a => ( a.Key, a.Max(m => m.ReferenceDate) )).ToList();
-                }
+                
                 foreach (var fund in funds)
                 {
                     CollectForFMFundId(fund.FMFundId, fund.ReferenceDate, fund.ReferenceDate);
@@ -76,21 +46,18 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
         }
         public void CollectForFMFundId(int fmFundId, DateTime fromDate, DateTime toDate)
         {
-            CollectForFMFundId2(fmFundId, fromDate, toDate, UseNew);
+            CollectForFMFundId2(fmFundId, fromDate, toDate);
         }
 
 
-        public void CollectCustodianAccountPositions(int fmFundId, DateTime referenceDate, bool useNew)
+        public void CollectCustodianAccountPositions(int fmFundId, DateTime referenceDate)
         {
-            BC.IPortfolio client = new PortfolioClient(useNew);
+            BC.IPortfolio client = new PortfolioClient();
 
             var portfolioItems = client.GetCustodianPortfolio(fmFundId, referenceDate);
             using (KeeleyModel context = new KeeleyModel(SecurityCallStackContext.Current))
             {
-                List<int> books;
-                if (useNew)
-                {
-                    books = context.Books
+                List<int> books = context.Books
                     .Where(a => a.Fund.LegalEntity.NewFMOrgId == fmFundId && a.NewFMOrgId.HasValue).Select(a => a.NewFMOrgId.Value)
                     .ToList();
                     if (fmFundId == 3638)
@@ -113,13 +80,8 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                     {
                         books.Add(4313);
                     }
-                }
-                else
-                {
-                    books = context.Books
-                    .Where(a => a.Fund.LegalEntity.FMOrgId == fmFundId && a.FMOrgId.HasValue).Select(a => a.FMOrgId.Value)
-                    .ToList();
-                }
+               
+                
 
                 var existingPortfolio =
                     context.FMCustodianPortfolios
@@ -160,17 +122,14 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
             }
         }
 
-        public void CollectForFMFundId2(int fmFundId, DateTime fromDate, DateTime toDate,bool useNew)
+        public void CollectForFMFundId2(int fmFundId, DateTime fromDate, DateTime toDate)
         {
-            BC.IPortfolio client = new PortfolioClient(useNew);
+            BC.IPortfolio client = new PortfolioClient();
             
             List<BC.Portfolio> portfolioItems = client.Get(fmFundId, fromDate, toDate);
             using (KeeleyModel context = new KeeleyModel(SecurityCallStackContext.Current))
             {
-                List<int> books;
-                if (useNew)
-                {
-                    books = context.Books
+                List<int> books = context.Books
                     .Where(a => a.Fund.LegalEntity.NewFMOrgId == fmFundId && a.NewFMOrgId.HasValue).Select(a => a.NewFMOrgId.Value)
                     .ToList();
                     if (fmFundId == 3638)
@@ -193,13 +152,7 @@ namespace Odey.ReconciliationServices.FMPortfolioCollectionService
                     {
                         books.Add(4313);
                     }
-                }
-                else
-                {
-                    books = context.Books
-                    .Where(a => a.Fund.LegalEntity.FMOrgId == fmFundId && a.FMOrgId.HasValue).Select(a => a.FMOrgId.Value)
-                    .ToList();
-                }
+                
           
                 var existingPortfolio =
                     context.FMPortfolios

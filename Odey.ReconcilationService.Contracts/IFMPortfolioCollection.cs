@@ -14,13 +14,11 @@ namespace Odey.ReconciliationServices.Contracts
         [OperationContract]
         void CollectForFMFundId(int orgId, DateTime fromDate, DateTime toDate);
 
-        [OperationContract]
-        void CollectForFMFundId2(int orgId, DateTime fromDate, DateTime toDate, bool useNew);
 
         [OperationContract]
         void CollectForLatestValuation();
 
         [OperationContract]
-        void CollectCustodianAccountPositions(int fmFundId, DateTime referenceDate, bool useNew);
+        void CollectCustodianAccountPositions(int fmFundId, DateTime referenceDate);
     }
 }

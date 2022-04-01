@@ -59,7 +59,7 @@ namespace Odey.ReconcilationServices.FMKeeleyReconciliationService.MatchingEngin
                 return true;
             }
             InstrumentMarketNoSetupCache instrumentMarketFMCache = new InstrumentMarketNoSetupCache();
-            InstrumentMarket instrumentMarket = instrumentMarketFMCache.Get(IdentifierTypeIds.FMSecIdOld, matchingEngineOutputItem.KeyValues["FMSecId"].ToString(), null);            
+            InstrumentMarket instrumentMarket = instrumentMarketFMCache.Get(IdentifierTypeIds.FMSecIdNew, matchingEngineOutputItem.KeyValues["FMSecId"].ToString(), null);            
             if (instrumentMarket.InstrumentClassID == (int)InstrumentClassIds.ForwardFX)
             {
                 return !GreaterThanZero(field1 - field2, (decimal)tolerance);

@@ -25,10 +25,10 @@ namespace Testing
         {
 
                 FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
-                fMPortfolioCollectionService.CollectForFMFundId2(fund.LegalEntity.FMOrgId.Value, referenceDate, referenceDate, false);
-                fMPortfolioCollectionService.CollectForFMFundId2(fund.LegalEntity.NewFMOrgId.Value, referenceDate, referenceDate, true);
-                fMPortfolioCollectionService.CollectCustodianAccountPositions(fund.LegalEntity.FMOrgId.Value, referenceDate, false);
-                fMPortfolioCollectionService.CollectCustodianAccountPositions(fund.LegalEntity.NewFMOrgId.Value, referenceDate, true);
+                //fMPortfolioCollectionService.CollectForFMFundId2(fund.LegalEntity.FMOrgId.Value, referenceDate, referenceDate, false);
+                //fMPortfolioCollectionService.CollectForFMFundId2(fund.LegalEntity.NewFMOrgId.Value, referenceDate, referenceDate, true);
+                //fMPortfolioCollectionService.CollectCustodianAccountPositions(fund.LegalEntity.FMOrgId.Value, referenceDate, false);
+                //fMPortfolioCollectionService.CollectCustodianAccountPositions(fund.LegalEntity.NewFMOrgId.Value, referenceDate, true);
 
         }
 
@@ -59,6 +59,10 @@ namespace Testing
 
         static void Main(string[] args)
         {
+            //FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
+            FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
+         //   fMPortfolioCollectionService.CollectForFMFundId2(3501, new DateTime(2022, 3, 29), new DateTime(2022, 3, 29), true);
+
             FMKeeleyReconciliationService ssss = new FMKeeleyReconciliationService();
             ssss.GetUnmatchedCVLPositions(10657, DateTime.Today.AddDays(-1), DateTime.Today.AddDays(-1), true);
 
@@ -69,9 +73,8 @@ namespace Testing
             //FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
             
 
-            FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
-            fMPortfolioCollectionService.CollectForFMFundId2(56777, new DateTime(2021, 12, 31), new DateTime(2021, 12, 31), false);
-            fMPortfolioCollectionService.CollectForFMFundId2(3601, new DateTime(2021, 12, 31), new DateTime(2021, 12, 31),true);
+//fMPortfolioCollectionService.CollectForFMFundId2(56777, new DateTime(2021, 12, 31), new DateTime(2021, 12, 31), false);
+            
             EzeReconciliationService eze = new EzeReconciliationService();
            // eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
            FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
