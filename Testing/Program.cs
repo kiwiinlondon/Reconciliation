@@ -61,10 +61,10 @@ namespace Testing
         {
             //FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
             FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
-         //   fMPortfolioCollectionService.CollectForFMFundId2(3501, new DateTime(2022, 3, 29), new DateTime(2022, 3, 29), true);
+            fMPortfolioCollectionService.CollectForFMFundId(3600, DateTime.Today, DateTime.Today);
 
             FMKeeleyReconciliationService ssss = new FMKeeleyReconciliationService();
-            ssss.GetUnmatchedCVLPositions(10657, DateTime.Today.AddDays(-1), DateTime.Today.AddDays(-1), true);
+            ssss.GetUnmatchedCVLPositions(5330, DateTime.Today, DateTime.Today, true);
 
            // PullDataForFundId(4927, new DateTime(2022, 03, 24));
             PullDataForFunds(new DateTime(2022, 3, 28));
