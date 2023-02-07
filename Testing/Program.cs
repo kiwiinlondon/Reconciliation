@@ -59,12 +59,12 @@ namespace Testing
 
         static void Main(string[] args)
         {
-            //FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
-            FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
-            fMPortfolioCollectionService.CollectForFMFundId(3600, DateTime.Today, DateTime.Today);
+            FMPortfolioCollectionService fMPortfolioCollectionService = new FMPortfolioCollectionService();
+           // FMPortfolioCollectionClient fMPortfolioCollectionService = new FMPortfolioCollectionClient();
+           // fMPortfolioCollectionService.CollectForFMFundId(3638, DateTime.Today, DateTime.Today);
 
             FMKeeleyReconciliationService ssss = new FMKeeleyReconciliationService();
-            ssss.GetUnmatchedCVLPositions(5330, DateTime.Today, DateTime.Today, true);
+            ssss.GetUnmatchedCVLPositions(3609, DateTime.Today, DateTime.Today, true);
 
            // PullDataForFundId(4927, new DateTime(2022, 03, 24));
             PullDataForFunds(new DateTime(2022, 3, 28));
@@ -77,8 +77,8 @@ namespace Testing
             
             EzeReconciliationService eze = new EzeReconciliationService();
            // eze.GetThreeWayRecOutput(DateTime.Today.AddDays(-3));
-           FMKeeleyReconciliationService servicee = new FMKeeleyReconciliationService();
-//            FMKeeleyReconcilationClient servicee = new FMKeeleyReconcilationClient();
+           
+            FMKeeleyReconcilationClient servicee = new FMKeeleyReconcilationClient();
             servicee.SendFMAdministratorDifferences();
             
             fMPortfolioCollectionService.CollectForLatestValuation();
